@@ -1,2 +1,3 @@
 # CorgiHouse
 App(bot) for creating/searching meetings of corgi owners. Can be used in other directions...
+App scheme on miro board - https://miro.com/app/board/uXjVMi9yMRk=/?share_link_id=22153125811

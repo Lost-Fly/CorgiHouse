@@ -36,7 +36,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             switch(messageText){
                 case "/start":
-                    startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
+                    String info = "first name - " + update.getMessage().getChat().getFirstName() + " user name -  " + update.getMessage().getChat().getUserName() + " last name - " + update.getMessage().getChat().getLastName() + " bio - " + update.getMessage().getChat().getBio() + " description -  " + update.getMessage().getChat().getDescription()+ " linked chat id - " + update.getMessage().getChat().getLinkedChatId() + " id - " + update.getMessage().getChat().getId()+ " location - " + update.getMessage().getChat().getLocation() ;
+                    startCommandReceived(chatId, info);
                     break;
                 case "/help":
                     helpCommandReceived(chatId);

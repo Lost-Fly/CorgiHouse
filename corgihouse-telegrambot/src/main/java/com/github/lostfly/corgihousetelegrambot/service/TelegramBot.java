@@ -5,6 +5,7 @@ import com.github.lostfly.corgihousetelegrambot.model.Pet;
 import com.github.lostfly.corgihousetelegrambot.model.PetRepository;
 import com.github.lostfly.corgihousetelegrambot.model.User;
 import com.github.lostfly.corgihousetelegrambot.model.UserRepository;
+import com.vdurmont.emoji.EmojiParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -221,7 +222,9 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void startCommandReceived(long chatId, String name) {
-        String answer = "Привет, " + name + ", рад тебя видеть!";
+
+        String answer = EmojiParser.parseToUnicode("Привет, " + name + ", рад тебя видеть!" + " :blush:");
+        //String answer = "Привет, " + name + ", рад тебя видеть!";
         sendMessage(chatId, answer);
         log.info("Replied to user " + name + " " + chatId);
     }

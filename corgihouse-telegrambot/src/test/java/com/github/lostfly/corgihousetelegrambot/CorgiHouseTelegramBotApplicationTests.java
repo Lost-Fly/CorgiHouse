@@ -8,6 +8,8 @@ class CorgiHouseTelegramBotApplicationTests {
 
 	@Test
 	void contextLoads() {
+
+
 	}
 
 }

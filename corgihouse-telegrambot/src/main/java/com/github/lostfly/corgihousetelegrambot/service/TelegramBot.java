@@ -33,6 +33,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -102,9 +103,6 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                         sendPhoto(chatId, localFile);
 
-                        var petId = petRepository.count();
-
-                        
 
                         System.out.println("Фото сохранено: " + localFile.getAbsolutePath());
                     } catch (TelegramApiException | IOException e) {
@@ -122,6 +120,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     break;
                 case "/register":
                     registerUser(update.getMessage());
+
                     registerUserCommandReceived(chatId, update.getMessage().getChat().getFirstName());
                     break;
                 case "/register_pet":
@@ -130,6 +129,18 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                     registerPetCommandReceived(chatId, update.getMessage().getChat().getFirstName());
                     break;
+                case "/test_pet":
+                case "Питомцы":
+
+                    testPet(update.getMessage());
+
+                    break;
+                case "Профиль":
+
+                    testProfile(update.getMessage());
+
+                    break;
+
                 default:
                     sendMessage(chatId, "Пока я в разработке, но скоро смогу понять тебя!");
                     break;
@@ -138,6 +149,53 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
     }
+
+    private void testProfile(Message message) {
+        var chatId = message.getChatId();
+
+        User user = userRepository.findByChatId(chatId);
+
+        StringBuilder user_info_message = new StringBuilder();
+
+        user_info_message.append("ID пользователя: ").append(user.getChatId()).append("\n");
+        user_info_message.append("Логин: ").append(user.getUserName()).append("\n");
+        user_info_message.append("Имя: ").append(user.getFirstName()).append("\n");
+        user_info_message.append("Фамилия: ").append(user.getLastName()).append("\n");
+        user_info_message.append("Телефон: ").append(user.getPhoneNumber()).append("\n");
+        user_info_message.append("Дата Регистрации: ").append(user.getRegisteredAt()).append("\n\n");
+
+        // Отправьте сообщение с информацией о всех животных
+        sendMessage(chatId, user_info_message.toString());
+
+    }
+
+    private void testPet(Message message) {
+        var chatId = message.getChatId();
+
+        ArrayList<Pet> pets = petRepository.findAllByOwnerId(chatId);
+
+        // Проверьте, если список животных пустой
+        if (pets.isEmpty()) {
+            // Если список пуст, отправьте сообщение о том, что нет питомцев
+            sendMessage(chatId, "У вас пока что нет питомцев! Хотите зарегистрировать?");
+        } else {
+            // Создайте StringBuilder для сбора информации о животных
+            StringBuilder pet_info_message = new StringBuilder();
+
+            // Переберите каждое животное и добавьте информацию о нем в StringBuilder
+            for (Pet pet : pets) {
+                pet_info_message.append("ID животного: ").append(pet.getPetId()).append("\n");
+                pet_info_message.append("Имя животного: ").append(pet.getPetName()).append("\n");
+                pet_info_message.append("Тип животного: ").append(pet.getAnimalType()).append("\n");
+                pet_info_message.append("Порода животного: ").append(pet.getPetBreed()).append("\n");
+                pet_info_message.append("ID владельца: ").append(pet.getOwnerId()).append("\n\n");
+            }
+
+            // Отправьте сообщение с информацией о всех животных
+            sendMessage(chatId, pet_info_message.toString());
+        }
+    }
+
 
     private void sendPhoto(Long chatId, File imageFile) throws TelegramApiException{
         SendPhoto sendPhoto = new SendPhoto();
@@ -222,9 +280,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void startCommandReceived(long chatId, String name) {
-
         String answer = EmojiParser.parseToUnicode("Привет, " + name + ", рад тебя видеть!" + " :blush:");
-        //String answer = "Привет, " + name + ", рад тебя видеть!";
         sendMessage(chatId, answer);
         log.info("Replied to user " + name + " " + chatId);
     }
@@ -238,14 +294,12 @@ public class TelegramBot extends TelegramLongPollingBot {
         SendMessage message = new SendMessage();
         message.setChatId(String.valueOf(chatId));
         message.setText(textToSend);
-
         try {
             execute(message);
         }
         catch (TelegramApiException e){
             log.error("Error occurred" + e.getMessage());
         }
-
     }
 
 }

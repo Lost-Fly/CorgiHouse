@@ -7,6 +7,7 @@ import com.github.lostfly.corgihousetelegrambot.model.User;
 import com.github.lostfly.corgihousetelegrambot.model.UserRepository;
 import com.vdurmont.emoji.EmojiParser;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.DialectOverride;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -36,11 +37,15 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
+
+    @Autowired
+    private UserRegistration userRegistration;
 
     @Autowired
     private UserRepository userRepository;
@@ -78,40 +83,18 @@ public class TelegramBot extends TelegramLongPollingBot {
         return config.getToken();
     }
 
+    public static String globalFunctionContext = "default";
     @Override
     public void onUpdateReceived(Update update) {
 
-        if(update.hasMessage()){
+        if(update.hasMessage() && Objects.equals(globalFunctionContext, "default")){
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
 
 
             // DOWNLOAD AND SEND IMAGES
             if (update.hasMessage() && update.getMessage().hasPhoto()) {
-                // Получаем объект, представляющий сообщение
-                PhotoSize photo = update.getMessage().getPhoto().stream()
-                        .sorted((p1, p2) -> Integer.compare(p2.getFileSize(), p1.getFileSize()))
-                        .findFirst()
-                        .orElse(null);
-
-                if (photo != null) {
-                    try {
-                        // Получаем объект, представляющий файл фотографии
-                        GetFile getFileRequest = new GetFile();
-                        getFileRequest.setFileId(photo.getFileId());
-                        org.telegram.telegrambots.meta.api.objects.File file = execute(getFileRequest);
-
-                        // Скачиваем фото на компьютер
-                        java.io.File localFile = downloadPhotoByFilePath(file.getFilePath(), "downloaded_photos", chatId);
-
-                        sendPhoto(chatId, localFile);
-
-
-                        System.out.println("Фото сохранено: " + localFile.getAbsolutePath());
-                    } catch (TelegramApiException | IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+                downloadAndSendImage(update);
             }
 
             switch(messageText){
@@ -122,35 +105,36 @@ public class TelegramBot extends TelegramLongPollingBot {
                     helpCommandReceived(chatId);
                     break;
                 case "/register":
-                    registerUser(update.getMessage());
-
-                    registerUserCommandReceived(chatId, update.getMessage().getChat().getFirstName());
+                    sendMessage(chatId,userRegistration.initializeRegistration(update));
                     break;
                 case "/register_pet":
-
                     registerPet(update.getMessage());
-
                     registerPetCommandReceived(chatId, update.getMessage().getChat().getFirstName());
                     break;
-                case "/test_pet":
                 case "Питомцы":
-
                     testPet(update.getMessage());
-
                     break;
                 case "Профиль":
-
                     testProfile(update.getMessage());
-
                     break;
-
                 default:
                     sendMessage(chatId, "Пока я в разработке, но скоро смогу понять тебя!");
                     break;
             }
-
         }
-
+        else {
+            String messageText = update.getMessage().getText();
+            long chatId = update.getMessage().getChatId();
+            switch (globalFunctionContext){
+                case "UserRegistration":
+                    sendMessage(chatId,userRegistration.continueRegistration(update));
+                    break;
+                default:
+                    globalFunctionContext="default";
+                    sendMessage(chatId, "No function found");
+                    break;
+            }
+        }
     }
 
     private void testProfile(Message message) {
@@ -226,13 +210,20 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void registerUser(Message message) {
 
+        var chatId = message.getChatId();
+        var chat = message.getChat();
+
         if (userRepository.findById(message.getChatId()).isEmpty()){
-            var chatId = message.getChatId();
-            var chat = message.getChat();
+
             User user = new User();
+
+
+
+
 
             user.setChatId(chatId);
             user.setFirstName(chat.getFirstName());
+
             user.setLastName(chat.getLastName());
             user.setUserName(chat.getUserName());
             user.setRegisteredAt(new Timestamp(System.currentTimeMillis()));
@@ -241,7 +232,9 @@ public class TelegramBot extends TelegramLongPollingBot {
             userRepository.save(user);
 
             log.info("user saved: " + user);
+
         }
+
 
     }
 
@@ -251,7 +244,6 @@ public class TelegramBot extends TelegramLongPollingBot {
 
 
             var chatId = message.getChatId();
-            var chat = message.getChat();
             Pet pet = new Pet();
 
             pet.setOwnerId(chatId);
@@ -260,21 +252,18 @@ public class TelegramBot extends TelegramLongPollingBot {
             pet.setPetName("Булочка");
 
             var petId = petRepository.count();
-
+            System.out.println(petId);
             pet.setPetId(petId + 1);
 
             petRepository.save(pet);
 
             log.info("pet saved: " + pet);
+            System.out.println("pet saved: " + pet);
         }
 
     }
 
-    private void registerUserCommandReceived(long chatId, String name ) {
-        String answer = "Раздел регистрации! Сначала введите имя: ";
-        sendMessage(chatId, answer);
-        log.info("Register user " + name + " " + chatId);
-    }
+
 
     private void registerPetCommandReceived(long chatId, String name ) {
         String answer = "Регистрация питомца! Сначала введите имя: ";
@@ -293,7 +282,37 @@ public class TelegramBot extends TelegramLongPollingBot {
         sendMessage(chatId, answer);
     }
 
-    private void sendMessage(long chatId, String textToSend)  {
+    private void downloadAndSendImage(Update update){
+
+        long chatId = update.getMessage().getChatId();
+
+        // Получаем объект, представляющий сообщение
+        PhotoSize photo = update.getMessage().getPhoto().stream()
+                .sorted((p1, p2) -> Integer.compare(p2.getFileSize(), p1.getFileSize()))
+                .findFirst()
+                .orElse(null);
+
+        if (photo != null) {
+            try {
+                // Получаем объект, представляющий файл фотографии
+                GetFile getFileRequest = new GetFile();
+                getFileRequest.setFileId(photo.getFileId());
+                org.telegram.telegrambots.meta.api.objects.File file = execute(getFileRequest);
+
+                // Скачиваем фото на компьютер
+                java.io.File localFile = downloadPhotoByFilePath(file.getFilePath(), "downloaded_photos", chatId);
+
+                sendPhoto(chatId, localFile);
+
+
+                System.out.println("Фото сохранено: " + localFile.getAbsolutePath());
+            } catch (TelegramApiException | IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    void sendMessage(long chatId, String textToSend)  {
         SendMessage message = new SendMessage();
         message.setChatId(String.valueOf(chatId));
         message.setText(textToSend);

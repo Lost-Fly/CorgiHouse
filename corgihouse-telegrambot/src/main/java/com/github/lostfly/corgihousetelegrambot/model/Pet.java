@@ -1,10 +1,7 @@
 package com.github.lostfly.corgihousetelegrambot.model;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-
-import java.sql.Blob;
 
 @Entity(name = "petDataTable")
 public class Pet {
@@ -18,21 +15,14 @@ public class Pet {
 
     private String petBreed;
 
-    private Blob petImage;
+    private String petImageId;
 
     private Long ownerId;
 
 
+    public String getPetImageId() { return petImageId; }
 
-
-    public Blob getPetImage() {
-        return petImage;
-    }
-
-    public void setPetImage(Blob petImage) {
-        this.petImage = petImage;
-    }
-
+    public void setPetImageId(String petImageId) { this.petImageId = petImageId;  }
 
     public Long getOwnerId() {
         return ownerId;
@@ -47,9 +37,7 @@ public class Pet {
         return petId;
     }
 
-    public void setPetId(Long petId) {
-        this.petId = petId;
-    }
+    public void setPetId(Long petId) { this.petId = petId;  }
 
     public String getPetName() {
         return petName;

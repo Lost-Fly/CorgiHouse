@@ -18,9 +18,9 @@ public class PetRegistration {
     @Autowired
     private PetRepository petRepository;
 
-    public void registerPet(Message message) {
-        if (petRepository.findById(message.getChatId()).isEmpty()){
-            var chatId = message.getChatId();
+    public void savePetToDB(long chatId) {
+        if (petRepository.findById(chatId).isEmpty()){
+
             Pet pet = new Pet();
 
             pet.setOwnerId(chatId);
@@ -29,15 +29,17 @@ public class PetRegistration {
             pet.setPetName("Булочка");
 
             var petId = petRepository.count();
-            System.out.println(petId);
             pet.setPetId(petId + 1);
 
             petRepository.save(pet);
 
             log.info("pet saved: " + pet);
-            System.out.println("pet saved: " + pet);
         }
+    }
 
+
+    public String registerPet(){
+        return "Раздел регистрации животных";
     }
 
 }

@@ -37,5 +37,8 @@ public class GlobalConstants {
     public static final String GLOBAL_CONTEXT_DEFAULT = "default";
     public static final String GLOBAL_CONTEXT_USER_REGISTRATION = "user_registration";
 
+    // Global files/dirs names
+    public static final String PHOTO_STORAGE_DIR = "downloaded_photos";
+
 
 }

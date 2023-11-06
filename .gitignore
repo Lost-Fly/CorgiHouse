@@ -11,6 +11,11 @@
 .mtj.tmp/
 
 # Package Files #
+*.md
+*.iml
+*.xml
+*.properties
+*.cmd
 *.jar
 *.war
 *.nar

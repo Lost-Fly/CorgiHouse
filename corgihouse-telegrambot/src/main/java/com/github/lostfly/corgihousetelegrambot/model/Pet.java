@@ -20,9 +20,13 @@ public class Pet {
     private Long ownerId;
 
 
-    public String getPetImageId() { return petImageId; }
+    public String getPetImageId() {
+        return petImageId;
+    }
 
-    public void setPetImageId(String petImageId) { this.petImageId = petImageId;  }
+    public void setPetImageId(String petImageId) {
+        this.petImageId = petImageId;
+    }
 
     public Long getOwnerId() {
         return ownerId;
@@ -37,7 +41,9 @@ public class Pet {
         return petId;
     }
 
-    public void setPetId(Long petId) { this.petId = petId;  }
+    public void setPetId(Long petId) {
+        this.petId = petId;
+    }
 
     public String getPetName() {
         return petName;

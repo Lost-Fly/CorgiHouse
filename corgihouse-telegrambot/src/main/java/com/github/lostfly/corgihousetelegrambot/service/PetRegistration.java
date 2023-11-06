@@ -6,7 +6,6 @@ import com.github.lostfly.corgihousetelegrambot.model.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Slf4j
 @Component
@@ -19,7 +18,7 @@ public class PetRegistration {
     private PetRepository petRepository;
 
     public void savePetToDB(long chatId) {
-        if (petRepository.findById(chatId).isEmpty()){
+        if (petRepository.findById(chatId).isEmpty()) {
 
             Pet pet = new Pet();
 
@@ -38,7 +37,7 @@ public class PetRegistration {
     }
 
 
-    public String registerPet(){
+    public String registerPet() {
         return "Раздел регистрации животных";
     }
 

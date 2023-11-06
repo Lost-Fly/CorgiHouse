@@ -20,7 +20,7 @@ public class FileService {
         if (!downloadedFile.exists()) {
             downloadedFile.mkdirs();
         }
-        java.io.File localFile = new java.io.File(downloadedFile, "pet_image_" + Long.toString(id) + ".jpg");
+        java.io.File localFile = new java.io.File(downloadedFile, "pet_image_" + id + ".jpg");
 
         String link = "https://api.telegram.org/file/bot" + botToken + "/" + filePath;
 

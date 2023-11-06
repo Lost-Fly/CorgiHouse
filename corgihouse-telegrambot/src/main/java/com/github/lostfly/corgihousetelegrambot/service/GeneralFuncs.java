@@ -4,8 +4,6 @@ import com.vdurmont.emoji.EmojiParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import static com.github.lostfly.corgihousetelegrambot.constants.GlobalConstants.HELP_TEXT;
-
 @Slf4j
 @Component
 public class GeneralFuncs {

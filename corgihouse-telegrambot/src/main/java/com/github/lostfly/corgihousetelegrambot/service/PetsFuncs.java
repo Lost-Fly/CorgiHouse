@@ -5,7 +5,7 @@ import com.github.lostfly.corgihousetelegrambot.model.PetRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.objects.Message;
+
 import java.util.ArrayList;
 
 import static com.github.lostfly.corgihousetelegrambot.constants.GlobalConstants.NO_PETS_TEXT;

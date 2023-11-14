@@ -34,12 +34,17 @@ public class GlobalConstants {
 
 
     // Global session context
+
+    public static final String GLOBAL_CONTEXT_PET_DELETE = "global_context_pet_delete";
     public static final String GLOBAL_CONTEXT_DEFAULT = "default";
     public static final String GLOBAL_CONTEXT_USER_REGISTRATION = "user_registration";
     public static final String GLOBAL_CONTEXT_PET_REGISTRATION = "pet_registration";
+    public static final String GLOBAL_CONTEXT_USER_EDIT= "user_edit";
 
     // Global files/dirs names
     public static final String PHOTO_STORAGE_DIR = "downloaded_photos";
+
+
 
 
 }

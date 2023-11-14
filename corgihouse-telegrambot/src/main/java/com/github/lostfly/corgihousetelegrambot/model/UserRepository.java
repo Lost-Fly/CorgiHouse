@@ -23,7 +23,12 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @Query("update usersDataTable u set u.phoneNumber = ?1 where u.chatId = ?2")
     void setPhoneNumberByChatId(String firstname, Long chatId);
 
+
+
     User findByChatId(Long chatId);
+
+    @Transactional
+    void deleteByChatId(Long chatId);
 
 
 }

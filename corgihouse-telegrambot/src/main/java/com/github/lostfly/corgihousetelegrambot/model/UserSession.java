@@ -17,6 +17,30 @@ public class UserSession {
     @Value("default")
     private String registerFunctionContext;
 
+    @Value("default")
+    private String editFunctionContext;
+
+    @Value("default")
+    private String petRegisterFunctionContext;
+
+    public String getPetRegisterFunctionContext() {
+        return petRegisterFunctionContext;
+    }
+
+    public void setPetRegisterFunctionContext(String petRegisterFunctionContext) {
+        this.petRegisterFunctionContext = petRegisterFunctionContext;
+    }
+
+
+
+    public String getEditFunctionContext() {
+        return editFunctionContext;
+    }
+
+    public void setEditFunctionContext(String editFunctionContext) {
+        this.editFunctionContext = editFunctionContext;
+    }
+
     public Long getChatId() {
         return chatId;
     }

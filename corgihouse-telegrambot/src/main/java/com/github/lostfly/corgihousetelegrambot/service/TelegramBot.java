@@ -31,7 +31,9 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.github.lostfly.corgihousetelegrambot.constants.GlobalConstants.*;
-import static com.github.lostfly.corgihousetelegrambot.listMenus.ListMenus.DELETE_PROFILE_QUESTION;
+import static com.github.lostfly.corgihousetelegrambot.listMenus.ListMenus.*;
+import static com.github.lostfly.corgihousetelegrambot.service.PetRegistration.CANCEL_OPERATION;
+import static com.github.lostfly.corgihousetelegrambot.service.UserFuncs.EDIT_CHOISE;
 
 
 @Slf4j
@@ -63,6 +65,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     private UserFuncs userFuncs;
     @Autowired
     private PetsFuncs petsFuncs;
+
+
     @Autowired
     private FileService fileService;
 
@@ -121,9 +125,39 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case DELETE_PROFILE_QUESTION:
                     sendEditMessage(chatId, messageId, userFuncs.deleteProfileQuestion(), listMenus.profileDeleteKeyboard());
                     break;
+                case DELETE_PROFILE_CONFIRM:
+                    sendEditMessage(chatId, messageId, userFuncs.deleteProfile(chatId));
+                    break;
+                case DELETE_PROFILE_DENY:
+                    sendEditMessage(chatId,messageId, userFuncs.showProfile(chatId), listMenus.profileButtonKeyboard());
+                    break;
+                case EDIT_PROFILE:
+                    sendEditMessage(chatId, messageId, EDIT_CHOISE,listMenus.profileEditKeyboard());
+                    break;
+                case EDIT_PROFILE_NAME:
+                    sendEditMessage(chatId, messageId, userFuncs.editProfile(chatId,EDIT_PROFILE_NAME));
+                    break;
+                case EDIT_PROFILE_LASTNAME:
+                    sendEditMessage(chatId, messageId, userFuncs.editProfile(chatId,EDIT_PROFILE_LASTNAME));
+                    break;
+                case EDIT_PROFILE_PHONE_NUMBER:
+                    sendEditMessage(chatId, messageId, userFuncs.editProfile(chatId,EDIT_PROFILE_PHONE_NUMBER));
+                    break;
+                case PET_QUESTION_CONFIRM, PET_ADD:
+                    sendEditMessage(chatId, messageId, petRegistration.initializeRegistration(update));
+                    break;
+                case PET_DELETE_SELECTION:
+                    sendMessage(chatId, petsFuncs.deleteAnimalSelection(chatId));
+                    break;
+                case PET_QUESTION_DENY:
+                    sendEditMessage(chatId,messageId,CANCEL_OPERATION);
+                    break;
+
+
                 default:
                     sendMessage(chatId, INDEV_TEXT, keyboardMenus.mainKeyboard());
                     break;
+
             }
         }
 
@@ -136,18 +170,22 @@ public class TelegramBot extends TelegramLongPollingBot {
                         sendMessage(chatId, generalFuncs.startCommandReceived(chatId, update.getMessage().getChat().getFirstName()), keyboardMenus.mainKeyboard());
                 case "/help" -> sendMessage(chatId, HELP_TEXT, keyboardMenus.mainKeyboard());
                 case "/register" ->
-                        sendMessage(chatId, userRegistration.initializeRegistration(update), keyboardMenus.mainKeyboard());
-                case "/register_pet" ->
-                        sendMessage(chatId, petRegistration.registerPet(), keyboardMenus.mainKeyboard());
-                case "Питомцы" -> sendMessage(chatId, petsFuncs.showPets(chatId), keyboardMenus.mainKeyboard());
+                        sendMessage(chatId, userRegistration.initializeRegistration(update));
+                case "Питомцы" -> sendMessage(chatId, petsFuncs.showPets(chatId));
                 case "Профиль" -> sendMessage(chatId, userFuncs.showProfile(chatId), listMenus.profileButtonKeyboard());
                 default -> sendMessage(chatId, INDEV_TEXT, keyboardMenus.mainKeyboard());
             }
         } else {
+            String messageText = update.getMessage().getText();
             switch (sessionRepository.findByChatId(chatId).getGlobalFunctionContext()) {
                 case GLOBAL_CONTEXT_USER_REGISTRATION ->
-                        sendMessage(chatId, userRegistration.continueRegistration(update), keyboardMenus.mainKeyboard());
-                case GLOBAL_CONTEXT_PET_REGISTRATION -> sendMessage(chatId, INDEV_TEXT, keyboardMenus.mainKeyboard());
+                        sendMessage(chatId, userRegistration.continueRegistration(update));
+                case GLOBAL_CONTEXT_PET_REGISTRATION -> sendMessage(chatId, petRegistration.continueRegistration(update));
+                case GLOBAL_CONTEXT_USER_EDIT ->
+                        sendMessage(chatId, userFuncs.editProfileAction(chatId,messageText));
+                case GLOBAL_CONTEXT_PET_DELETE ->
+                        sendMessage(chatId, petsFuncs.deleteAnimal(chatId, messageText));
+
                 default -> {
                     sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
                     log.error("No global context found -  " + update.getMessage().getText());
@@ -213,12 +251,48 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
+    void sendMessage(long chatId, String textToSend) {
+        SendMessage message = new SendMessage();
+        message.setChatId(String.valueOf(chatId));
+        message.setText(textToSend);
+
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            log.error("Error occurred" + e.getMessage());
+        }
+    }
+
+    void sendMessage(long chatId, SendMessage message) {
+        message.setChatId(String.valueOf(chatId));
+
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            log.error("Error occurred" + e.getMessage());
+        }
+    }
+
+
     void sendEditMessage(long chatId, long messageId, String textToSend, InlineKeyboardMarkup msgKeyboard) {
         EditMessageText message = new EditMessageText();
         message.setChatId(String.valueOf(chatId));
         message.setMessageId((int) messageId);
         message.setText(textToSend);
         message.setReplyMarkup(msgKeyboard);
+
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            log.error("Error occurred" + e.getMessage());
+        }
+    }
+
+    void sendEditMessage(long chatId, long messageId, String textToSend) {
+        EditMessageText message = new EditMessageText();
+        message.setChatId(String.valueOf(chatId));
+        message.setMessageId((int) messageId);
+        message.setText(textToSend);
 
         try {
             execute(message);

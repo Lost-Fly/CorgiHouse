@@ -15,5 +15,6 @@ public class UserRegConstants {
     public static final String REGISTER_ENDED_TEXT = "Регистрация завершена";
     public static final String GIVE_PHONE_NUMBER_TEXT = "Введите номер телефона:";
     public static final String GIVE_LAST_NAME_TEXT = "Введите фамилию:";
+    public static final String GIVE_NAME_TEXT = "Введите имя:";
 
 }

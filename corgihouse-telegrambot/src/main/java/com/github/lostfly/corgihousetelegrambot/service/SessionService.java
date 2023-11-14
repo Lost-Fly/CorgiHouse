@@ -23,6 +23,9 @@ public class SessionService {
             userSession.setChatId(chatId);
             userSession.setGlobalFunctionContext(GLOBAL_CONTEXT_DEFAULT);
             userSession.setRegisterFunctionContext(REGISTER_CONTEXT_DEFAULT);
+            userSession.setEditFunctionContext(REGISTER_CONTEXT_DEFAULT);
+            userSession.setPetRegisterFunctionContext(REGISTER_CONTEXT_DEFAULT);
+
             sessionRepository.save(userSession);
 
             log.info("New session saved to DB: " + userSession);

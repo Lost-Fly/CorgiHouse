@@ -19,5 +19,18 @@ public interface SessionRepository extends CrudRepository<UserSession, Long> {
     @Query("update sessionDataTable u set u.registerFunctionContext = ?1 where u.chatId = ?2")
     void setRegUserContextByChatId(String regUserContext, Long chatId);
 
+    @Transactional
+    void deleteByChatId(Long chatId);
+
+    @Modifying
+    @Transactional
+    @Query("update sessionDataTable u set u.editFunctionContext = ?1 where u.chatId = ?2")
+    void setEditUserContextByChatId(String EditUserContext, Long chatId);
+
+    @Modifying
+    @Transactional
+    @Query("update sessionDataTable u set u.petRegisterFunctionContext = ?1 where u.chatId = ?2")
+    void setPetRegisterFunctionContext(String PetRegisterFunctionContext, Long chatId);
+
 
 }

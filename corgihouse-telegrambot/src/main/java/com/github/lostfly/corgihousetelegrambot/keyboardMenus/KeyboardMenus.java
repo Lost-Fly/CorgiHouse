@@ -8,14 +8,11 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.lostfly.corgihousetelegrambot.constants.KeyboardMenusConstants.*;
+
 @Slf4j
 @Component
 public class KeyboardMenus {
-
-    private static final String PROFILE = "Профиль";
-    private static final String PETS = "Питомцы";
-    private static final String MY_MEETINGS = "Мои встречи";
-    private static final String SEARCH_MEETINGS = "Поиск встреч";
 
     public ReplyKeyboardMarkup mainKeyboard() {
         ReplyKeyboardMarkup mainMarkup = new ReplyKeyboardMarkup();
@@ -30,6 +27,25 @@ public class KeyboardMenus {
 
         mainRow2.add(PETS);
         mainRow2.add(MY_MEETINGS);
+        keyboardRows.add(mainRow2);
+
+        mainMarkup.setKeyboard(keyboardRows);
+
+        return mainMarkup;
+    }
+
+    public ReplyKeyboardMarkup myMeetingsKeyboard() {
+        ReplyKeyboardMarkup mainMarkup = new ReplyKeyboardMarkup();
+
+        List<KeyboardRow> keyboardRows = new ArrayList<>();
+        KeyboardRow mainRow1 = new KeyboardRow();
+        KeyboardRow mainRow2 = new KeyboardRow();
+
+        mainRow1.add(MY_MEETINGS_APPLIED);
+        mainRow1.add(MY_MEETINGS_CREATED);
+        keyboardRows.add(mainRow1);
+
+        mainRow2.add(BACK);
         keyboardRows.add(mainRow2);
 
         mainMarkup.setKeyboard(keyboardRows);

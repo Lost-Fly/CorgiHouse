@@ -29,7 +29,6 @@ public class UserRegistration {
     private SessionRepository sessionRepository;
 
 
-
     public String initializeRegistration(Update update) {
 
         var chatId = update.getMessage().getChatId();
@@ -73,19 +72,12 @@ public class UserRegistration {
         var chatId = update.getMessage().getChatId();
         var messageText = update.getMessage().getText();
 
-        switch (sessionRepository.findByChatId(chatId).getRegisterFunctionContext()) {
-            case (SET_NAME):
-                return SetName(chatId, messageText);
-
-            case (SET_LAST_NAME):
-                return SetLastName(chatId, messageText);
-
-            case (SET_PHONE_NUMBER):
-                return SetPhoneNumber(chatId, messageText);
-
-            default:
-                return INDEV_TEXT;
-        }
+        return switch (sessionRepository.findByChatId(chatId).getRegisterFunctionContext()) {
+            case (SET_NAME) -> SetName(chatId, messageText);
+            case (SET_LAST_NAME) -> SetLastName(chatId, messageText);
+            case (SET_PHONE_NUMBER) -> SetPhoneNumber(chatId, messageText);
+            default -> INDEV_TEXT;
+        };
     }
 
 

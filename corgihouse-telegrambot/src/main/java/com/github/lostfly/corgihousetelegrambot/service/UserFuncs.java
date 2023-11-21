@@ -7,19 +7,10 @@ import com.github.lostfly.corgihousetelegrambot.model.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.github.lostfly.corgihousetelegrambot.constants.GlobalConstants.*;
+import static com.github.lostfly.corgihousetelegrambot.constants.ListMenusConstants.*;
 import static com.github.lostfly.corgihousetelegrambot.constants.UserRegConstants.*;
-import static com.github.lostfly.corgihousetelegrambot.listMenus.ListMenus.*;
-
 @Slf4j
 @Component
 public class UserFuncs {
@@ -65,16 +56,6 @@ public class UserFuncs {
     }
 
 
-
-//    public String editProfileName(long chatId) {
-//
-//    }
-//
-//    public String editProfileLastName(long chatId) {
-//    }
-//
-//    public String editProfilePhoneNumber(long chatId) {
-//    }
     public String editProfile(long chatId, String editContext ) {
 
         sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_USER_EDIT, chatId);

@@ -1,5 +1,7 @@
 package com.github.lostfly.corgihousetelegrambot.constants;
 
+import com.vdurmont.emoji.EmojiParser;
+
 public class GlobalConstants {
 
     // GLOBAL
@@ -31,6 +33,13 @@ public class GlobalConstants {
             "TG: @eveprova";
 
     public static final String NO_PETS_TEXT = "У вас пока что нет питомцев! Хотите зарегистрировать?";
+    public static final String DELETE_PROFILE_QUESTION_TEXT = "Вы точно хотите удалить профиль?";
+
+    public static final String BLUSH_EMOJI = ":blush:";
+
+    public static final String generateStartMeetingMessage(String name) {
+        return EmojiParser.parseToUnicode("Привет, " + name + ", рад тебя видеть!" + " " + BLUSH_EMOJI);
+    }
 
 
     // Global session context
@@ -39,12 +48,14 @@ public class GlobalConstants {
     public static final String GLOBAL_CONTEXT_DEFAULT = "default";
     public static final String GLOBAL_CONTEXT_USER_REGISTRATION = "user_registration";
     public static final String GLOBAL_CONTEXT_PET_REGISTRATION = "pet_registration";
-    public static final String GLOBAL_CONTEXT_USER_EDIT= "user_edit";
+    public static final String GLOBAL_CONTEXT_USER_EDIT = "user_edit";
+    public static final String GLOBAL_CONTEXT_MEETING_REGISTRATION = "meeting_registration";
 
     // Global files/dirs names
     public static final String PHOTO_STORAGE_DIR = "downloaded_photos";
 
-
+    // Logs texts
+    public static final String ERROR_OCCURRED = "Error occurred: ";
 
 
 }

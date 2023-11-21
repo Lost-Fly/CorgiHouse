@@ -30,9 +30,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.github.lostfly.corgihousetelegrambot.constants.CommandListConstants.*;
 import static com.github.lostfly.corgihousetelegrambot.constants.GlobalConstants.*;
-import static com.github.lostfly.corgihousetelegrambot.listMenus.ListMenus.*;
-import static com.github.lostfly.corgihousetelegrambot.service.PetRegistration.CANCEL_OPERATION;
+import static com.github.lostfly.corgihousetelegrambot.constants.KeyboardMenusConstants.*;
+import static com.github.lostfly.corgihousetelegrambot.constants.ListMenusConstants.*;
+import static com.github.lostfly.corgihousetelegrambot.constants.PetRegConstants.CANCEL_OPERATION;
 import static com.github.lostfly.corgihousetelegrambot.service.UserFuncs.EDIT_CHOISE;
 
 
@@ -66,7 +68,6 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Autowired
     private PetsFuncs petsFuncs;
 
-
     @Autowired
     private FileService fileService;
 
@@ -75,17 +76,25 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Autowired
     private ListMenus listMenus;
 
+    @Autowired
+    private MeetingFuncs meetingFuncs;
+
+    @Autowired
+    private MeetingRegistration meetingRegistration;
+    @Autowired
+    private SearchMeetings searchMeetings;
+
     final BotConfig config;
 
     public TelegramBot(BotConfig config) {
 
         this.config = config;
-        // ----------------TO_DECOMPOSE--------------------
+
         List<BotCommand> listofCommands = new ArrayList<>();
-        listofCommands.add(new BotCommand("/start", "Начать"));
-        listofCommands.add(new BotCommand("/help", "Помощь"));
-        listofCommands.add(new BotCommand("/register", "Регистрация пользователя"));
-        // ------------------------------------
+        listofCommands.add(new BotCommand(START_MENU_COMMAND, START_MENU_COMMAND_TEXT));
+        listofCommands.add(new BotCommand(HELP_MENU_COMMAND, HELP_MENU_COMMAND_TEXT));
+        listofCommands.add(new BotCommand(REGISTER_MENU_COMMAND, REGISTER_MENU_COMMAND_TEXT));
+
         try {
             this.execute(new SetMyCommands(listofCommands, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException e) {
@@ -129,19 +138,19 @@ public class TelegramBot extends TelegramLongPollingBot {
                     sendEditMessage(chatId, messageId, userFuncs.deleteProfile(chatId));
                     break;
                 case DELETE_PROFILE_DENY:
-                    sendEditMessage(chatId,messageId, userFuncs.showProfile(chatId), listMenus.profileButtonKeyboard());
+                    sendEditMessage(chatId, messageId, userFuncs.showProfile(chatId), listMenus.profileButtonKeyboard());
                     break;
                 case EDIT_PROFILE:
-                    sendEditMessage(chatId, messageId, EDIT_CHOISE,listMenus.profileEditKeyboard());
+                    sendEditMessage(chatId, messageId, EDIT_CHOISE, listMenus.profileEditKeyboard());
                     break;
                 case EDIT_PROFILE_NAME:
-                    sendEditMessage(chatId, messageId, userFuncs.editProfile(chatId,EDIT_PROFILE_NAME));
+                    sendEditMessage(chatId, messageId, userFuncs.editProfile(chatId, EDIT_PROFILE_NAME));
                     break;
                 case EDIT_PROFILE_LASTNAME:
-                    sendEditMessage(chatId, messageId, userFuncs.editProfile(chatId,EDIT_PROFILE_LASTNAME));
+                    sendEditMessage(chatId, messageId, userFuncs.editProfile(chatId, EDIT_PROFILE_LASTNAME));
                     break;
                 case EDIT_PROFILE_PHONE_NUMBER:
-                    sendEditMessage(chatId, messageId, userFuncs.editProfile(chatId,EDIT_PROFILE_PHONE_NUMBER));
+                    sendEditMessage(chatId, messageId, userFuncs.editProfile(chatId, EDIT_PROFILE_PHONE_NUMBER));
                     break;
                 case PET_QUESTION_CONFIRM, PET_ADD:
                     sendEditMessage(chatId, messageId, petRegistration.initializeRegistration(update));
@@ -150,10 +159,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                     sendMessage(chatId, petsFuncs.deleteAnimalSelection(chatId));
                     break;
                 case PET_QUESTION_DENY:
-                    sendEditMessage(chatId,messageId,CANCEL_OPERATION);
+                    sendEditMessage(chatId, messageId, CANCEL_OPERATION);
                     break;
-
-
+                case MEETING_ADD:
+                    sendEditMessage(chatId, messageId, meetingRegistration.initializeRegistration(update));
+                    break;
                 default:
                     sendMessage(chatId, INDEV_TEXT, keyboardMenus.mainKeyboard());
                     break;
@@ -166,26 +176,51 @@ public class TelegramBot extends TelegramLongPollingBot {
             String messageText = update.getMessage().getText();
 
             switch (messageText) {
-                case "/start" ->
-                        sendMessage(chatId, generalFuncs.startCommandReceived(chatId, update.getMessage().getChat().getFirstName()), keyboardMenus.mainKeyboard());
-                case "/help" -> sendMessage(chatId, HELP_TEXT, keyboardMenus.mainKeyboard());
-                case "/register" ->
-                        sendMessage(chatId, userRegistration.initializeRegistration(update));
-                case "Питомцы" -> sendMessage(chatId, petsFuncs.showPets(chatId));
-                case "Профиль" -> sendMessage(chatId, userFuncs.showProfile(chatId), listMenus.profileButtonKeyboard());
-                default -> sendMessage(chatId, INDEV_TEXT, keyboardMenus.mainKeyboard());
+                case START_MENU_COMMAND:
+                    sendMessage(chatId, generalFuncs.startCommandReceived(chatId, update.getMessage().getChat().getFirstName()), keyboardMenus.mainKeyboard());
+                    break;
+                case HELP_MENU_COMMAND:
+                    sendMessage(chatId, HELP_TEXT, keyboardMenus.mainKeyboard());
+                    break;
+                case REGISTER_MENU_COMMAND:
+                    sendMessage(chatId, userRegistration.initializeRegistration(update));
+                    break;
+                case PETS:
+                    sendMessage(chatId, petsFuncs.showPets(chatId));
+                    break;
+                case MY_MEETINGS:
+                    sendMessage(chatId, meetingFuncs.changeToMyMeetings(chatId));
+                    sendMessage(chatId, meetingFuncs.showMyMeetings(chatId));
+                    break;
+                case MY_MEETINGS_CREATED:
+                    sendMessage(chatId, meetingFuncs.showCreatedMeetings(chatId));
+                    break;
+                case MY_MEETINGS_APPLIED:
+                    sendMessage(chatId, meetingFuncs.showAppliedMeetings(chatId));
+                    break;
+                case SEARCH_MEETINGS:
+                    sendMessage(chatId, searchMeetings.searchMeetings(chatId));
+                    break;
+                case BACK:
+                    sendMessage(chatId, meetingFuncs.changeToMainMenu(chatId));
+                    break;
+                case PROFILE:
+                    sendMessage(chatId, userFuncs.showProfile(chatId), listMenus.profileButtonKeyboard());
+                    break;
+                default:
+                    sendMessage(chatId, INDEV_TEXT, keyboardMenus.mainKeyboard());
+                    break;
             }
         } else {
             String messageText = update.getMessage().getText();
             switch (sessionRepository.findByChatId(chatId).getGlobalFunctionContext()) {
                 case GLOBAL_CONTEXT_USER_REGISTRATION ->
                         sendMessage(chatId, userRegistration.continueRegistration(update));
-                case GLOBAL_CONTEXT_PET_REGISTRATION -> sendMessage(chatId, petRegistration.continueRegistration(update));
-                case GLOBAL_CONTEXT_USER_EDIT ->
-                        sendMessage(chatId, userFuncs.editProfileAction(chatId,messageText));
-                case GLOBAL_CONTEXT_PET_DELETE ->
-                        sendMessage(chatId, petsFuncs.deleteAnimal(chatId, messageText));
-
+                case GLOBAL_CONTEXT_PET_REGISTRATION ->
+                        sendMessage(chatId, petRegistration.continueRegistration(update));
+                case GLOBAL_CONTEXT_USER_EDIT -> sendMessage(chatId, userFuncs.editProfileAction(chatId, messageText));
+                case GLOBAL_CONTEXT_PET_DELETE -> sendMessage(chatId, petsFuncs.deleteAnimal(chatId, messageText));
+                case GLOBAL_CONTEXT_MEETING_REGISTRATION -> sendMessage(chatId, meetingRegistration.continueRegistration(update));
                 default -> {
                     sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
                     log.error("No global context found -  " + update.getMessage().getText());
@@ -197,7 +232,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
 
-    private void downloadAndSendImage(Update update) {
+    private void downloadImage(Update update) {
 
         long chatId = update.getMessage().getChatId();
 
@@ -210,7 +245,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                 getFileRequest.setFileId(photo.getFileId());
                 org.telegram.telegrambots.meta.api.objects.File file = execute(getFileRequest);
                 java.io.File localFile = fileService.downloadPhotoByFilePath(file.getFilePath(), PHOTO_STORAGE_DIR, chatId, getBotToken());
-                sendPhoto(chatId, localFile);
 
             } catch (TelegramApiException | IOException e) {
                 e.printStackTrace();
@@ -234,7 +268,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             execute(message);
         } catch (TelegramApiException e) {
-            log.error("Error occurred" + e.getMessage());
+            log.error(ERROR_OCCURRED + e.getMessage());
         }
     }
 
@@ -247,7 +281,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             execute(message);
         } catch (TelegramApiException e) {
-            log.error("Error occurred" + e.getMessage());
+            log.error(ERROR_OCCURRED + e.getMessage());
         }
     }
 
@@ -259,17 +293,19 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             execute(message);
         } catch (TelegramApiException e) {
-            log.error("Error occurred" + e.getMessage());
+            log.error(ERROR_OCCURRED + e.getMessage());
         }
     }
 
     void sendMessage(long chatId, SendMessage message) {
+        if (message == null){return;}
+
         message.setChatId(String.valueOf(chatId));
 
         try {
             execute(message);
         } catch (TelegramApiException e) {
-            log.error("Error occurred" + e.getMessage());
+            log.error(ERROR_OCCURRED + e.getMessage());
         }
     }
 
@@ -284,7 +320,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             execute(message);
         } catch (TelegramApiException e) {
-            log.error("Error occurred" + e.getMessage());
+            log.error(ERROR_OCCURRED + e.getMessage());
         }
     }
 
@@ -297,7 +333,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             execute(message);
         } catch (TelegramApiException e) {
-            log.error("Error occurred" + e.getMessage());
+            log.error(ERROR_OCCURRED + e.getMessage());
         }
     }
 

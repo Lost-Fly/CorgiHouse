@@ -19,30 +19,27 @@ public interface PetRepository extends CrudRepository<Pet, Long> {
     void deleteByOwnerId(Long ownerId);
 
     @Transactional
-    void deleteByOwnerIdAndPetId(Long ownerId,Long petId);
+    void deleteByOwnerIdAndPetId(Long ownerId, Long petId);
 
 
     @Query("select max(pet.petId) from petDataTable pet where pet.ownerId = :ownerId")
     Long findTopByOrderByOwnerIdDesc(@Param("ownerId") Long ownerId);
 
 
-    //Long findTopByOrderByOwnerIdDesc();
-
     @Modifying
     @Transactional
     @Query("update petDataTable u set u.petName = ?1 where u.ownerId = ?2 and u.petId = ?3")
-    void setPetNameByOwnerIdAndPetId(String petname, Long ownerId,Long petId);
+    void setPetNameByOwnerIdAndPetId(String petname, Long ownerId, Long petId);
 
     @Modifying
     @Transactional
     @Query("update petDataTable u set u.animalType = ?1 where u.ownerId = ?2 and u.petId = ?3")
-    void setAnimalTypeByOwnerIdAndPetId(String animaltype, Long ownerId,Long petId);
+    void setAnimalTypeByOwnerIdAndPetId(String animaltype, Long ownerId, Long petId);
 
     @Modifying
     @Transactional
     @Query("update petDataTable u set u.petBreed = ?1 where u.ownerId = ?2 and u.petId = ?3")
-    void setPetBreedByOwnerIdAndPetId(String petbreed, Long ownerId,Long petId);
-
+    void setPetBreedByOwnerIdAndPetId(String petbreed, Long ownerId, Long petId);
 
 
 }

@@ -12,6 +12,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.util.ArrayList;
 
 import static com.github.lostfly.corgihousetelegrambot.constants.GlobalConstants.*;
+import static com.github.lostfly.corgihousetelegrambot.constants.PetFuncsConstants.*;
 
 @Slf4j
 @Component
@@ -24,9 +25,6 @@ public class PetsFuncs {
     private ListMenus listMenus;
     @Autowired
     private PetRepository petRepository;
-
-    public static final String DELETE_ANIMAL_SELECT_TEXT = "Введите ID животного для удаления:"+"\n"+ "(без лишних символов, только цифру)";
-    public static final String DELETE_ANIMAL_TEXT = "Животное удалено";
 
     public SendMessage showPets(Long chatId) {
 
@@ -58,30 +56,30 @@ public class PetsFuncs {
         }
 
     }
-    public String deleteAnimalSelection (Long chatId) {
+
+    public String deleteAnimalSelection(Long chatId) {
         sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_PET_DELETE, chatId);
         return DELETE_ANIMAL_SELECT_TEXT;
     }
 
-    public String deleteAnimal (Long chatId,String getFromMsg) {
+    public String deleteAnimal(Long chatId, String getFromMsg) {
         Long petId;
         try {
-            petId=Long.parseLong(getFromMsg);
-        }catch (NumberFormatException e) {
+            petId = Long.parseLong(getFromMsg);
+        } catch (NumberFormatException e) {
             sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
-            return "Кринж, идите нахуй";
+            return INCORRECT_NUMBER_ANS;
         }
 
-        if (petRepository.findByPetIdAndOwnerId(petId,chatId) != null){
-            petRepository.deleteByOwnerIdAndPetId(chatId,petId);
+        if (petRepository.findByPetIdAndOwnerId(petId, chatId) != null) {
+            petRepository.deleteByOwnerIdAndPetId(chatId, petId);
             sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
             return DELETE_ANIMAL_TEXT;
-        }else{
+        } else {
             sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
-            return "Ты дурак?";
+            return INCORRECT_PET_NUMBER_ANS;
         }
     }
-
 
 
 }

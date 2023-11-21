@@ -3,33 +3,17 @@ package com.github.lostfly.corgihousetelegrambot.listMenus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.lostfly.corgihousetelegrambot.constants.ListMenusConstants.*;
+
 @Slf4j
 @Component
 public class ListMenus {
-
-    public static final String EDIT_PROFILE = "edit_profile";
-    public static final String EDIT_PROFILE_BUTTON_TEXT = "Редактировать профиль";
-    public static final String DELETE_PROFILE_QUESTION = "delete_profile_question";
-    public static final String DELETE_PROFILE_BUTTON_TEXT = "Удалить профиль";
-    public static final String EDIT_PROFILE_NAME_TEXT = "Имя";
-    public static final String EDIT_PROFILE_NAME = "edit_profile_name";
-    public static final String EDIT_PROFILE_LASTNAME_TEXT = "Фамилия";
-    public static final String EDIT_PROFILE_LASTNAME = "edit_profile_lastname";
-    public static final String EDIT_PROFILE_PHONE_NUMBER_TEXT = "Телефон";
-    public static final String EDIT_PROFILE_PHONE_NUMBER = "edit_profile_phone_number";
-    public static final String PET_QUESTION_CONFIRM_BUTTON_TEXT = "Да" ;
-    public static final String PET_QUESTION_CONFIRM = "pet_question_confirm";
-    public static final String PET_QUESTION_DENY_TEXT = "Нет";
-    public static final String PET_QUESTION_DENY = "pet_question_deny";
-    public static final String PET_ADD_TEXT = "Добавить";
-    public static final String PET_ADD = "pet_add";
-    public static final String PET_DELETE_SELECTION_TEXT = "Удалить";
-    public static final String PET_DELETE_SELECTION = "delete_add";
 
     public InlineKeyboardMarkup profileButtonKeyboard() {
         InlineKeyboardMarkup profileButtonKeyboard = new InlineKeyboardMarkup();
@@ -53,14 +37,8 @@ public class ListMenus {
         profileEditRows.add(profileEditRow2);
         profileButtonKeyboard.setKeyboard(profileEditRows);
 
-        return  profileButtonKeyboard;
+        return profileButtonKeyboard;
     }
-
-    public static final String DELETE_PROFILE_QUESTION_TEXT = "Вы точно хотите удалить профиль?";
-    public static final String DELETE_PROFILE_CONFIRM = "delete_profile_confirm";
-    public static final String DELETE_PROFILE_DENY = "delete_profile_deny";
-    public static final String DELETE_PROFILE_CONFIRM_TEXT = "Да";
-    public static final String DELETE_PROFILE_DENY_TEXT = "Нет";
 
     public InlineKeyboardMarkup profileDeleteKeyboard() {
         InlineKeyboardMarkup profileButtonKeyboard = new InlineKeyboardMarkup();
@@ -82,7 +60,7 @@ public class ListMenus {
         profileDelRows.add(profileDelRow1);
         profileButtonKeyboard.setKeyboard(profileDelRows);
 
-        return  profileButtonKeyboard;
+        return profileButtonKeyboard;
     }
 
     public InlineKeyboardMarkup profileEditKeyboard() {
@@ -119,7 +97,7 @@ public class ListMenus {
 
         profileButtonKeyboard.setKeyboard(profileEditRows);
 
-        return  profileButtonKeyboard;
+        return profileButtonKeyboard;
     }
 
     public InlineKeyboardMarkup petQuestionButtonKeyboard() {
@@ -143,7 +121,7 @@ public class ListMenus {
         petQuestionRows.add(petQuestionRow1);
         petQuestionKeyboard.setKeyboard(petQuestionRows);
 
-        return  petQuestionKeyboard;
+        return petQuestionKeyboard;
     }
 
     public InlineKeyboardMarkup petAddButtonKeyboard() {
@@ -168,7 +146,85 @@ public class ListMenus {
         petAddRows.add(petAddRow1);
         petAddKeyboard.setKeyboard(petAddRows);
 
-        return  petAddKeyboard;
+        return petAddKeyboard;
+    }
+
+    public InlineKeyboardMarkup meetingKeyboard() {
+        InlineKeyboardMarkup meetingCreateKeyboard = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> meetingCreateRows = new ArrayList<>();
+        List<InlineKeyboardButton> meetingCreateRow = new ArrayList<>();
+
+        var meetingCreateButton = new InlineKeyboardButton();
+
+        meetingCreateButton.setText(MEETING_ADD_TEXT);
+        meetingCreateButton.setCallbackData(MEETING_ADD);
+
+        meetingCreateRow.add(meetingCreateButton);
+        meetingCreateRows.add(meetingCreateRow);
+        meetingCreateKeyboard.setKeyboard(meetingCreateRows);
+
+        return meetingCreateKeyboard;
+    }
+
+    public ReplyKeyboard createdMeetingKeyboard() {
+        InlineKeyboardMarkup createdMeetingKeyboard = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> createdMeetingRows = new ArrayList<>();
+        List<InlineKeyboardButton> createdMeetingRow = new ArrayList<>();
+
+        var showInfoCreatedMeetingButton = new InlineKeyboardButton();
+
+        showInfoCreatedMeetingButton.setText(CREATED_MEETINGS_FULL_INFO_TEXT);
+        showInfoCreatedMeetingButton.setCallbackData(CREATED_MEETINGS_FULL_INFO);
+
+        createdMeetingRow.add(showInfoCreatedMeetingButton);
+        createdMeetingRows.add(createdMeetingRow);
+        createdMeetingKeyboard.setKeyboard(createdMeetingRows);
+
+        return createdMeetingKeyboard;
+    }
+
+    public ReplyKeyboard appliedMeetingKeyboard() {
+        InlineKeyboardMarkup createdMeetingKeyboard = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> createdMeetingRows = new ArrayList<>();
+        List<InlineKeyboardButton> createdMeetingRow = new ArrayList<>();
+
+        var showInfoCreatedMeetingButton = new InlineKeyboardButton();
+
+        showInfoCreatedMeetingButton.setText(APPLIED_MEETINGS_FULL_INFO_TEXT);
+        showInfoCreatedMeetingButton.setCallbackData(APPLIED_MEETINGS_FULL_INFO);
+
+        createdMeetingRow.add(showInfoCreatedMeetingButton);
+        createdMeetingRows.add(createdMeetingRow);
+        createdMeetingKeyboard.setKeyboard(createdMeetingRows);
+
+        return createdMeetingKeyboard;
+    }
+
+    public ReplyKeyboard searchMeetingKeyboard() {
+        InlineKeyboardMarkup createdMeetingKeyboard = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> createdMeetingRows = new ArrayList<>();
+        List<InlineKeyboardButton> createdMeetingRow = new ArrayList<>();
+
+        var likeMeetingButton = new InlineKeyboardButton();
+        var dislikeMeetingButton = new InlineKeyboardButton();
+        var pinnedMeetingButton = new InlineKeyboardButton();
+
+        likeMeetingButton.setText(LIKE_MEETING_TEXT);
+        likeMeetingButton.setCallbackData(LIKE_MEETING);
+
+        dislikeMeetingButton.setText(DISLIKE_MEETING_TEXT);
+        dislikeMeetingButton.setCallbackData(DISLIKE_MEETING);
+
+        pinnedMeetingButton.setText(PIN_MEETING_TEXT);
+        pinnedMeetingButton.setCallbackData(PIN_MEETING);
+
+        createdMeetingRow.add(likeMeetingButton);
+        createdMeetingRow.add(dislikeMeetingButton);
+        createdMeetingRow.add(pinnedMeetingButton);
+        createdMeetingRows.add(createdMeetingRow);
+        createdMeetingKeyboard.setKeyboard(createdMeetingRows);
+
+        return createdMeetingKeyboard;
     }
 
 }

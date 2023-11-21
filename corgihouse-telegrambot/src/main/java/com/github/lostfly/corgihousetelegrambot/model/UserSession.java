@@ -23,6 +23,27 @@ public class UserSession {
     @Value("default")
     private String petRegisterFunctionContext;
 
+    @Value("default")
+    private String meetingRegisterFunctionContext;
+
+    private Long meetingRegisterFunctionId;
+
+    public Long getMeetingRegisterFunctionId() {
+        return meetingRegisterFunctionId;
+    }
+
+    public void setMeetingRegisterFunctionId(Long meetingRegisterFunctionId) {
+        this.meetingRegisterFunctionId = meetingRegisterFunctionId;
+    }
+
+    public String getMeetingRegisterFunctionContext() {
+        return meetingRegisterFunctionContext;
+    }
+
+    public void setMeetingRegisterFunctionContext(String meetingRegisterFunctionContext) {
+        this.meetingRegisterFunctionContext = meetingRegisterFunctionContext;
+    }
+
     public String getPetRegisterFunctionContext() {
         return petRegisterFunctionContext;
     }
@@ -30,7 +51,6 @@ public class UserSession {
     public void setPetRegisterFunctionContext(String petRegisterFunctionContext) {
         this.petRegisterFunctionContext = petRegisterFunctionContext;
     }
-
 
 
     public String getEditFunctionContext() {

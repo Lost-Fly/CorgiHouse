@@ -24,7 +24,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
     void setPhoneNumberByChatId(String firstname, Long chatId);
 
 
-
     User findByChatId(Long chatId);
 
     @Transactional

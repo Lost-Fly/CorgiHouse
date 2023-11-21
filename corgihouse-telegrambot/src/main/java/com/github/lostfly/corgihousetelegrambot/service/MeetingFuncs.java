@@ -92,6 +92,15 @@ public class MeetingFuncs {
         return message;
     }
 
+    public String showMainMeetingInfo(Meeting meeting){
+        String created_meeting_item = "ID события: " + meeting.getMeetingId() + "\n" +
+                "Название: " + meeting.getTitle() + "\n" +
+                "Дата: " + meeting.getEventDate() + "\n" +
+                "Тип животного: " + meeting.getAnimalType() + "\n" +
+                "Порода: " + meeting.getBreed() + "\n\n";
+        return created_meeting_item;
+    }
+
     public SendMessage showCreatedMeetings(long chatId) {
         ArrayList<Meeting> my_meetings_created = getMyCreatedMeetings(chatId);
         SendMessage message = new SendMessage();
@@ -103,14 +112,7 @@ public class MeetingFuncs {
             StringBuilder created_meetings_list = new StringBuilder();
 
             for(Meeting meeting : my_meetings_created){
-
-                String created_meeting_item = "ID события: " + meeting.getMeetingId() + "\n" +
-                        "Название: " + meeting.getTitle() + "\n" +
-                        "Дата: " + meeting.getEventDate() + "\n" +
-                        "Тип животного: " + meeting.getAnimalType() + "\n" +
-                        "Порода: " + meeting.getBreed() + "\n\n";
-
-                created_meetings_list.append(created_meeting_item);
+                created_meetings_list.append(showMainMeetingInfo(meeting));
             }
 
             message.setText(created_meetings_list.toString());

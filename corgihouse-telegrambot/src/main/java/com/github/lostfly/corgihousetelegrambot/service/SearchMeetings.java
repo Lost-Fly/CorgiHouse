@@ -50,28 +50,23 @@ public class SearchMeetings {
                 "Максимальное кол-во участников: " + meeting.getUserLimit() + "\n\n" +
                 "Заполнено: " + fullFilledStatus + "\n\n" +
                 "Прошло: " + completedStatus + "\n\n";
-        return created_meeting_item.toString();
+        return created_meeting_item;
     }
 
     public SendMessage searchMeetings(long chatId) {
 
-        ArrayList<Meeting> my_meetings_created = meetingFuncs.getMyCreatedMeetings(chatId);
-        ArrayList<Meeting> my_meetings_applied = meetingFuncs.getMyAppliedMeetings(chatId);
+        ArrayList<Meeting> all_meetings_created = meetingRepository.findAll();
+
 
         SendMessage message = new SendMessage();
-        if (my_meetings_created.isEmpty() && my_meetings_applied.isEmpty()) {
+        if (all_meetings_created.isEmpty()) {
             message.setText(NO_AT_ALL_MEETINGS_TEXT);
             message.setReplyMarkup(listMenus.meetingKeyboard());
         }else{
 
-            ArrayList<Meeting> meetingsForSearching = new ArrayList<>();
-
-            meetingsForSearching.addAll(my_meetings_created);
-            meetingsForSearching.addAll(my_meetings_applied);
-
             StringBuilder created_meetings_list = new StringBuilder();
 
-            for(Meeting meeting : meetingsForSearching){
+            for(Meeting meeting : all_meetings_created){
                 created_meetings_list.append(showAllMeetingInfo(meeting));
             }
 

@@ -1,21 +1,19 @@
-package com.github.lostfly.corgihousetelegrambot.service;
+package com.github.lostfly.corgihousetelegrambot.service.modelsConnectedFuncs;
 
 import com.github.lostfly.corgihousetelegrambot.keyboardMenus.KeyboardMenus;
 import com.github.lostfly.corgihousetelegrambot.listMenus.ListMenus;
 import com.github.lostfly.corgihousetelegrambot.model.Meeting;
-import com.github.lostfly.corgihousetelegrambot.model.MeetingRepository;
-import com.github.lostfly.corgihousetelegrambot.model.SessionRepository;
-import com.github.lostfly.corgihousetelegrambot.model.UserToMeetingRepository;
-import jakarta.persistence.Id;
+import com.github.lostfly.corgihousetelegrambot.repository.MeetingRepository;
+import com.github.lostfly.corgihousetelegrambot.repository.SessionRepository;
+import com.github.lostfly.corgihousetelegrambot.repository.UserToMeetingRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 
-import static com.github.lostfly.corgihousetelegrambot.constants.ShowMeetingsConstants.NO_AT_ALL_MEETINGS_TEXT;
+import static com.github.lostfly.corgihousetelegrambot.constants.funcsConstants.ShowMeetingsConstants.NO_AT_ALL_MEETINGS_TEXT;
 
 @Slf4j
 @Component
@@ -55,7 +53,7 @@ public class SearchMeetings {
 
     public SendMessage searchMeetings(long chatId) {
 
-        ArrayList<Meeting> all_meetings_created = meetingRepository.findAll();
+        ArrayList<Meeting> all_meetings_created = meetingRepository.findAllByOwnerIdNot(chatId);
 
 
         SendMessage message = new SendMessage();

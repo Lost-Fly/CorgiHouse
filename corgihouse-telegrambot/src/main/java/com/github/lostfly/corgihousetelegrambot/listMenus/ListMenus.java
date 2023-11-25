@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.github.lostfly.corgihousetelegrambot.constants.ListMenusConstants.*;
+import static com.github.lostfly.corgihousetelegrambot.constants.keyboardsConstants.ListMenusConstants.*;
 
 @Slf4j
 @Component
@@ -184,26 +184,26 @@ public class ListMenus {
     }
 
     public ReplyKeyboard appliedMeetingKeyboard() {
-        InlineKeyboardMarkup createdMeetingKeyboard = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> createdMeetingRows = new ArrayList<>();
-        List<InlineKeyboardButton> createdMeetingRow = new ArrayList<>();
+        InlineKeyboardMarkup appliedMeetingKeyboard = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> appliedMeetingRows = new ArrayList<>();
+        List<InlineKeyboardButton> appliedMeetingRow = new ArrayList<>();
 
-        var showInfoCreatedMeetingButton = new InlineKeyboardButton();
+        var showInfoAppliedMeetingButton = new InlineKeyboardButton();
 
-        showInfoCreatedMeetingButton.setText(APPLIED_MEETINGS_FULL_INFO_TEXT);
-        showInfoCreatedMeetingButton.setCallbackData(APPLIED_MEETINGS_FULL_INFO);
+        showInfoAppliedMeetingButton.setText(APPLIED_MEETINGS_FULL_INFO_TEXT);
+        showInfoAppliedMeetingButton.setCallbackData(APPLIED_MEETINGS_FULL_INFO);
 
-        createdMeetingRow.add(showInfoCreatedMeetingButton);
-        createdMeetingRows.add(createdMeetingRow);
-        createdMeetingKeyboard.setKeyboard(createdMeetingRows);
+        appliedMeetingRow.add(showInfoAppliedMeetingButton);
+        appliedMeetingRows.add(appliedMeetingRow);
+        appliedMeetingKeyboard.setKeyboard(appliedMeetingRows);
 
-        return createdMeetingKeyboard;
+        return appliedMeetingKeyboard;
     }
 
     public ReplyKeyboard searchMeetingKeyboard() {
-        InlineKeyboardMarkup createdMeetingKeyboard = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> createdMeetingRows = new ArrayList<>();
-        List<InlineKeyboardButton> createdMeetingRow = new ArrayList<>();
+        InlineKeyboardMarkup searchMeetingKeyboard = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> searchMeetingRows = new ArrayList<>();
+        List<InlineKeyboardButton> searchMeetingRow = new ArrayList<>();
 
         var likeMeetingButton = new InlineKeyboardButton();
         var dislikeMeetingButton = new InlineKeyboardButton();
@@ -218,13 +218,13 @@ public class ListMenus {
         pinnedMeetingButton.setText(PIN_MEETING_TEXT);
         pinnedMeetingButton.setCallbackData(PIN_MEETING);
 
-        createdMeetingRow.add(likeMeetingButton);
-        createdMeetingRow.add(dislikeMeetingButton);
-        createdMeetingRow.add(pinnedMeetingButton);
-        createdMeetingRows.add(createdMeetingRow);
-        createdMeetingKeyboard.setKeyboard(createdMeetingRows);
+        searchMeetingRow.add(likeMeetingButton);
+        searchMeetingRow.add(dislikeMeetingButton);
+//        searchMeetingRow.add(pinnedMeetingButton);
+        searchMeetingRows.add(searchMeetingRow);
+        searchMeetingKeyboard.setKeyboard(searchMeetingRows);
 
-        return createdMeetingKeyboard;
+        return searchMeetingKeyboard;
     }
 
 }

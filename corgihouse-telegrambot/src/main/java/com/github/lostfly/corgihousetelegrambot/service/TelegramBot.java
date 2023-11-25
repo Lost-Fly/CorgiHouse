@@ -3,9 +3,16 @@ package com.github.lostfly.corgihousetelegrambot.service;
 import com.github.lostfly.corgihousetelegrambot.config.BotConfig;
 import com.github.lostfly.corgihousetelegrambot.keyboardMenus.KeyboardMenus;
 import com.github.lostfly.corgihousetelegrambot.listMenus.ListMenus;
-import com.github.lostfly.corgihousetelegrambot.model.PetRepository;
-import com.github.lostfly.corgihousetelegrambot.model.SessionRepository;
-import com.github.lostfly.corgihousetelegrambot.model.UserRepository;
+import com.github.lostfly.corgihousetelegrambot.repository.PetRepository;
+import com.github.lostfly.corgihousetelegrambot.repository.SessionRepository;
+import com.github.lostfly.corgihousetelegrambot.repository.UserRepository;
+import com.github.lostfly.corgihousetelegrambot.service.generalFuncs.FileService;
+import com.github.lostfly.corgihousetelegrambot.service.generalFuncs.GeneralFuncs;
+import com.github.lostfly.corgihousetelegrambot.service.sessionService.SessionService;
+import com.github.lostfly.corgihousetelegrambot.service.modelsConnectedFuncs.*;
+import com.github.lostfly.corgihousetelegrambot.service.regFuncs.MeetingRegistration;
+import com.github.lostfly.corgihousetelegrambot.service.regFuncs.PetRegistration;
+import com.github.lostfly.corgihousetelegrambot.service.regFuncs.UserRegistration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,14 +36,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
-import static com.github.lostfly.corgihousetelegrambot.constants.CommandListConstants.*;
+import static com.github.lostfly.corgihousetelegrambot.constants.keyboardsConstants.CommandListConstants.*;
 import static com.github.lostfly.corgihousetelegrambot.constants.GlobalConstants.*;
-import static com.github.lostfly.corgihousetelegrambot.constants.KeyboardMenusConstants.*;
-import static com.github.lostfly.corgihousetelegrambot.constants.ListMenusConstants.*;
-import static com.github.lostfly.corgihousetelegrambot.constants.PetRegConstants.CANCEL_OPERATION;
-import static com.github.lostfly.corgihousetelegrambot.service.UserFuncs.EDIT_CHOISE;
-
+import static com.github.lostfly.corgihousetelegrambot.constants.keyboardsConstants.KeyboardMenusConstants.*;
+import static com.github.lostfly.corgihousetelegrambot.constants.keyboardsConstants.ListMenusConstants.*;
+import static com.github.lostfly.corgihousetelegrambot.constants.regConstants.PetRegConstants.CANCEL_OPERATION;
+import static com.github.lostfly.corgihousetelegrambot.constants.funcsConstants.UserFuncsConstants.EDIT_CHOISE;
 
 @Slf4j
 @Component
@@ -87,6 +96,9 @@ public class TelegramBot extends TelegramLongPollingBot {
     final BotConfig config;
 
     public TelegramBot(BotConfig config) {
+
+        super(String.valueOf(new ThreadPoolExecutor(6, 12, 60,
+                TimeUnit.SECONDS, new LinkedBlockingQueue<>())));
 
         this.config = config;
 

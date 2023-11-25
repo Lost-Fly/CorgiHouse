@@ -1,11 +1,11 @@
-package com.github.lostfly.corgihousetelegrambot.constants;
+package com.github.lostfly.corgihousetelegrambot.constants.regConstants;
 
 import com.vdurmont.emoji.EmojiParser;
 
 public class MeetingRegConstants {
 
     // MEETING_REGISTRATION
-    // Meeting registration func context
+    // meeting registration func context
     public static final String SET_MEETING_TITLE = "set_meeting_title";
     public static final String SET_MEETING_DESCRIPTION = "set_meeting_description";
     public static final String SET_MEETING_PLACE = "set_meeting_place";
@@ -15,7 +15,7 @@ public class MeetingRegConstants {
     public static final String SET_MEETING_BREED = "set_meeting_breed";
 
 
-    // Meeting registration func texts
+    // meeting registration func texts
     public static final String SET_MEETING_TITLE_TEXT = "Введите заголовок события:";
     public static final String SET_MEETING_DESCRIPTION_TEXT = "Введите описание события:";
     public static final String SET_MEETING_PLACE_TEXT = "Введите место(адрес) проведения события:";

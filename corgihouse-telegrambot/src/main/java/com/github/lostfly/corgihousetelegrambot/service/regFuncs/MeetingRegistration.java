@@ -1,6 +1,8 @@
-package com.github.lostfly.corgihousetelegrambot.service;
+package com.github.lostfly.corgihousetelegrambot.service.regFuncs;
 
-import com.github.lostfly.corgihousetelegrambot.model.*;
+import com.github.lostfly.corgihousetelegrambot.model.Meeting;
+import com.github.lostfly.corgihousetelegrambot.model.UserToMeeting;
+import com.github.lostfly.corgihousetelegrambot.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,7 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static com.github.lostfly.corgihousetelegrambot.constants.GlobalConstants.*;
-import static com.github.lostfly.corgihousetelegrambot.constants.MeetingRegConstants.*;
+import static com.github.lostfly.corgihousetelegrambot.constants.regConstants.MeetingRegConstants.*;
 
 @Slf4j
 @Component
@@ -46,7 +48,7 @@ public class MeetingRegistration {
             Long meetingId = meetingRepository.findTopByOrderByMeetingIdDesc();
             meeting.setMeetingId(meetingId + 1);
             userToMeeting.setMeetingId(meetingId + 1);
-            sessionRepository.setMeetingRegisterFunctionId(meetingId, chatId);
+            sessionRepository.setMeetingRegisterFunctionId(meetingId + 1, chatId);
         } else {
             Long meetingId = 1L;
             meeting.setMeetingId(meetingId);
@@ -96,12 +98,16 @@ public class MeetingRegistration {
 
 
     private String SetMeetingTitle(long chatId, String messageText) {
+        System.out.println(messageText);
+        System.out.println(sessionRepository.findByChatId(chatId).getMeetingRegisterFunctionId());
         meetingRepository.setTitleByOwnerIdAndMeetingId(messageText, chatId, sessionRepository.findByChatId(chatId).getMeetingRegisterFunctionId());
         sessionRepository.setMeetingRegisterFunctionContext(SET_MEETING_DESCRIPTION, chatId);
         return (SET_MEETING_DESCRIPTION_TEXT);
     }
 
     private String SetMeetingDescription(long chatId, String messageText) {
+        System.out.println(messageText);
+        System.out.println(sessionRepository.findByChatId(chatId).getMeetingRegisterFunctionId());
         meetingRepository.setDescriptionByOwnerIdAndMeetingId(messageText, chatId, sessionRepository.findByChatId(chatId).getMeetingRegisterFunctionId());
         sessionRepository.setMeetingRegisterFunctionContext(SET_MEETING_PLACE, chatId);
         return (SET_MEETING_PLACE_TEXT);

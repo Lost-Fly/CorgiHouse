@@ -1,5 +1,7 @@
-package com.github.lostfly.corgihousetelegrambot.model;
+package com.github.lostfly.corgihousetelegrambot.repository;
 
+import com.github.lostfly.corgihousetelegrambot.model.Meeting;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,9 +18,18 @@ public interface MeetingRepository extends CrudRepository<Meeting, Long> {
 
     ArrayList<Meeting> findAllByOwnerId(Long ownerId);
 
+    ArrayList<Meeting> findAllByOwnerIdNot(Long ownerId);
+
     ArrayList<Meeting> findAll();
 
     ArrayList<Meeting> findAllByAnimalType(String animalType);
+
+    @Modifying
+    @Transactional
+    @Query("SELECT m FROM meetingDataTable m " +
+            "JOIN userToMeetingDataTable utm ON m.meetingId = utm.meetingId " +
+            "WHERE utm.chatId = :chatId AND utm.chatId != m.ownerId")
+    ArrayList<Meeting> findMyAppliedMeetings(@Param("chatId") Long chatId);
 
     @Transactional
     void deleteAllByOwnerId(Long ownerId);

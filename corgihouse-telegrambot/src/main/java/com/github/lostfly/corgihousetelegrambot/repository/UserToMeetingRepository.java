@@ -1,5 +1,6 @@
-package com.github.lostfly.corgihousetelegrambot.model;
+package com.github.lostfly.corgihousetelegrambot.repository;
 
+import com.github.lostfly.corgihousetelegrambot.model.UserToMeeting;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

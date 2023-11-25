@@ -1,4 +1,4 @@
-package com.github.lostfly.corgihousetelegrambot.constants;
+package com.github.lostfly.corgihousetelegrambot.constants.keyboardsConstants;
 
 public class KeyboardMenusConstants {
     // KEYBOARD_MENUS

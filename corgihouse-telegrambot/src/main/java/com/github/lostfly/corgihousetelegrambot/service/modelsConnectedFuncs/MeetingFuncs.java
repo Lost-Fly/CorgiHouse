@@ -1,18 +1,19 @@
-package com.github.lostfly.corgihousetelegrambot.service;
+package com.github.lostfly.corgihousetelegrambot.service.modelsConnectedFuncs;
 
 import com.github.lostfly.corgihousetelegrambot.keyboardMenus.KeyboardMenus;
 import com.github.lostfly.corgihousetelegrambot.listMenus.ListMenus;
-import com.github.lostfly.corgihousetelegrambot.model.*;
+import com.github.lostfly.corgihousetelegrambot.model.Meeting;
+import com.github.lostfly.corgihousetelegrambot.model.UserToMeeting;
+import com.github.lostfly.corgihousetelegrambot.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static com.github.lostfly.corgihousetelegrambot.constants.MeetingFuncsConstants.*;
+import static com.github.lostfly.corgihousetelegrambot.constants.funcsConstants.MeetingFuncsConstants.*;
 
 
 @Slf4j
@@ -39,16 +40,16 @@ public class MeetingFuncs {
     }
 
     public  ArrayList<Meeting> getMyAppliedMeetings(Long chatId){
-        ArrayList<UserToMeeting> my_meetings_applied_list = userToMeetingRepository.findAllByChatId(chatId);
-
-        ArrayList<Meeting> my_meetings_applied = new ArrayList<>();
-
-        for (UserToMeeting utmObject : my_meetings_applied_list) {
-            if (!Objects.equals(meetingRepository.findByMeetingId(utmObject.getMeetingId()).getOwnerId(), chatId)) {
-                my_meetings_applied.add(meetingRepository.findByMeetingId(utmObject.getMeetingId()));
-            }
-        }
-        return my_meetings_applied;
+//        ArrayList<UserToMeeting> my_meetings_applied_list = userToMeetingRepository.findAllByChatId(chatId);
+//
+//        ArrayList<Meeting> my_meetings_applied = new ArrayList<>();
+//
+//        for (UserToMeeting utmObject : my_meetings_applied_list) {
+//            if (!Objects.equals(meetingRepository.findByMeetingId(utmObject.getMeetingId()).getOwnerId(), chatId)) {
+//                my_meetings_applied.add(meetingRepository.findByMeetingId(utmObject.getMeetingId()));
+//            }
+//        }
+        return meetingRepository.findMyAppliedMeetings(chatId);
     }
 
     public SendMessage showMyMeetings(Long chatId) {
@@ -154,3 +155,5 @@ public class MeetingFuncs {
 
 
 }
+
+

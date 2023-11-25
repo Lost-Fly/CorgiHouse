@@ -1,22 +1,20 @@
-package com.github.lostfly.corgihousetelegrambot.service;
+package com.github.lostfly.corgihousetelegrambot.service.modelsConnectedFuncs;
 
-import com.github.lostfly.corgihousetelegrambot.model.PetRepository;
-import com.github.lostfly.corgihousetelegrambot.model.SessionRepository;
+import com.github.lostfly.corgihousetelegrambot.repository.PetRepository;
+import com.github.lostfly.corgihousetelegrambot.repository.SessionRepository;
 import com.github.lostfly.corgihousetelegrambot.model.User;
-import com.github.lostfly.corgihousetelegrambot.model.UserRepository;
+import com.github.lostfly.corgihousetelegrambot.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import static com.github.lostfly.corgihousetelegrambot.constants.GlobalConstants.*;
-import static com.github.lostfly.corgihousetelegrambot.constants.ListMenusConstants.*;
-import static com.github.lostfly.corgihousetelegrambot.constants.UserRegConstants.*;
+import static com.github.lostfly.corgihousetelegrambot.constants.keyboardsConstants.ListMenusConstants.*;
+import static com.github.lostfly.corgihousetelegrambot.constants.funcsConstants.UserFuncsConstants.*;
+import static com.github.lostfly.corgihousetelegrambot.constants.regConstants.UserRegConstants.*;
 @Slf4j
 @Component
 public class UserFuncs {
-
-    public static final String DELETE_PROFILE_TEXT = "Профиль успешно удален";
-    public static final String EDIT_CHOISE = "Выберите поле для редактирования";
 
     @Autowired
     private UserRepository userRepository;
@@ -85,19 +83,19 @@ public class UserFuncs {
                 userRepository.setFirstNameByChatId(messageText, chatId);
                 sessionRepository.setEditUserContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
                 sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
-                return "Имя изменено";
+                return CHANGED_NAME_TEXT;
 
             case EDIT_PROFILE_LASTNAME:
                 userRepository.setLastNameByChatId(messageText, chatId);
                 sessionRepository.setEditUserContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
                 sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
-                return "Фамилия изменена";
+                return CHANGED_LAST_NAME_TEXT;
 
             case EDIT_PROFILE_PHONE_NUMBER:
                 userRepository.setPhoneNumberByChatId(messageText, chatId);
                 sessionRepository.setEditUserContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
                 sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
-                return "Телефон изменен";
+                return CHANGED_PHONE_TEXT;
             default:
                 return INDEV_TEXT;
 

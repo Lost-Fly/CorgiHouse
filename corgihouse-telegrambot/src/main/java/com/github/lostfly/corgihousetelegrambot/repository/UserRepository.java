@@ -1,6 +1,7 @@
-package com.github.lostfly.corgihousetelegrambot.model;
+package com.github.lostfly.corgihousetelegrambot.repository;
 
 
+import com.github.lostfly.corgihousetelegrambot.model.User;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

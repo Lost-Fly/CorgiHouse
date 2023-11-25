@@ -29,7 +29,7 @@
 //        globalContextCommandMap.put(GLOBAL_CONTEXT_PET_REGISTRATION, update -> INDEV_TEXT);
 //
 //        // Обработка команд
-//        Update update = ...; // Здесь вы должны получить объект Update
+//        Update update = ...;
 //        String chatId = update.getChatId();
 //
 //        if (update.hasMessage() && Objects.equals(sessionRepository.findByChatId(chatId).getGlobalFunctionContext(), GLOBAL_CONTEXT_DEFAULT)) {

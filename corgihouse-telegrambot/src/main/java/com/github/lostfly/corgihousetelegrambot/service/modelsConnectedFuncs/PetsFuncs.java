@@ -1,9 +1,9 @@
-package com.github.lostfly.corgihousetelegrambot.service;
+package com.github.lostfly.corgihousetelegrambot.service.modelsConnectedFuncs;
 
 import com.github.lostfly.corgihousetelegrambot.listMenus.ListMenus;
 import com.github.lostfly.corgihousetelegrambot.model.Pet;
-import com.github.lostfly.corgihousetelegrambot.model.PetRepository;
-import com.github.lostfly.corgihousetelegrambot.model.SessionRepository;
+import com.github.lostfly.corgihousetelegrambot.repository.PetRepository;
+import com.github.lostfly.corgihousetelegrambot.repository.SessionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.util.ArrayList;
 
 import static com.github.lostfly.corgihousetelegrambot.constants.GlobalConstants.*;
-import static com.github.lostfly.corgihousetelegrambot.constants.PetFuncsConstants.*;
+import static com.github.lostfly.corgihousetelegrambot.constants.funcsConstants.PetFuncsConstants.*;
 
 @Slf4j
 @Component

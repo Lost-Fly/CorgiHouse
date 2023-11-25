@@ -1,4 +1,4 @@
-package com.github.lostfly.corgihousetelegrambot.constants;
+package com.github.lostfly.corgihousetelegrambot.constants.funcsConstants;
 
 import com.vdurmont.emoji.EmojiParser;
 

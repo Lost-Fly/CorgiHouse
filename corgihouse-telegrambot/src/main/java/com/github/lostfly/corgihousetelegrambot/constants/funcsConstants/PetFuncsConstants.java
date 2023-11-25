@@ -1,4 +1,4 @@
-package com.github.lostfly.corgihousetelegrambot.constants;
+package com.github.lostfly.corgihousetelegrambot.constants.funcsConstants;
 
 public class PetFuncsConstants {
     // PET_FUNCS

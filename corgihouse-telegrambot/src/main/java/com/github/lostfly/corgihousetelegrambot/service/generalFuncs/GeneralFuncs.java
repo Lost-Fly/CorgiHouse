@@ -1,4 +1,4 @@
-package com.github.lostfly.corgihousetelegrambot.service;
+package com.github.lostfly.corgihousetelegrambot.service.generalFuncs;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -13,6 +13,5 @@ public class GeneralFuncs {
         log.info("Replied /start to user " + name + " " + chatId);
         return generateStartMeetingMessage(name);
     }
-
 
 }

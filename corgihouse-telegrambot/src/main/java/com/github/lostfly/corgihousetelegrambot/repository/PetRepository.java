@@ -1,5 +1,6 @@
-package com.github.lostfly.corgihousetelegrambot.model;
+package com.github.lostfly.corgihousetelegrambot.repository;
 
+import com.github.lostfly.corgihousetelegrambot.model.Pet;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -24,7 +25,6 @@ public interface PetRepository extends CrudRepository<Pet, Long> {
 
     @Query("select max(pet.petId) from petDataTable pet where pet.ownerId = :ownerId")
     Long findTopByOrderByOwnerIdDesc(@Param("ownerId") Long ownerId);
-
 
     @Modifying
     @Transactional

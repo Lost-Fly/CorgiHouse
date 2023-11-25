@@ -1,4 +1,4 @@
-package com.github.lostfly.corgihousetelegrambot.constants;
+package com.github.lostfly.corgihousetelegrambot.constants.keyboardsConstants;
 
 import com.vdurmont.emoji.EmojiParser;
 
@@ -56,7 +56,7 @@ public class ListMenusConstants {
     // searchMeetingKeyboard
     public static final String LIKE_MEETING_TEXT = EmojiParser.parseToUnicode(":heart:");
     public static final String LIKE_MEETING = "like_meeting";
-    public static final String DISLIKE_MEETING_TEXT = EmojiParser.parseToUnicode(":rage:");
+    public static final String DISLIKE_MEETING_TEXT = EmojiParser.parseToUnicode(":broken_heart:");
     public static final String DISLIKE_MEETING = "dislike_meeting";
     public static final String PIN_MEETING_TEXT = EmojiParser.parseToUnicode(":stopwatch:");
     public static final String PIN_MEETING = "pin_meeting";

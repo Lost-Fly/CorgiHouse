@@ -3,8 +3,13 @@ package com.github.lostfly.corgihousetelegrambot.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-
+@Getter
+@Setter
+@ToString
 @Entity(name = "userToMeetingDataTable")
 public class UserToMeeting {
 
@@ -13,27 +18,4 @@ public class UserToMeeting {
     private Long chatId;
     private Long meetingId;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getChatId() {
-        return chatId;
-    }
-
-    public void setChatId(Long chatId) {
-        this.chatId = chatId;
-    }
-
-    public Long getMeetingId() {
-        return meetingId;
-    }
-
-    public void setMeetingId(Long meetingId) {
-        this.meetingId = meetingId;
-    }
 }

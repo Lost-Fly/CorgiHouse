@@ -30,6 +30,9 @@ public class MeetingFuncs {
     private KeyboardMenus keyboardMenus;
 
     @Autowired
+    private UserFuncs userFuncs;
+
+    @Autowired
     private MeetingRepository meetingRepository;
 
     @Autowired
@@ -69,6 +72,10 @@ public class MeetingFuncs {
     }
 
     public SendMessage changeToMyMeetings(Long chatId) {
+        if (userFuncs.checkExistingProfile(chatId) != null){
+            return userFuncs.checkExistingProfile(chatId);
+        }
+
         ArrayList<Meeting> my_meetings_created = getMyCreatedMeetings(chatId);
         ArrayList<Meeting> my_meetings_applied = getMyAppliedMeetings(chatId);
         SendMessage message = new SendMessage();

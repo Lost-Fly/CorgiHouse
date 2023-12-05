@@ -223,6 +223,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     sendMessage(chatId, meetingFuncs.changeToMainMenu(chatId));
                     break;
                 case PROFILE:
+                    sendMessage(chatId, userFuncs.checkExistingProfile(chatId));
                     sendMessage(chatId, userFuncs.showProfile(chatId), listMenus.profileButtonKeyboard());
                     break;
                 default:

@@ -228,7 +228,7 @@ public class ListMenus {
     }
 
 
-    public InlineKeyboardMarkup RegistrationKeyboard() {
+    public InlineKeyboardMarkup registrationKeyboard() {
         InlineKeyboardMarkup registrationKeyboard = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> registrationRows = new ArrayList<>();
         List<InlineKeyboardButton> registrationRow = new ArrayList<>();

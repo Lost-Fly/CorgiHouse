@@ -61,8 +61,8 @@ public class ListMenusConstants {
     public static final String PIN_MEETING_TEXT = EmojiParser.parseToUnicode(":stopwatch:");
     public static final String PIN_MEETING = "pin_meeting";
 
-    //RegistrationKeyboard
-    public static final String REGISTRATION_TEXT = "Регистрация";
+    // registrationKeyboard
+    public static final String REGISTRATION_TEXT = "Зарегистрироваться";
     public static final String REGISTRATION = "registration";
 
 

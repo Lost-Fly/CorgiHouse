@@ -187,14 +187,22 @@ public class ListMenus {
         InlineKeyboardMarkup appliedMeetingKeyboard = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> appliedMeetingRows = new ArrayList<>();
         List<InlineKeyboardButton> appliedMeetingRow = new ArrayList<>();
+        List<InlineKeyboardButton> createMeetingRow = new ArrayList<>();
 
         var showInfoAppliedMeetingButton = new InlineKeyboardButton();
+        var createMeetingButton = new InlineKeyboardButton();
 
         showInfoAppliedMeetingButton.setText(APPLIED_MEETINGS_FULL_INFO_TEXT);
         showInfoAppliedMeetingButton.setCallbackData(APPLIED_MEETINGS_FULL_INFO);
 
+        createMeetingButton.setText(MEETING_ADD_TEXT);
+        createMeetingButton.setCallbackData(MEETING_ADD);
+
         appliedMeetingRow.add(showInfoAppliedMeetingButton);
+        createMeetingRow.add(createMeetingButton);
         appliedMeetingRows.add(appliedMeetingRow);
+        appliedMeetingRows.add(createMeetingRow);
+
         appliedMeetingKeyboard.setKeyboard(appliedMeetingRows);
 
         return appliedMeetingKeyboard;

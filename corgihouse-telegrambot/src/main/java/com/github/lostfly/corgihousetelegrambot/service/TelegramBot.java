@@ -182,7 +182,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case APPLIED_MEETINGS_FULL_INFO:
                     sendEditMessage(chatId, messageId, INDEV_TEXT);
                     break;
-                    
+
                 case REGISTRATION:
                     sendMessage(chatId, userRegistration.initializeRegistration(update));
                     break;

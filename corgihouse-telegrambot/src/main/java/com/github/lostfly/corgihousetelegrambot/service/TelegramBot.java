@@ -16,6 +16,7 @@ import com.github.lostfly.corgihousetelegrambot.service.regFuncs.UserRegistratio
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
@@ -97,8 +98,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     public TelegramBot(BotConfig config) {
 
-        super(String.valueOf(new ThreadPoolExecutor(6, 12, 60,
-                TimeUnit.SECONDS, new LinkedBlockingQueue<>())));
+        super(config.getBotDefaultOptions());
 
         this.config = config;
 
@@ -177,10 +177,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                     sendEditMessage(chatId, messageId, meetingRegistration.initializeRegistration(update));
                     break;
                 case CREATED_MEETINGS_FULL_INFO:
-                    sendEditMessage(chatId, messageId, "da");
+                    sendEditMessage(chatId, messageId, INDEV_TEXT);
                     break;
                 case APPLIED_MEETINGS_FULL_INFO:
-                    sendEditMessage(chatId, messageId, "DADAD");
+                    sendEditMessage(chatId, messageId, INDEV_TEXT);
                     break;
                 default:
                     sendMessage(chatId, INDEV_TEXT, keyboardMenus.mainKeyboard());

@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.telegram.telegrambots.bots.DefaultBotOptions;
 
 @Configuration
 @Data
@@ -13,4 +14,12 @@ public class BotConfig {
     String botName;
     @Value("${bot.token}")
     String token;
+
+    public DefaultBotOptions getBotDefaultOptions(){
+        DefaultBotOptions options = new DefaultBotOptions();
+        options.setMaxThreads(10);
+
+        return options;
+    }
+
 }

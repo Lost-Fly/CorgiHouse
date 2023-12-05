@@ -26,7 +26,19 @@ public class UserFuncs {
     private SessionRepository sessionRepository;
 
 
+    public Boolean checkExistingProfile(long chatId){
+
+        if (userRepository.findById(chatId).isEmpty()){
+            return False;
+        }
+
+        return False;
+    }
+
     public String showProfile(long chatId) {
+
+        
+
         User user = userRepository.findByChatId(chatId);
 
         String profileInfo = "ID пользователя: " + user.getChatId() + "\n" +

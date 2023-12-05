@@ -220,11 +220,29 @@ public class ListMenus {
 
         searchMeetingRow.add(likeMeetingButton);
         searchMeetingRow.add(dislikeMeetingButton);
-//        searchMeetingRow.add(pinnedMeetingButton);
+//        searchMeetingRow.add(pinnedMeetingButton); #Это для кнопки отложить. Можно включить, она частично работает
         searchMeetingRows.add(searchMeetingRow);
         searchMeetingKeyboard.setKeyboard(searchMeetingRows);
 
         return searchMeetingKeyboard;
+    }
+
+
+    public InlineKeyboardMarkup RegistrationKeyboard() {
+        InlineKeyboardMarkup registrationKeyboard = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> registrationRows = new ArrayList<>();
+        List<InlineKeyboardButton> registrationRow = new ArrayList<>();
+
+        var registrationButton = new InlineKeyboardButton();
+
+        registrationButton.setText(REGISTRATION_TEXT);
+        registrationButton.setCallbackData(REGISTRATION);
+
+        registrationRow.add(registrationButton);
+        registrationRows.add(registrationRow);
+        registrationKeyboard.setKeyboard(registrationRows);
+
+        return registrationKeyboard;
     }
 
 }

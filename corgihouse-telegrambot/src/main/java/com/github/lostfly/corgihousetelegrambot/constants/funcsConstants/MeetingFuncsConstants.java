@@ -19,7 +19,7 @@ public class MeetingFuncsConstants {
     public static final String NO_CREATED_MEETINGS_TEXT = """
             У вас нет созданных встреч.
             Чтобы создать свою встречу нажмите Создать.""";
-    public static final String CHANGE_TO_MY_MEETINGS_TEXT = EmojiParser.parseToUnicode("Магия ебать" + " :sparkles:");
-    public static final String CHANGE_TO_MAIN_MENU = EmojiParser.parseToUnicode("Магия ебать" + " :sparkles:");
+    public static final String CHANGE_TO_MY_MEETINGS_TEXT = EmojiParser.parseToUnicode("Раздел просмотра событий" );
+    public static final String CHANGE_TO_MAIN_MENU = EmojiParser.parseToUnicode("Главное меню" );
 
 }

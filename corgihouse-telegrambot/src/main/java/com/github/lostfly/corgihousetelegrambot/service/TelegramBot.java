@@ -184,9 +184,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                     break;
 
                 case REGISTRATION:
+                    System.out.println("bef");
                     sendMessage(chatId, userRegistration.initializeRegistration(update));
+                    System.out.println("aft");
                     break;
-
                 default:
                     sendMessage(chatId, INDEV_TEXT, keyboardMenus.mainKeyboard());
                     break;
@@ -228,6 +229,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     sendMessage(chatId, meetingFuncs.changeToMainMenu(chatId));
                     break;
                 case PROFILE:
+                    sendMessage(chatId, userFuncs.checkExistingProfile(chatId));
                     sendMessage(chatId, userFuncs.showProfile(chatId), listMenus.profileButtonKeyboard());
                     break;
                 default:

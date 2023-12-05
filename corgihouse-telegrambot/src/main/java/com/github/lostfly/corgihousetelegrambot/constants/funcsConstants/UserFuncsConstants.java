@@ -8,4 +8,5 @@ public class UserFuncsConstants {
     public static final String CHANGED_NAME_TEXT = "Имя изменено";
     public static final String CHANGED_LAST_NAME_TEXT = "Фамилия изменена";
     public static final String CHANGED_PHONE_TEXT = "Телефон изменен";
+    public static final String NO_CREATED_PROFILE_TEXT = "Прежде чем пользоваться ботом, необходимо пройти регистрацию!";
 }

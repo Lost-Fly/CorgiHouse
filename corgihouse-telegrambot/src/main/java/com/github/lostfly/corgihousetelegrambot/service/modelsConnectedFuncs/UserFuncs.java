@@ -1,12 +1,13 @@
 package com.github.lostfly.corgihousetelegrambot.service.modelsConnectedFuncs;
 
-import com.github.lostfly.corgihousetelegrambot.repository.PetRepository;
-import com.github.lostfly.corgihousetelegrambot.repository.SessionRepository;
+import com.github.lostfly.corgihousetelegrambot.listMenus.ListMenus;
+import com.github.lostfly.corgihousetelegrambot.repository.*;
 import com.github.lostfly.corgihousetelegrambot.model.User;
-import com.github.lostfly.corgihousetelegrambot.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import static com.github.lostfly.corgihousetelegrambot.constants.GlobalConstants.*;
 import static com.github.lostfly.corgihousetelegrambot.constants.keyboardsConstants.ListMenusConstants.*;
@@ -25,19 +26,35 @@ public class UserFuncs {
     @Autowired
     private SessionRepository sessionRepository;
 
+    @Autowired
+    private ListMenus listMenus;
 
-    public Boolean checkExistingProfile(long chatId){
+    @Autowired
+    private MeetingRepository meetingRepository;
 
-        if (userRepository.findById(chatId).isEmpty()){
-            return False;
+    @Autowired
+    private UserToMeetingRepository userToMeetingRepository;
+
+    public SendMessage checkExistingProfile(long chatId){
+
+        if (userRepository.findById(chatId).isEmpty()) {
+            SendMessage message = new SendMessage();
+            message.setText(NO_CREATED_PROFILE_TEXT);
+            message.setChatId(chatId);
+            message.setReplyMarkup(listMenus.registrationKeyboard());
+
+            return message;
+        }else{
+            return null;
         }
 
-        return False;
     }
 
     public String showProfile(long chatId) {
 
-        
+        if (userRepository.findById(chatId).isEmpty()){
+            return null;
+        }
 
         User user = userRepository.findByChatId(chatId);
 
@@ -47,7 +64,6 @@ public class UserFuncs {
                 "Фамилия: " + user.getLastName() + "\n" +
                 "Телефон: " + user.getPhoneNumber() + "\n" +
                 "Дата Регистрации: " + user.getRegisteredAt() + "\n\n";
-
 
         return profileInfo;
 
@@ -62,6 +78,8 @@ public class UserFuncs {
         userRepository.deleteByChatId(chatId);
         petRepository.deleteByOwnerId(chatId);
         sessionRepository.deleteByChatId(chatId);
+        meetingRepository.deleteAllByOwnerId(chatId);
+        userToMeetingRepository.deleteAllByChatId(chatId);
         return DELETE_PROFILE_TEXT;
     }
 

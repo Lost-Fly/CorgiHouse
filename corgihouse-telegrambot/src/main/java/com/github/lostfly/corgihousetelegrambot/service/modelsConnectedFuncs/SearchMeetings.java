@@ -28,6 +28,9 @@ public class SearchMeetings {
     private KeyboardMenus keyboardMenus;
 
     @Autowired
+    private UserFuncs userFuncs;
+
+    @Autowired
     private MeetingRepository meetingRepository;
 
     @Autowired
@@ -52,6 +55,10 @@ public class SearchMeetings {
     }
 
     public SendMessage searchMeetings(long chatId) {
+
+        if (userFuncs.checkExistingProfile(chatId) != null){
+            return userFuncs.checkExistingProfile(chatId);
+        }
 
         ArrayList<Meeting> all_meetings_created = meetingRepository.findAllByOwnerIdNot(chatId);
 

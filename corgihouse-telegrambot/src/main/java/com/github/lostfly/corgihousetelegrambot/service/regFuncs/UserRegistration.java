@@ -7,6 +7,8 @@ import com.github.lostfly.corgihousetelegrambot.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.objects.Chat;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.sql.Timestamp;
@@ -30,11 +32,19 @@ public class UserRegistration {
 
 
     public String initializeRegistration(Update update) {
+        long chatId = 0;
+        Message message = new Message();
+        Chat chat = new Chat();
 
-        var chatId = update.getMessage().getChatId();
-        var chat = update.getMessage().getChat();
-        var message = update.getMessage();
-
+        if (update.hasCallbackQuery()) {
+            chatId = update.getCallbackQuery().getMessage().getChatId();
+            message = update.getCallbackQuery().getMessage();
+            chat = update.getCallbackQuery().getMessage().getChat();
+        } else if (update.hasMessage()) {
+            chatId = update.getMessage().getChatId();
+            chat = update.getMessage().getChat();
+            message = update.getMessage();
+        }
 
         if (userRepository.findById(message.getChatId()).isEmpty()) {
 

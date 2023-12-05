@@ -26,7 +26,14 @@ public class PetsFuncs {
     @Autowired
     private PetRepository petRepository;
 
+    @Autowired
+    private UserFuncs userFuncs;
+
     public SendMessage showPets(Long chatId) {
+
+        if (userFuncs.checkExistingProfile(chatId) != null){
+            return userFuncs.checkExistingProfile(chatId);
+        }
 
 
         ArrayList<Pet> pets = petRepository.findAllByOwnerId(chatId);

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import static com.github.lostfly.corgihousetelegrambot.constants.funcsConstants.MeetingFuncsConstants.*;
 
@@ -30,10 +29,15 @@ public class MeetingFuncs {
     private KeyboardMenus keyboardMenus;
 
     @Autowired
+    private UserFuncs userFuncs;
+
+    @Autowired
     private MeetingRepository meetingRepository;
 
     @Autowired
     private UserToMeetingRepository userToMeetingRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     public  ArrayList<Meeting> getMyCreatedMeetings(Long chatId){
         return meetingRepository.findAllByOwnerId(chatId);
@@ -54,6 +58,10 @@ public class MeetingFuncs {
 
     public SendMessage showMyMeetings(Long chatId) {
 
+        if (userRepository.findById(chatId).isEmpty()){
+            return null;
+        }
+
         ArrayList<Meeting> my_meetings_created = getMyCreatedMeetings(chatId);
         ArrayList<Meeting> my_meetings_applied = getMyAppliedMeetings(chatId);
 
@@ -69,6 +77,10 @@ public class MeetingFuncs {
     }
 
     public SendMessage changeToMyMeetings(Long chatId) {
+        if (userFuncs.checkExistingProfile(chatId) != null){
+            return userFuncs.checkExistingProfile(chatId);
+        }
+
         ArrayList<Meeting> my_meetings_created = getMyCreatedMeetings(chatId);
         ArrayList<Meeting> my_meetings_applied = getMyAppliedMeetings(chatId);
         SendMessage message = new SendMessage();

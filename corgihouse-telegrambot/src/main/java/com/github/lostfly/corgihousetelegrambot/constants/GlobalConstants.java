@@ -58,6 +58,8 @@ public class GlobalConstants {
 
     // logs texts
     public static final String ERROR_OCCURRED = "Error occurred: ";
+    public static final String GLOBAL_CONTEXT_FULL_MEETING_INFO = "global_context_full_meeting_info";
+
 
 
 }

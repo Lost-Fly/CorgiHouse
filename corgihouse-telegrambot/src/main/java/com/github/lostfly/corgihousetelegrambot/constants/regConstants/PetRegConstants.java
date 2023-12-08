@@ -15,6 +15,6 @@ public class PetRegConstants {
     public static final String REGISTER_PET_TYPE_ANIMAL_TEXT = "Введите тип животного:";
     public static final String REGISTER_PET_BREED_TEXT = "Введите пароду животного:";
     public static final String REGISTER_PET_PHOTO_TEXT = "Отправьте фото животного:";
-    public static final String CANCEL_OPERATION = "Операция отменена:";
+    public static final String CANCEL_OPERATION = "Операция отменена";
     
 }

@@ -179,8 +179,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case CREATED_MEETINGS_FULL_INFO:
                     sendEditMessage(chatId, messageId, INDEV_TEXT);
                     break;
-                case APPLIED_MEETINGS_FULL_INFO:
-                    sendEditMessage(chatId, messageId, INDEV_TEXT);
+                case APPLIED_MEETINGS_FULL_INFO_SELECT:
+                    sendEditMessage(chatId, messageId, meetingFuncs.fullInfoMeetingSelection(chatId));
                     break;
 
                 case REGISTRATION:
@@ -245,6 +245,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                         sendMessage(chatId, petRegistration.continueRegistration(update));
                 case GLOBAL_CONTEXT_USER_EDIT -> sendMessage(chatId, userFuncs.editProfileAction(chatId, messageText));
                 case GLOBAL_CONTEXT_PET_DELETE -> sendMessage(chatId, petsFuncs.deleteAnimal(chatId, messageText));
+                case GLOBAL_CONTEXT_FULL_MEETING_INFO -> sendMessage(chatId, meetingFuncs.fullInfoMeetingByNumber(chatId, messageText));
                 case GLOBAL_CONTEXT_MEETING_REGISTRATION -> sendMessage(chatId, meetingRegistration.continueRegistration(update));
                 default -> {
                     sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);

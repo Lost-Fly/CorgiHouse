@@ -21,5 +21,11 @@ public class MeetingFuncsConstants {
             Чтобы создать свою встречу нажмите Создать.""";
     public static final String CHANGE_TO_MY_MEETINGS_TEXT = EmojiParser.parseToUnicode("Раздел просмотра событий" );
     public static final String CHANGE_TO_MAIN_MENU = EmojiParser.parseToUnicode("Главное меню" );
+    public static final String SELECT_FULL_MEETING_INFO_TEXT = """
+            "Выберите встречу для просмотра полной информации по ней.""";
+
+    public static final String INCORRECT_FULL_INFO_NUMBER_ANS = "Ты дурак! Вам в первый класс.";
+
+
 
 }

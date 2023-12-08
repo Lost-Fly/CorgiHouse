@@ -51,7 +51,7 @@ public class ListMenusConstants {
 
     // appliedMeetingKeyboard
     public static final String APPLIED_MEETINGS_FULL_INFO_TEXT = "Подробнее";
-    public static final String APPLIED_MEETINGS_FULL_INFO = "applied_meetings_full_info";
+    public static final String APPLIED_MEETINGS_FULL_INFO_SELECT = "applied_meetings_full_info";
 
     // searchMeetingKeyboard
     public static final String LIKE_MEETING_TEXT = EmojiParser.parseToUnicode(":heart:");

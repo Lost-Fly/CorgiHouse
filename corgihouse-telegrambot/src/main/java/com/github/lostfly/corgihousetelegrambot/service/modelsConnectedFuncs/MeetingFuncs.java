@@ -101,6 +101,7 @@ public class MeetingFuncs {
     }
 
 
+
     public SendMessage changeToMainMenu(long chatId) {
         SendMessage message = new SendMessage();
         message.setText(CHANGE_TO_MAIN_MENU);
@@ -122,36 +123,15 @@ public class MeetingFuncs {
         String created_meeting_item = "ID события: " + meeting.getMeetingId() + "\n" +
                 "Название: " + meeting.getTitle() + "\n" +
                 "Дата: " + meeting.getEventDate() + "\n" +
-                "Место проведения" + meeting.getPlace() + "\n" +
+                "Место проведения: " + meeting.getPlace() + "\n" +
                 "Тип животного: " + meeting.getAnimalType() + "\n" +
                 "Порода: " + meeting.getBreed() + "\n" +
-                "Описание" + meeting.getDescription() +"\n" +
-                "Число записавшихся" + userToMeetingRepository.countByMeetingId(meeting.getMeetingId()) + "\n\n";
+                "Описание: " + meeting.getDescription() +"\n" +
+                "Число записавшихся: " + userToMeetingRepository.countByMeetingId(meeting.getMeetingId()) + "\n\n";
 
 
         return created_meeting_item;
     }
-    private Long meetingId;
-
-    private String animalType;
-
-    private String breed;
-
-    private String title;
-
-    private String description;
-
-    private String place;
-
-    private Boolean completed;
-
-    private Boolean fullFilled;
-
-    private Integer userLimit;
-
-    private Long ownerId;
-
-    private Timestamp eventDate;
 
 
     public SendMessage showCreatedMeetings(long chatId) {
@@ -198,6 +178,7 @@ public class MeetingFuncs {
 
     }
 
+
     public String fullInfoMeetingSelection(Long chatId) {
         sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_FULL_MEETING_INFO, chatId);
         return SELECT_FULL_MEETING_INFO_TEXT;
@@ -221,6 +202,55 @@ public class MeetingFuncs {
             return INCORRECT_FULL_INFO_NUMBER_ANS;
         }
     }
+
+    public String deleteMeetingSelection(Long chatId) {
+        sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_MEETING_DELETE, chatId);
+        return SELECT_MEETING_DELETE_TEXT;
+    }
+
+    public String deleteMeeting(Long chatId, String getFromMsg) {
+        Long meetingId;
+        try {
+            meetingId = Long.parseLong(getFromMsg);
+        } catch (NumberFormatException e) {
+            sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+            return INCORRECT_NUMBER_ANS;
+        }
+
+        if (meetingRepository.findByMeetingId(meetingId) != null) {
+            userToMeetingRepository.deleteAllByMeetingId(meetingId);
+            meetingRepository.deleteAllByMeetingId(meetingId);
+            sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+            return MEETING_DELETE_TEXT;
+        } else {
+            sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+            return INCORRECT_FULL_INFO_NUMBER_ANS;
+        }
+    }
+
+    public String editMeetingSelection(Long chatId) {
+        sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_MEETING_EDIT, chatId);
+        return SELECT_MEETING_EDIT_TEXT;
+    }
+    public String editMeeting(Long chatId, String getFromMsg) {
+        Long meetingId;
+        try {
+            meetingId = Long.parseLong(getFromMsg);
+        } catch (NumberFormatException e) {
+            sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+            return INCORRECT_NUMBER_ANS;
+        }
+
+        if (meetingRepository.findByMeetingId(meetingId) != null) {
+            meetingRepository.deleteAllByMeetingId(meetingId);
+            sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+            return MEETING_DELETE_TEXT;
+        } else {
+            sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+            return INCORRECT_FULL_INFO_NUMBER_ANS;
+        }
+    }
+
 
 
 }

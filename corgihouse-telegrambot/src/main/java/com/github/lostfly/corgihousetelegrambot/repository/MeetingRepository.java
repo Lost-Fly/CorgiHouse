@@ -35,6 +35,9 @@ public interface MeetingRepository extends CrudRepository<Meeting, Long> {
     void deleteAllByOwnerId(Long ownerId);
 
     @Transactional
+    void deleteAllByMeetingId(Long meetingId);
+
+    @Transactional
     void deleteByOwnerIdAndMeetingId(Long ownerId, Long meetingId);
 
 

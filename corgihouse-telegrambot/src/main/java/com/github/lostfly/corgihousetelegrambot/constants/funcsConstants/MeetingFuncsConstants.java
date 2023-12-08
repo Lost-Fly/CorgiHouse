@@ -22,9 +22,15 @@ public class MeetingFuncsConstants {
     public static final String CHANGE_TO_MY_MEETINGS_TEXT = EmojiParser.parseToUnicode("Раздел просмотра событий" );
     public static final String CHANGE_TO_MAIN_MENU = EmojiParser.parseToUnicode("Главное меню" );
     public static final String SELECT_FULL_MEETING_INFO_TEXT = """
-            "Выберите встречу для просмотра полной информации по ней.""";
+            Введите ID встречи (без лишних символов, только цифры) для просмотра полной информации по ней.""";
 
     public static final String INCORRECT_FULL_INFO_NUMBER_ANS = "Ты дурак! Вам в первый класс.";
+    public static final String SELECT_MEETING_DELETE_TEXT="""
+            Введите ID встречи (без лишних символов, только цифры) для просмотра полной информации по ней.""";
+    public static final String MEETING_DELETE_TEXT = "Встреча удалена";
+    public static final String SELECT_MEETING_EDIT_TEXT="""
+            Введите ID встречи (без лишних символов, только цифры) для просмотра полной информации по ней.""";
+
 
 
 

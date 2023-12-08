@@ -47,7 +47,13 @@ public class ListMenusConstants {
 
     // createdMeetingKeyboard
     public static final String CREATED_MEETINGS_FULL_INFO_TEXT = "Подробнее";
-    public static final String CREATED_MEETINGS_FULL_INFO = "created_meetings_full_info_text";
+    public static final String CREATED_MEETINGS_FULL_INFO_SELECT = "created_meetings_full_info_select";
+
+    public static final String MEETING_DELETE_BUTTOM_TEXT = "Удалить";
+    public static final String MEETING_DELETE_BUTTOM_SELECT = "meeting_delete_buttom";
+
+    public static final String MEETING_EDIT_BUTTOM_TEXT = "Изменить";
+    public static final String MEETING_EDIT_BUTTOM_SELECT = "meeting_edit_buttom_select";
 
     // appliedMeetingKeyboard
     public static final String APPLIED_MEETINGS_FULL_INFO_TEXT = "Подробнее";
@@ -64,6 +70,21 @@ public class ListMenusConstants {
     // registrationKeyboard
     public static final String REGISTRATION_TEXT = "Зарегистрироваться";
     public static final String REGISTRATION = "registration";
+
+    //meetingEditKeyboard
+    public static final String EDIT_MEETING_BUTTOM_TITLE_TEXT = "Название";
+    public static final String EDIT_MEETING_BUTTOM_TITLE = "edit_profile_name";
+    public static final String EDIT_MEETING_BUTTOM_DATE_TEXT = "Дата";
+    public static final String EDIT_MEETING_BUTTOM_DATE = "edit_profile_lastname";
+    public static final String EDIT_MEETING_BUTTOM_PLACE_TEXT = "Место проведения";
+    public static final String EDIT_MEETING_BUTTOM_PLACE = "edit_profile_phone_number";
+    public static final String EDIT_MEETING_BUTTOM_ANIMALTYPE_TEXT = "Тип животного";
+    public static final String EDIT_MEETING_BUTTOM_ANIMALTYPE = "edit_profile_name";
+    public static final String EDIT_MEETING_BUTTOM_BREED_TEXT = "Порода";
+    public static final String EDIT_MEETING_BUTTOM_BREED = "edit_profile_lastname";
+    public static final String EDIT_MEETING_BUTTOM_DESCRIPTION_TEXT = "Описание";
+    public static final String EDIT_MEETING_BUTTOM_DESCRIPTION = "edit_profile_phone_number";
+
 
 
 

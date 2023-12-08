@@ -176,11 +176,18 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case MEETING_ADD:
                     sendEditMessage(chatId, messageId, meetingRegistration.initializeRegistration(update));
                     break;
-                case CREATED_MEETINGS_FULL_INFO:
-                    sendEditMessage(chatId, messageId, INDEV_TEXT);
+                case CREATED_MEETINGS_FULL_INFO_SELECT:
+                    sendEditMessage(chatId, messageId, meetingFuncs.fullInfoMeetingSelection(chatId));
                     break;
                 case APPLIED_MEETINGS_FULL_INFO_SELECT:
                     sendEditMessage(chatId, messageId, meetingFuncs.fullInfoMeetingSelection(chatId));
+                    break;
+                case MEETING_DELETE_BUTTOM_SELECT:
+                    sendEditMessage(chatId, messageId, meetingFuncs.deleteMeetingSelection(chatId));
+                    break;
+                case MEETING_EDIT_BUTTOM_SELECT:
+                    sendEditMessage(chatId, messageId, meetingFuncs.editMeetingSelection(chatId));
+                    //sendMessage(chatId, EDIT_CHOISE, listMenus.meetingEditKeyboard());
                     break;
 
                 case REGISTRATION:
@@ -246,7 +253,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case GLOBAL_CONTEXT_USER_EDIT -> sendMessage(chatId, userFuncs.editProfileAction(chatId, messageText));
                 case GLOBAL_CONTEXT_PET_DELETE -> sendMessage(chatId, petsFuncs.deleteAnimal(chatId, messageText));
                 case GLOBAL_CONTEXT_FULL_MEETING_INFO -> sendMessage(chatId, meetingFuncs.fullInfoMeetingByNumber(chatId, messageText));
+                case GLOBAL_CONTEXT_MEETING_DELETE -> sendMessage(chatId,meetingFuncs.deleteMeeting(chatId,messageText));
                 case GLOBAL_CONTEXT_MEETING_REGISTRATION -> sendMessage(chatId, meetingRegistration.continueRegistration(update));
+                //case GLOBAL_CONTEXT_MEETING_EDIT -> sendMessage(chatId,meetingFuncs.continueEdit(update));
+
                 default -> {
                     sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
                     log.error("No global context found -  " + update.getMessage().getText());

@@ -32,6 +32,11 @@ public class UserSession {
     @Value("default")
     private String meetingRegisterFunctionContext;
 
+    @Value("default")
+    private String meetingEditFunctionContext;
+
+
+
     private Long meetingRegisterFunctionId;
 
 }

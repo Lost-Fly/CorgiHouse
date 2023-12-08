@@ -10,9 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import static com.github.lostfly.corgihousetelegrambot.constants.GlobalConstants.*;
 import static com.github.lostfly.corgihousetelegrambot.constants.funcsConstants.MeetingFuncsConstants.*;
+import static com.github.lostfly.corgihousetelegrambot.constants.funcsConstants.PetFuncsConstants.*;
+import static com.github.lostfly.corgihousetelegrambot.constants.funcsConstants.PetFuncsConstants.INCORRECT_PET_NUMBER_ANS;
 
 
 @Slf4j
@@ -114,6 +118,42 @@ public class MeetingFuncs {
         return created_meeting_item;
     }
 
+    public String showFullMeetingInfo(Meeting meeting){
+        String created_meeting_item = "ID события: " + meeting.getMeetingId() + "\n" +
+                "Название: " + meeting.getTitle() + "\n" +
+                "Дата: " + meeting.getEventDate() + "\n" +
+                "Место проведения" + meeting.getPlace() + "\n" +
+                "Тип животного: " + meeting.getAnimalType() + "\n" +
+                "Порода: " + meeting.getBreed() + "\n" +
+                "Описание" + meeting.getDescription() +"\n" +
+                "Число записавшихся" + userToMeetingRepository.countByMeetingId(meeting.getMeetingId()) + "\n\n";
+
+
+        return created_meeting_item;
+    }
+    private Long meetingId;
+
+    private String animalType;
+
+    private String breed;
+
+    private String title;
+
+    private String description;
+
+    private String place;
+
+    private Boolean completed;
+
+    private Boolean fullFilled;
+
+    private Integer userLimit;
+
+    private Long ownerId;
+
+    private Timestamp eventDate;
+
+
     public SendMessage showCreatedMeetings(long chatId) {
         ArrayList<Meeting> my_meetings_created = getMyCreatedMeetings(chatId);
         SendMessage message = new SendMessage();
@@ -146,14 +186,7 @@ public class MeetingFuncs {
             StringBuilder applied_meetings_list = new StringBuilder();
 
             for (Meeting meeting : my_meetings_applied) {
-
-                String created_meeting_item = "ID события: " + meeting.getMeetingId() + "\n" +
-                        "Название: " + meeting.getTitle() + "\n" +
-                        "Дата: " + meeting.getEventDate() + "\n" +
-                        "Тип животного: " + meeting.getAnimalType() + "\n" +
-                        "Порода: " + meeting.getBreed() + "\n\n";
-
-                applied_meetings_list.append(created_meeting_item);
+                applied_meetings_list.append(showMainMeetingInfo(meeting));
             }
 
             message.setText(applied_meetings_list.toString());
@@ -163,6 +196,30 @@ public class MeetingFuncs {
 
         return message;
 
+    }
+
+    public String fullInfoMeetingSelection(Long chatId) {
+        sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_FULL_MEETING_INFO, chatId);
+        return SELECT_FULL_MEETING_INFO_TEXT;
+    }
+
+    public String fullInfoMeetingByNumber(Long chatId, String getFromMsg) {
+        Long meetingId;
+        try {
+            meetingId = Long.parseLong(getFromMsg);
+        } catch (NumberFormatException e) {
+            sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+            return INCORRECT_NUMBER_ANS;
+        }
+
+        if (meetingRepository.findByMeetingId(meetingId) != null) {
+            String fullMeetingInfo=showFullMeetingInfo(meetingRepository.findByMeetingId(meetingId));
+            sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+            return fullMeetingInfo;
+        } else {
+            sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+            return INCORRECT_FULL_INFO_NUMBER_ANS;
+        }
     }
 
 

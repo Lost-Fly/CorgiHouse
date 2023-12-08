@@ -170,13 +170,20 @@ public class ListMenus {
         InlineKeyboardMarkup createdMeetingKeyboard = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> createdMeetingRows = new ArrayList<>();
         List<InlineKeyboardButton> createdMeetingRow = new ArrayList<>();
+        List<InlineKeyboardButton> createMeetingRow = new ArrayList<>();
 
         var showInfoCreatedMeetingButton = new InlineKeyboardButton();
+        var createMeetingButton = new InlineKeyboardButton();
 
         showInfoCreatedMeetingButton.setText(CREATED_MEETINGS_FULL_INFO_TEXT);
         showInfoCreatedMeetingButton.setCallbackData(CREATED_MEETINGS_FULL_INFO);
 
+        createMeetingButton.setText(MEETING_ADD_TEXT);
+        createMeetingButton.setCallbackData(MEETING_ADD);
+
         createdMeetingRow.add(showInfoCreatedMeetingButton);
+        createMeetingRow.add(createMeetingButton);
+        createdMeetingRows.add(createMeetingRow);
         createdMeetingRows.add(createdMeetingRow);
         createdMeetingKeyboard.setKeyboard(createdMeetingRows);
 
@@ -188,10 +195,13 @@ public class ListMenus {
         List<List<InlineKeyboardButton>> appliedMeetingRows = new ArrayList<>();
         List<InlineKeyboardButton> appliedMeetingRow = new ArrayList<>();
 
+
         var showInfoAppliedMeetingButton = new InlineKeyboardButton();
 
         showInfoAppliedMeetingButton.setText(APPLIED_MEETINGS_FULL_INFO_TEXT);
-        showInfoAppliedMeetingButton.setCallbackData(APPLIED_MEETINGS_FULL_INFO);
+        showInfoAppliedMeetingButton.setCallbackData(APPLIED_MEETINGS_FULL_INFO_SELECT);
+
+
 
         appliedMeetingRow.add(showInfoAppliedMeetingButton);
         appliedMeetingRows.add(appliedMeetingRow);

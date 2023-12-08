@@ -15,6 +15,9 @@ public interface UserToMeetingRepository extends CrudRepository<UserToMeeting, L
 
     ArrayList<UserToMeeting> findAllByMeetingId(Long meetingId);
 
+    @Transactional
+    Long countByMeetingId(Long meetingId);
+
     @Query("select max(element.id) from userToMeetingDataTable element")
     Long findTopByOrderByIdDesc();
 

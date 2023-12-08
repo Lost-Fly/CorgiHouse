@@ -28,5 +28,12 @@ public class MeetingRegConstants {
     public static final String SET_MEETING_BREED_TEXT = "Введите пароду животных события:";
     public static final String REGISTER_MEETING_END_TEXT = "Создание события успешно завершено!";
 
+    public static final String INCORRECT_MEETING_TITLE = "Неверный формат заголовка встречи. Пожалуйста, используйте " +
+            "только буквы и смайлики.";
+    public static final String INCORRECT_MEETING_DESCRIPTION = "Неверный формат / или превышена допустимая длина " +
+            "описания встречи. Пожалуйста, используйте только буквы и смайлики.";
+    public static final String INCORRECT_MEETING_PLACE = "Неверный формат места проведения встречи. Пожалуйста, " +
+            "используйте только буквы и смайлики.";
+
 
 }

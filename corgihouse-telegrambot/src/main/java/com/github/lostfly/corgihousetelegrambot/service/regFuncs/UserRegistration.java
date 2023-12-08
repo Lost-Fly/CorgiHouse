@@ -91,23 +91,45 @@ public class UserRegistration {
     }
 
 
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        String phoneRegex = "^(\\+7|7|8)?[0-9]{10}$";
+        return phoneNumber.matches(phoneRegex);
+    }
+
     private String SetPhoneNumber(long chatId, String messageText) {
-        userRepository.setPhoneNumberByChatId(messageText, chatId);
-        sessionRepository.setRegUserContextByChatId(REGISTER_CONTEXT_DEFAULT, chatId);
-        sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
-        return (REGISTER_ENDED_TEXT);
+        if (isValidPhoneNumber(messageText)) {
+            userRepository.setPhoneNumberByChatId(messageText, chatId);
+            sessionRepository.setRegUserContextByChatId(REGISTER_CONTEXT_DEFAULT, chatId);
+            sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+            return REGISTER_ENDED_TEXT;
+        } else {
+            return INCORRECT_PHONE_NUMBER;
+        }
+    }
+
+    private boolean isValidName(String name) {
+        String nameRegex = "^[^\\d!@#$%^&*()_+=~`:;\"><,./|\\\\]{1,40}$";
+        return name.matches(nameRegex);
     }
 
     private String SetLastName(long chatId, String messageText) {
-        userRepository.setLastNameByChatId(messageText, chatId);
-        sessionRepository.setRegUserContextByChatId(SET_PHONE_NUMBER, chatId);
-        return (GIVE_PHONE_NUMBER_TEXT);
+        if (isValidName(messageText)) {
+            userRepository.setLastNameByChatId(messageText, chatId);
+            sessionRepository.setRegUserContextByChatId(SET_PHONE_NUMBER, chatId);
+            return (GIVE_PHONE_NUMBER_TEXT);
+        } else {
+            return INCORRECT_LAST_NAME;
+        }
     }
 
     private String SetName(long chatId, String messageText) {
-        userRepository.setFirstNameByChatId(messageText, chatId);
-        sessionRepository.setRegUserContextByChatId(SET_LAST_NAME, chatId);
-        return (GIVE_LAST_NAME_TEXT);
+        if (isValidName(messageText)) {
+            userRepository.setFirstNameByChatId(messageText, chatId);
+            sessionRepository.setRegUserContextByChatId(SET_LAST_NAME, chatId);
+            return (GIVE_LAST_NAME_TEXT);
+        } else {
+            return INCORRECT_FIRST_NAME;
+        }
     }
 
 }

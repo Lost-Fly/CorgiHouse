@@ -48,7 +48,6 @@ public class PetRegistration {
             pet.setPetId(petId);
         }
 
-
         petRepository.save(pet);
 
         log.info("pet saved: " + pet);
@@ -78,28 +77,49 @@ public class PetRegistration {
     }
 
 
+    private boolean isValidName(String name) {
+        String nameRegex = "^[^\\d!@#$%^&*()_+=~`:;\"><,./|\\\\]{1,40}$";
+        return name.matches(nameRegex);
+    }
+
     private String SetPetBreed(long chatId, String messageText) {
-        petRepository.setPetBreedByOwnerIdAndPetId(messageText, chatId, petRepository.findTopByOrderByOwnerIdDesc(chatId));
-        sessionRepository.setPetRegisterFunctionContext(REGISTER_PET_PHOTO, chatId);
-        return (REGISTER_PET_PHOTO_TEXT);
+        if (isValidName(messageText)) {
+            petRepository.setPetBreedByOwnerIdAndPetId(messageText, chatId, petRepository.findTopByOrderByOwnerIdDesc(chatId));
+            sessionRepository.setPetRegisterFunctionContext(REGISTER_PET_PHOTO, chatId);
+            return (REGISTER_PET_PHOTO_TEXT);
+        } else {
+            return INCORRECT_PET_BREED;
+        }
     }
 
     private String SetPetPhoto(Long chatId, Update update) {
-        sessionRepository.setPetRegisterFunctionContext(REGISTER_CONTEXT_DEFAULT, chatId);
-        sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
-        return (REGISTER_PET_ENDED_TEXT);
+        if (update.getMessage().hasPhoto()) {
+            sessionRepository.setPetRegisterFunctionContext(REGISTER_CONTEXT_DEFAULT, chatId);
+            sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+            return (REGISTER_PET_ENDED_TEXT);
+        } else {
+            return INCORRECT_PET_PHOTO;
+        }
     }
 
     private String SetPetType(long chatId, String messageText) {
-        petRepository.setAnimalTypeByOwnerIdAndPetId(messageText, chatId, petRepository.findTopByOrderByOwnerIdDesc(chatId));
-        sessionRepository.setPetRegisterFunctionContext(REGISTER_PET_BREED, chatId);
-        return (REGISTER_PET_BREED_TEXT);
+        if (isValidName(messageText)) {
+            petRepository.setAnimalTypeByOwnerIdAndPetId(messageText, chatId, petRepository.findTopByOrderByOwnerIdDesc(chatId));
+            sessionRepository.setPetRegisterFunctionContext(REGISTER_PET_BREED, chatId);
+            return (REGISTER_PET_BREED_TEXT);
+        } else {
+            return INCORRECT_PET_TYPE;
+        }
     }
 
     private String SetPetName(long chatId, String messageText) {
-        petRepository.setPetNameByOwnerIdAndPetId(messageText, chatId, petRepository.findTopByOrderByOwnerIdDesc(chatId));
-        sessionRepository.setPetRegisterFunctionContext(REGISTER_PET_TYPE_ANIMAL, chatId);
-        return (REGISTER_PET_TYPE_ANIMAL_TEXT);
+        if (isValidName(messageText)) {
+            petRepository.setPetNameByOwnerIdAndPetId(messageText, chatId, petRepository.findTopByOrderByOwnerIdDesc(chatId));
+            sessionRepository.setPetRegisterFunctionContext(REGISTER_PET_TYPE_ANIMAL, chatId);
+            return (REGISTER_PET_TYPE_ANIMAL_TEXT);
+        } else {
+            return INCORRECT_PET_NAME;
+        }
     }
 
 

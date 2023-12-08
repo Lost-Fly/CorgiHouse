@@ -17,4 +17,11 @@ public class UserRegConstants {
     public static final String GIVE_LAST_NAME_TEXT = "Введите фамилию:";
     public static final String GIVE_NAME_TEXT = "Введите имя:";
 
+    public static final String INCORRECT_PHONE_NUMBER = "Неверный формат номера телефона. Пожалуйста, введите номер " +
+            "в правильном формате. Например - +7900XXXXX90 / 8900XXXXX90";
+    public static final String INCORRECT_FIRST_NAME = "Неверный формат имени. Пожалуйста, используйте только " +
+            "буквы и смайлики.";
+    public static final String INCORRECT_LAST_NAME = "Неверный формат фамилии. Пожалуйста, используйте только буквы " +
+            "и смайлики.";
+
 }

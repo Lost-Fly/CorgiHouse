@@ -16,5 +16,14 @@ public class PetRegConstants {
     public static final String REGISTER_PET_BREED_TEXT = "Введите пароду животного:";
     public static final String REGISTER_PET_PHOTO_TEXT = "Отправьте фото животного:";
     public static final String CANCEL_OPERATION = "Операция отменена:";
+
+    public static final String INCORRECT_PET_NAME = "Неверный формат имени питомца. Пожалуйста, используйте только " +
+            "буквы и смайлики.";
+    public static final String INCORRECT_PET_BREED = "Неверный формат породы питомца. Пожалуйста, используйте только " +
+            "буквы и смайлики.";
+    public static final String INCORRECT_PET_TYPE = "Неверный формат типа животного. Пожалуйста, используйте только " +
+            "буквы и смайлики.";
+    public static final String INCORRECT_PET_PHOTO = "Вы не отправили фотографию! Пожалуйста отправьте фото вашего " +
+            "питомца, прикрепив её именно как снимок, а не как файл!";
     
 }

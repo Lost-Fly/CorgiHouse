@@ -62,6 +62,11 @@ public class GlobalConstants {
     public static final String GLOBAL_CONTEXT_MEETING_DELETE = "global_context_meeting_delete";
     public static final String GLOBAL_CONTEXT_MEETING_EDIT = "global_context_meeting_edit";
 
+    public static final String GLOBAL_CONTEXT_SET_NAME_FIELD_MEETING = "global_context_set_name_field_meeting";
+
+    public static final String GLOBAL_CONTEXT_MEETING_SELECT_NUMBER_MEETING = "global_context_meeting_select_number_meeting";
+
+
 
 
 

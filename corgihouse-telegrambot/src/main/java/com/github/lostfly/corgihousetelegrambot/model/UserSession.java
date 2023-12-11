@@ -33,10 +33,13 @@ public class UserSession {
     private String meetingRegisterFunctionContext;
 
     @Value("default")
-    private String meetingEditFunctionContext;
+    private String editMeetingFunctionContext;
 
 
 
     private Long meetingRegisterFunctionId;
+
+
+    private Long numberEditMeeting;
 
 }

@@ -184,11 +184,11 @@ public class ListMenus {
         createMeetingButton.setText(MEETING_ADD_TEXT);
         createMeetingButton.setCallbackData(MEETING_ADD);
 
-        deleteMeetingButton.setText(MEETING_DELETE_BUTTOM_TEXT);
-        deleteMeetingButton.setCallbackData(MEETING_DELETE_BUTTOM_SELECT);
+        deleteMeetingButton.setText(MEETING_DELETE_BUTTON_TEXT);
+        deleteMeetingButton.setCallbackData(MEETING_DELETE_BUTTON_SELECT);
 
-        editMeetingButton.setText(MEETING_EDIT_BUTTOM_TEXT);
-        editMeetingButton.setCallbackData(MEETING_EDIT_BUTTOM_SELECT);
+        editMeetingButton.setText(MEETING_EDIT_BUTTON_TEXT);
+        editMeetingButton.setCallbackData(MEETING_EDIT_BUTTON_SELECT);
 
 
         showInfoCreatedMeetingRow.add(showInfoCreatedMeetingButton);
@@ -215,47 +215,47 @@ public class ListMenus {
 
         var editMeetingButtonTitle = new InlineKeyboardButton();
 
-        editMeetingButtonTitle.setText(EDIT_MEETING_BUTTOM_TITLE_TEXT);
-        editMeetingButtonTitle.setCallbackData(EDIT_MEETING_BUTTOM_TITLE);
+        editMeetingButtonTitle.setText(EDIT_MEETING_BUTTON_TITLE_TEXT);
+        editMeetingButtonTitle.setCallbackData(EDIT_MEETING_BUTTON_TITLE);
 
         meetingEditTitleRow.add(editMeetingButtonTitle);
         meetingEditRows.add(meetingEditTitleRow);
 
         var editMeetingButtonData = new InlineKeyboardButton();
 
-        editMeetingButtonData.setText(EDIT_MEETING_BUTTOM_DATE_TEXT);
-        editMeetingButtonData.setCallbackData(EDIT_MEETING_BUTTOM_DATE);
+        editMeetingButtonData.setText(EDIT_MEETING_BUTTON_DATE_TEXT);
+        editMeetingButtonData.setCallbackData(EDIT_MEETING_BUTTON_DATE);
 
         meetingEditDataRow.add(editMeetingButtonData);
         meetingEditRows.add(meetingEditDataRow);
 
         var editMeetingButtonPlace = new InlineKeyboardButton();
 
-        editMeetingButtonPlace.setText(EDIT_MEETING_BUTTOM_PLACE_TEXT);
-        editMeetingButtonPlace.setCallbackData(EDIT_MEETING_BUTTOM_PLACE);
+        editMeetingButtonPlace.setText(EDIT_MEETING_BUTTON_PLACE_TEXT);
+        editMeetingButtonPlace.setCallbackData(EDIT_MEETING_BUTTON_PLACE);
 
         meetingEditPlaceRow.add(editMeetingButtonPlace);
         meetingEditRows.add(meetingEditPlaceRow);
 
         var editMeetingButtonAnimalType = new InlineKeyboardButton();
 
-        editMeetingButtonAnimalType.setText(EDIT_MEETING_BUTTOM_ANIMALTYPE_TEXT);
-        editMeetingButtonAnimalType.setCallbackData(EDIT_MEETING_BUTTOM_ANIMALTYPE);
+        editMeetingButtonAnimalType.setText(EDIT_MEETING_BUTTON_ANIMALTYPE_TEXT);
+        editMeetingButtonAnimalType.setCallbackData(EDIT_MEETING_BUTTON_ANIMALTYPE);
 
         meetingEditAnimalTypeRow.add(editMeetingButtonAnimalType);
         meetingEditRows.add(meetingEditAnimalTypeRow);
 
         var editMeetingButtonBreed = new InlineKeyboardButton();
-        editMeetingButtonBreed.setText(EDIT_MEETING_BUTTOM_BREED_TEXT);
-        editMeetingButtonBreed.setCallbackData(EDIT_MEETING_BUTTOM_BREED);
+        editMeetingButtonBreed.setText(EDIT_MEETING_BUTTON_BREED_TEXT);
+        editMeetingButtonBreed.setCallbackData(EDIT_MEETING_BUTTON_BREED);
 
         meetingEditBreedRow.add(editMeetingButtonBreed);
         meetingEditRows.add(meetingEditBreedRow);
 
 
         var editMeetingButtonDescription = new InlineKeyboardButton();
-        editMeetingButtonDescription.setText(EDIT_MEETING_BUTTOM_DESCRIPTION_TEXT);
-        editMeetingButtonDescription.setCallbackData(EDIT_MEETING_BUTTOM_DESCRIPTION_TEXT);
+        editMeetingButtonDescription.setText(EDIT_MEETING_BUTTON_DESCRIPTION_TEXT);
+        editMeetingButtonDescription.setCallbackData(EDIT_MEETING_BUTTON_DESCRIPTION);
 
         meetingEditDescriptionRow.add(editMeetingButtonDescription);
         meetingEditRows.add(meetingEditDescriptionRow);

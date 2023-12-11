@@ -41,6 +41,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static com.github.lostfly.corgihousetelegrambot.constants.funcsConstants.MeetingFuncsConstants.SELECT_NAME_FIELD_MEETING_EDIT_TEXT;
 import static com.github.lostfly.corgihousetelegrambot.constants.keyboardsConstants.CommandListConstants.*;
 import static com.github.lostfly.corgihousetelegrambot.constants.GlobalConstants.*;
 import static com.github.lostfly.corgihousetelegrambot.constants.keyboardsConstants.KeyboardMenusConstants.*;
@@ -182,13 +183,31 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case APPLIED_MEETINGS_FULL_INFO_SELECT:
                     sendEditMessage(chatId, messageId, meetingFuncs.fullInfoMeetingSelection(chatId));
                     break;
-                case MEETING_DELETE_BUTTOM_SELECT:
+                case MEETING_DELETE_BUTTON_SELECT:
                     sendEditMessage(chatId, messageId, meetingFuncs.deleteMeetingSelection(chatId));
                     break;
-                case MEETING_EDIT_BUTTOM_SELECT:
-                    sendEditMessage(chatId, messageId, meetingFuncs.editMeetingSelection(chatId));
-                    //sendMessage(chatId, EDIT_CHOISE, listMenus.meetingEditKeyboard());
+                case MEETING_EDIT_BUTTON_SELECT:
+                    sendMessage(chatId, meetingFuncs.editMeetingSelectionNumber(chatId));
                     break;
+                case EDIT_MEETING_BUTTON_TITLE:
+                    sendEditMessage(chatId, messageId, meetingFuncs.editMeeting(chatId, EDIT_MEETING_BUTTON_TITLE));
+                    break;
+                case EDIT_MEETING_BUTTON_PLACE:
+                    sendEditMessage(chatId, messageId, meetingFuncs.editMeeting(chatId, EDIT_MEETING_BUTTON_PLACE));
+                    break;
+                case EDIT_MEETING_BUTTON_ANIMALTYPE:
+                    sendEditMessage(chatId, messageId, meetingFuncs.editMeeting(chatId, EDIT_MEETING_BUTTON_ANIMALTYPE));
+                    break;
+                case EDIT_MEETING_BUTTON_BREED:
+                    sendEditMessage(chatId, messageId, meetingFuncs.editMeeting(chatId, EDIT_MEETING_BUTTON_BREED));
+                    break;
+                case EDIT_MEETING_BUTTON_DATE:
+                    sendEditMessage(chatId, messageId, meetingFuncs.editMeeting(chatId, EDIT_MEETING_BUTTON_DATE));
+                    break;
+                case EDIT_MEETING_BUTTON_DESCRIPTION:
+                    sendEditMessage(chatId, messageId, meetingFuncs.editMeeting(chatId, EDIT_MEETING_BUTTON_DESCRIPTION));
+                    break;
+
 
                 case REGISTRATION:
                     System.out.println("bef");
@@ -255,7 +274,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case GLOBAL_CONTEXT_FULL_MEETING_INFO -> sendMessage(chatId, meetingFuncs.fullInfoMeetingByNumber(chatId, messageText));
                 case GLOBAL_CONTEXT_MEETING_DELETE -> sendMessage(chatId,meetingFuncs.deleteMeeting(chatId,messageText));
                 case GLOBAL_CONTEXT_MEETING_REGISTRATION -> sendMessage(chatId, meetingRegistration.continueRegistration(update));
-                //case GLOBAL_CONTEXT_MEETING_EDIT -> sendMessage(chatId,meetingFuncs.continueEdit(update));
+                case GLOBAL_CONTEXT_MEETING_SELECT_NUMBER_MEETING -> sendMessage(chatId, meetingFuncs.editMeetingNameField(chatId,messageText), listMenus.meetingEditKeyboard());
+                case GLOBAL_CONTEXT_SET_NAME_FIELD_MEETING -> sendMessage(chatId,meetingFuncs.editMeetingAction(chatId,messageText));
 
                 default -> {
                     sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);

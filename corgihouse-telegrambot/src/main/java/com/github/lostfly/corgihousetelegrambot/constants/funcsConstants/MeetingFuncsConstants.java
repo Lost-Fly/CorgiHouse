@@ -28,9 +28,23 @@ public class MeetingFuncsConstants {
     public static final String SELECT_MEETING_DELETE_TEXT="""
             Введите ID встречи (без лишних символов, только цифры) для просмотра полной информации по ней.""";
     public static final String MEETING_DELETE_TEXT = "Встреча удалена";
-    public static final String SELECT_MEETING_EDIT_TEXT="""
+    public static final String SELECT_NUMBER_MEETING_EDIT_TEXT="""
             Введите ID встречи (без лишних символов, только цифры) для просмотра полной информации по ней.""";
+    public static final String SELECT_NUMBER_MEETING_EDIT_CONTEXT="select_number_meeting_edit_context";
+    public static final String SELECT_NAME_FIELD_MEETING_EDIT_CONTEXT="select_name_field_meeting_edit_context";
 
+    public static final String SELECT_NAME_FIELD_MEETING_EDIT_TEXT="""
+            Выберите поле для редактирования.""";
+
+    public static final String SET_NAME_FIELD_MEETING="set_name_field_meeting";
+
+
+    public static final String CHANGED_MEETING_TITTLE_TEXT = "Название изменено";
+    public static final String CHANGED_MEETING_BREED_TEXT = "Кличка изменена";
+    public static final String CHANGED_MEETING_DATA_TEXT = "Дата изменена";
+    public static final String CHANGED_MEETING_DESCRIPTION_TEXT = "Описание изменено";
+    public static final String CHANGED_MEETING_ANIMAL_TYPE_TEXT = "Тип животного изменен";
+    public static final String CHANGED_MEETING_PLACE_TEXT = "Место проведения изменено";
 
 
 

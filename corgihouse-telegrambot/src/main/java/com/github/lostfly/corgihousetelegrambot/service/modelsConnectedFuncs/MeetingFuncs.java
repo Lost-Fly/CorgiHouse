@@ -3,6 +3,7 @@ package com.github.lostfly.corgihousetelegrambot.service.modelsConnectedFuncs;
 import com.github.lostfly.corgihousetelegrambot.keyboardMenus.KeyboardMenus;
 import com.github.lostfly.corgihousetelegrambot.listMenus.ListMenus;
 import com.github.lostfly.corgihousetelegrambot.model.Meeting;
+import com.github.lostfly.corgihousetelegrambot.model.UserSession;
 import com.github.lostfly.corgihousetelegrambot.model.UserToMeeting;
 import com.github.lostfly.corgihousetelegrambot.repository.*;
 import lombok.extern.slf4j.Slf4j;
@@ -11,12 +12,20 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static com.github.lostfly.corgihousetelegrambot.constants.GlobalConstants.*;
 import static com.github.lostfly.corgihousetelegrambot.constants.funcsConstants.MeetingFuncsConstants.*;
 import static com.github.lostfly.corgihousetelegrambot.constants.funcsConstants.PetFuncsConstants.*;
 import static com.github.lostfly.corgihousetelegrambot.constants.funcsConstants.PetFuncsConstants.INCORRECT_PET_NUMBER_ANS;
+import static com.github.lostfly.corgihousetelegrambot.constants.funcsConstants.UserFuncsConstants.*;
+import static com.github.lostfly.corgihousetelegrambot.constants.keyboardsConstants.ListMenusConstants.*;
+import static com.github.lostfly.corgihousetelegrambot.constants.keyboardsConstants.ListMenusConstants.EDIT_PROFILE_PHONE_NUMBER;
+import static com.github.lostfly.corgihousetelegrambot.constants.regConstants.MeetingRegConstants.*;
+import static com.github.lostfly.corgihousetelegrambot.constants.regConstants.UserRegConstants.*;
 
 
 @Slf4j
@@ -193,7 +202,7 @@ public class MeetingFuncs {
             return INCORRECT_NUMBER_ANS;
         }
 
-        if (meetingRepository.findByMeetingId(meetingId) != null) {
+        if (meetingRepository.findByMeetingIdAndOwnerId(meetingId,chatId)!= null) {
             String fullMeetingInfo=showFullMeetingInfo(meetingRepository.findByMeetingId(meetingId));
             sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
             return fullMeetingInfo;
@@ -217,7 +226,7 @@ public class MeetingFuncs {
             return INCORRECT_NUMBER_ANS;
         }
 
-        if (meetingRepository.findByMeetingId(meetingId) != null) {
+        if (meetingRepository.findByMeetingIdAndOwnerId(meetingId,chatId) != null) {
             userToMeetingRepository.deleteAllByMeetingId(meetingId);
             meetingRepository.deleteAllByMeetingId(meetingId);
             sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
@@ -228,11 +237,14 @@ public class MeetingFuncs {
         }
     }
 
-    public String editMeetingSelection(Long chatId) {
-        sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_MEETING_EDIT, chatId);
-        return SELECT_MEETING_EDIT_TEXT;
+
+    public String editMeetingSelectionNumber(Long chatId) {
+        sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_MEETING_SELECT_NUMBER_MEETING, chatId);
+        sessionRepository.setEditMeetingFunctionContextByChatId(SELECT_NAME_FIELD_MEETING_EDIT_CONTEXT, chatId);
+        return SELECT_NUMBER_MEETING_EDIT_TEXT;
     }
-    public String editMeeting(Long chatId, String getFromMsg) {
+
+    public String editMeetingNameField(Long chatId, String getFromMsg) {
         Long meetingId;
         try {
             meetingId = Long.parseLong(getFromMsg);
@@ -241,17 +253,99 @@ public class MeetingFuncs {
             return INCORRECT_NUMBER_ANS;
         }
 
-        if (meetingRepository.findByMeetingId(meetingId) != null) {
-            meetingRepository.deleteAllByMeetingId(meetingId);
-            sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
-            return MEETING_DELETE_TEXT;
+        if (meetingRepository.findByMeetingIdAndOwnerId(meetingId,chatId) != null) {
+            sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_SET_NAME_FIELD_MEETING, chatId);
+            sessionRepository.setNumberEditMeetingByChatId(meetingId,chatId);
+            return SELECT_NAME_FIELD_MEETING_EDIT_TEXT;
         } else {
             sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
             return INCORRECT_FULL_INFO_NUMBER_ANS;
         }
     }
 
+    public String editMeeting(Long chatId, String editContext ) {
+        if (sessionRepository.findByChatId(chatId).getNumberEditMeeting()==0L){
+            return "Чет не записался номер редактируемой встречи в NumberEditMeetingByChatId";
+        }
+        switch(editContext){
+            case EDIT_MEETING_BUTTON_ANIMALTYPE:
+                sessionRepository.setEditMeetingFunctionContextByChatId(EDIT_MEETING_BUTTON_ANIMALTYPE, chatId);
+                return SET_MEETING_ANIMAL_TYPE_TEXT;
 
+            case EDIT_MEETING_BUTTON_BREED:
+                sessionRepository.setEditMeetingFunctionContextByChatId(EDIT_MEETING_BUTTON_BREED, chatId);
+                return SET_MEETING_BREED_TEXT;
+
+            case EDIT_MEETING_BUTTON_DATE:
+                sessionRepository.setEditMeetingFunctionContextByChatId(EDIT_MEETING_BUTTON_DATE, chatId);
+                return SET_MEETING_EVENT_DATE_TEXT;
+
+            case EDIT_MEETING_BUTTON_DESCRIPTION:
+                sessionRepository.setEditMeetingFunctionContextByChatId(EDIT_MEETING_BUTTON_DESCRIPTION, chatId);
+
+                return SET_MEETING_DESCRIPTION_TEXT;
+
+            case EDIT_MEETING_BUTTON_PLACE:
+                sessionRepository.setEditMeetingFunctionContextByChatId(EDIT_MEETING_BUTTON_PLACE, chatId);
+                return SET_MEETING_PLACE_TEXT;
+
+            case EDIT_MEETING_BUTTON_TITLE:
+                sessionRepository.setEditMeetingFunctionContextByChatId(EDIT_MEETING_BUTTON_TITLE, chatId);
+                return SET_MEETING_TITLE_TEXT;
+            default:
+                return INDEV_TEXT;
+        }
+    }
+
+    public String editMeetingAction(Long chatId, String messageText) {
+        Long meetingId=sessionRepository.findByChatId(chatId).getNumberEditMeeting();
+        switch(sessionRepository.findByChatId(chatId).getEditMeetingFunctionContext()){
+            case EDIT_MEETING_BUTTON_ANIMALTYPE:
+                meetingRepository.setAnimalTypeByOwnerIdAndMeetingId(messageText, chatId,meetingId);
+                sessionRepository.setEditMeetingFunctionContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+                sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+                sessionRepository.setNumberEditMeetingByChatId(chatId,0L);
+                return CHANGED_MEETING_ANIMAL_TYPE_TEXT;
+
+            case EDIT_MEETING_BUTTON_BREED:
+                meetingRepository.setBreedByOwnerIdAndMeetingId(messageText, chatId,meetingId);
+                sessionRepository.setEditMeetingFunctionContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+                sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+                sessionRepository.setNumberEditMeetingByChatId(chatId,0L);
+                return CHANGED_MEETING_BREED_TEXT;
+
+            case EDIT_MEETING_BUTTON_DATE:
+                meetingRepository.setEventDateByOwnerIdAndMeetingId(Timestamp.valueOf(messageText), chatId,meetingId);
+                sessionRepository.setEditMeetingFunctionContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+                sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+                sessionRepository.setNumberEditMeetingByChatId(chatId,0L);
+                return CHANGED_MEETING_DATA_TEXT;
+
+            case EDIT_MEETING_BUTTON_DESCRIPTION:
+                meetingRepository.setDescriptionByOwnerIdAndMeetingId(messageText, chatId,meetingId);
+                sessionRepository.setEditMeetingFunctionContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+                sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+                sessionRepository.setNumberEditMeetingByChatId(chatId,0L);
+                return CHANGED_MEETING_DESCRIPTION_TEXT;
+
+            case EDIT_MEETING_BUTTON_PLACE:
+                meetingRepository.setPlaceByOwnerIdAndMeetingId(messageText, chatId,meetingId);
+                sessionRepository.setEditMeetingFunctionContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+                sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+                sessionRepository.setNumberEditMeetingByChatId(chatId,0L);
+                return CHANGED_MEETING_PLACE_TEXT;
+
+            case EDIT_MEETING_BUTTON_TITLE:
+                meetingRepository.setTitleByOwnerIdAndMeetingId(messageText, chatId,meetingId);
+                sessionRepository.setEditMeetingFunctionContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+                sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+                sessionRepository.setNumberEditMeetingByChatId(chatId,0L);
+                return CHANGED_MEETING_TITTLE_TEXT;
+            default:
+                return INDEV_TEXT;
+
+        }
+    }
 
 }
 

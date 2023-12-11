@@ -3,14 +3,17 @@ package com.github.lostfly.corgihousetelegrambot.service.regFuncs;
 import com.github.lostfly.corgihousetelegrambot.model.Meeting;
 import com.github.lostfly.corgihousetelegrambot.model.UserToMeeting;
 import com.github.lostfly.corgihousetelegrambot.repository.*;
+import com.github.lostfly.corgihousetelegrambot.service.TelegramBot;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import static com.github.lostfly.corgihousetelegrambot.constants.GlobalConstants.*;
@@ -88,38 +91,42 @@ public class MeetingRegistration {
         var messageText = update.getMessage().getText();
 
         return switch (sessionRepository.findByChatId(chatId).getMeetingRegisterFunctionContext()) {
-            case (SET_MEETING_TITLE) -> SetMeetingTitle(chatId, messageText);
-            case (SET_MEETING_DESCRIPTION) -> SetMeetingDescription(chatId, messageText);
-            case (SET_MEETING_PLACE) -> SetMeetingPlace(chatId, messageText);
-            case (SET_MEETING_EVENT_DATE) -> SetMeetingEventDate(chatId, messageText);
-            case (SET_MEETING_USER_LIMIT) -> SetMeetingUserLimit(chatId, messageText);
-            case (SET_MEETING_ANIMAL_TYPE) -> SetMeetingAnimalType(chatId, messageText);
-            case (SET_MEETING_BREED) -> SetMeetingBreed(chatId, messageText);
+            case (SET_MEETING_TITLE) -> setMeetingTitle(chatId, messageText);
+            case (SET_MEETING_DESCRIPTION) -> setMeetingDescription(chatId, messageText);
+            case (SET_MEETING_PLACE) -> setMeetingPlace(chatId, messageText);
+            case (SET_MEETING_EVENT_DATE) -> setMeetingEventDate(chatId, messageText);
+            case (SET_MEETING_USER_LIMIT) -> setMeetingUserLimit(chatId, messageText);
+            case (SET_MEETING_ANIMAL_TYPE) -> setMeetingAnimalType(chatId, messageText);
+            case (SET_MEETING_BREED) -> setMeetingBreed(chatId, messageText);
             default -> INDEV_TEXT;
         };
     }
 
     private boolean isValidTitle(String name) {
-        String nameRegex = "^[^\\d$%^&*_=~`\"></|\\\\]{1,100}$";
-        return name.matches(nameRegex);
+        String nameRegex = String.format("^(?:(?!%s).){1,100}$", FORBIDDEN_WORDS);
+        return name.toLowerCase().matches(nameRegex);
     }
 
     private boolean isValidPlace(String name) {
-        String nameRegex = "^[^\\d$%^&*_=~`\"></|\\\\]{1,100}$";
-        return name.matches(nameRegex);
+        String nameRegex = String.format("^(?:(?!%s).){1,100}$", FORBIDDEN_WORDS);
+
+        String formatRegex = "^[a-zA-Z\\s]+,[a-zA-Z\\s]+,\\d+[a-zA-Z\\s]*$";
+
+        return name.toLowerCase().matches(nameRegex) && name.matches(formatRegex);
     }
 
+
     private boolean isValidDescription(String name) {
-        String nameRegex = "^[^\\d$%^&*></|\\\\]{1,1000}$";
-        return name.matches(nameRegex);
+        String nameRegex = String.format("^(?:(?!%s).){1,1000}$", FORBIDDEN_WORDS);
+        return name.toLowerCase().matches(nameRegex);
     }
 
     private boolean isValidName(String name) {
-        String nameRegex = "^[^\\d!@#$%^&*()_+=~`:;\"><,./|\\\\]{1,40}$";
-        return name.matches(nameRegex);
+        String nameRegex = String.format("^(?:(?!%s).){1,40}$", FORBIDDEN_WORDS);
+        return name.toLowerCase().matches(nameRegex);
     }
 
-    private String SetMeetingTitle(long chatId, String messageText) {
+    private String setMeetingTitle(long chatId, String messageText) {
         if (isValidTitle(messageText)) {
             meetingRepository.setTitleByOwnerIdAndMeetingId(messageText, chatId, sessionRepository.findByChatId(chatId).getMeetingRegisterFunctionId());
             sessionRepository.setMeetingRegisterFunctionContext(SET_MEETING_DESCRIPTION, chatId);
@@ -129,7 +136,7 @@ public class MeetingRegistration {
         }
     }
 
-    private String SetMeetingDescription(long chatId, String messageText) {
+    private String setMeetingDescription(long chatId, String messageText) {
         if (isValidDescription(messageText)) {
             meetingRepository.setDescriptionByOwnerIdAndMeetingId(messageText, chatId, sessionRepository.findByChatId(chatId).getMeetingRegisterFunctionId());
             sessionRepository.setMeetingRegisterFunctionContext(SET_MEETING_PLACE, chatId);
@@ -139,7 +146,7 @@ public class MeetingRegistration {
         }
     }
 
-    private String SetMeetingPlace(long chatId, String messageText) {
+    private String setMeetingPlace(long chatId, String messageText) {
         if (isValidPlace(messageText)) {
             meetingRepository.setPlaceByOwnerIdAndMeetingId(messageText, chatId, sessionRepository.findByChatId(chatId).getMeetingRegisterFunctionId());
             sessionRepository.setMeetingRegisterFunctionContext(SET_MEETING_EVENT_DATE, chatId);
@@ -149,24 +156,45 @@ public class MeetingRegistration {
         }
     }
 
-    private String SetMeetingEventDate(long chatId, String dateString) {
+    private String setMeetingEventDate(long chatId, String dateString) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        Date currentDate = new Date();
+        dateFormat.setLenient(false);
 
         try {
             Date parsedDate = dateFormat.parse(dateString);
+
+            if (parsedDate.before(currentDate)) {
+                sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_MEETING_REGISTRATION, chatId);
+                sessionRepository.setMeetingRegisterFunctionContext(SET_MEETING_EVENT_DATE, chatId);
+                return INCORRECT_DATE_TEXT;
+            }
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(parsedDate);
+            int month = calendar.get(Calendar.MONTH) + 1;
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+            if (month < 1 || month > 12 || day < 1 || day > calendar.getActualMaximum(Calendar.DAY_OF_MONTH)) {
+                sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_MEETING_REGISTRATION, chatId);
+                sessionRepository.setMeetingRegisterFunctionContext(SET_MEETING_EVENT_DATE, chatId);
+                return INCORRECT_DATE_TEXT;
+            }
+
             Timestamp eventDate = new Timestamp(parsedDate.getTime());
             meetingRepository.setEventDateByOwnerIdAndMeetingId(eventDate, chatId, sessionRepository.findByChatId(chatId).getMeetingRegisterFunctionId());
             sessionRepository.setMeetingRegisterFunctionContext(SET_MEETING_USER_LIMIT, chatId);
-            return (SET_MEETING_USER_LIMIT_TEXT);
+            return SET_MEETING_USER_LIMIT_TEXT;
         } catch (ParseException e) {
             e.printStackTrace();
             sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_MEETING_REGISTRATION, chatId);
             sessionRepository.setMeetingRegisterFunctionContext(SET_MEETING_EVENT_DATE, chatId);
-            return (INCORRECT_DATE_TEXT);
+            return INCORRECT_DATE_TEXT;
         }
     }
 
-    private String SetMeetingUserLimit(long chatId, String messageText) {
+
+    private String setMeetingUserLimit(long chatId, String messageText) {
         int userLimit;
         try {
             userLimit = Integer.parseInt(messageText);
@@ -178,7 +206,7 @@ public class MeetingRegistration {
         return (SET_MEETING_ANIMAL_TYPE_TEXT);
     }
 
-    private String SetMeetingAnimalType(long chatId, String messageText) {
+    private String setMeetingAnimalType(long chatId, String messageText) {
         if (isValidName(messageText)) {
             meetingRepository.setAnimalTypeByOwnerIdAndMeetingId(messageText, chatId, sessionRepository.findByChatId(chatId).getMeetingRegisterFunctionId());
             sessionRepository.setMeetingRegisterFunctionContext(SET_MEETING_BREED, chatId);
@@ -188,17 +216,22 @@ public class MeetingRegistration {
         }
     }
 
-    private String SetMeetingBreed(long chatId, String messageText) {
+    private String setMeetingBreed(long chatId, String messageText) {
         if (isValidName(messageText)) {
             meetingRepository.setBreedByOwnerIdAndMeetingId(messageText, chatId, sessionRepository.findByChatId(chatId).getMeetingRegisterFunctionId());
             sessionRepository.setMeetingRegisterFunctionContext(GLOBAL_CONTEXT_DEFAULT, chatId);
             sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
             sessionRepository.setMeetingRegisterFunctionId(0L, chatId);
+
+            SendMessage message = new SendMessage();
+            message.setChatId(String.valueOf(chatId));
+            message.setText("XD");
+            execute(message);
+
             return (REGISTER_MEETING_END_TEXT);
         }else {
             return INCORRECT_PET_BREED;
         }
     }
-
 
 }

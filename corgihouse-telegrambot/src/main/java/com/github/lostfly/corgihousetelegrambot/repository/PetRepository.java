@@ -16,6 +16,8 @@ public interface PetRepository extends CrudRepository<Pet, Long> {
 
     ArrayList<Pet> findAllByOwnerId(Long ownerId);
 
+    ArrayList<Pet> findAll();
+
     @Transactional
     void deleteByOwnerId(Long ownerId);
 
@@ -26,6 +28,8 @@ public interface PetRepository extends CrudRepository<Pet, Long> {
     @Query("select max(pet.petId) from petDataTable pet where pet.ownerId = :ownerId")
     Long findTopByOrderByOwnerIdDesc(@Param("ownerId") Long ownerId);
 
+    @Query("select max(pet.petId) from petDataTable pet")
+    Long findTopByOrderDesc();
     @Modifying
     @Transactional
     @Query("update petDataTable u set u.petName = ?1 where u.ownerId = ?2 and u.petId = ?3")

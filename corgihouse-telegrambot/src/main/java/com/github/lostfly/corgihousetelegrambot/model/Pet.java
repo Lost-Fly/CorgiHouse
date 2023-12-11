@@ -21,7 +21,7 @@ public class Pet {
 
     private String petBreed;
 
-    private Long petImageId;
+    private String petImageId;
 
     private Long ownerId;
 

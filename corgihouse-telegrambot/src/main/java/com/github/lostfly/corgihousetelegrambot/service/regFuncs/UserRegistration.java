@@ -92,7 +92,7 @@ public class UserRegistration {
 
 
     private boolean isValidPhoneNumber(String phoneNumber) {
-        String phoneRegex = "^(\\+7|7|8)?[0-9]{10}$";
+        String phoneRegex = "^(\\+7|7|8)?[\\s\\-]?[0-9]{3}[\\s\\-]?[0-9]{3}[\\s\\-]?[0-9]{2}[\\s\\-]?[0-9]{2}$";
         return phoneNumber.matches(phoneRegex);
     }
 
@@ -108,7 +108,7 @@ public class UserRegistration {
     }
 
     private boolean isValidName(String name) {
-        String nameRegex = "^[^\\d!@#$%^&*()_+=~`:;\"><,./|\\\\]{1,40}$";
+        String nameRegex = "^[^0-9~`'\".,<>/\\\\|!@#^&*()+=]{1,40}$";
         return name.matches(nameRegex);
     }
 

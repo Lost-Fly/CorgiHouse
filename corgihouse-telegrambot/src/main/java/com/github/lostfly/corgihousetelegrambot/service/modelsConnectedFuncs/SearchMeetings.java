@@ -3,16 +3,24 @@ package com.github.lostfly.corgihousetelegrambot.service.modelsConnectedFuncs;
 import com.github.lostfly.corgihousetelegrambot.keyboardMenus.KeyboardMenus;
 import com.github.lostfly.corgihousetelegrambot.listMenus.ListMenus;
 import com.github.lostfly.corgihousetelegrambot.model.Meeting;
+import com.github.lostfly.corgihousetelegrambot.model.Pet;
 import com.github.lostfly.corgihousetelegrambot.repository.MeetingRepository;
+import com.github.lostfly.corgihousetelegrambot.repository.PetRepository;
 import com.github.lostfly.corgihousetelegrambot.repository.SessionRepository;
 import com.github.lostfly.corgihousetelegrambot.repository.UserToMeetingRepository;
+import com.github.lostfly.corgihousetelegrambot.service.generalFuncs.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
+import java.text.ParseException;
+import java.util.List;
+import java.util.Random;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
-
+import java.util.Collections;
 import static com.github.lostfly.corgihousetelegrambot.constants.funcsConstants.ShowMeetingsConstants.NO_AT_ALL_MEETINGS_TEXT;
 
 @Slf4j
@@ -37,6 +45,10 @@ public class SearchMeetings {
     private UserToMeetingRepository userToMeetingRepository;
     @Autowired
     private MeetingFuncs meetingFuncs;
+    @Autowired
+    private FileService fileService;
+    @Autowired
+    private PetRepository petRepository;
 
     public String showAllMeetingInfo(Meeting meeting){
         String fullFilledStatus = meeting.getFullFilled() ? "Да" : "Нет";
@@ -52,6 +64,30 @@ public class SearchMeetings {
                 "Заполнено: " + fullFilledStatus + "\n\n" +
                 "Прошло: " + completedStatus + "\n\n";
         return created_meeting_item;
+    }
+
+    private <T> T getRandomElement(List<T> list) {
+        Collections.shuffle(list);
+        return list.get(0);
+    }
+
+    private boolean shouldReturnNull() {
+        Random random = new Random();
+        return random.nextInt(3) == 0;
+    }
+
+    public File showRandomPet() throws IOException {
+        if (shouldReturnNull()) {
+            return null;
+        }
+
+        ArrayList<Pet> allPets = petRepository.findAll();
+
+        Pet randomPet = getRandomElement(allPets);
+
+        File petPhoto = fileService.givePhotoByFilePath(randomPet.getOwnerId(), randomPet.getPetId());
+
+        return petPhoto;
     }
 
     public SendMessage searchMeetings(long chatId) {

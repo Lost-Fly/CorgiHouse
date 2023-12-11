@@ -34,6 +34,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -47,6 +48,7 @@ import static com.github.lostfly.corgihousetelegrambot.constants.keyboardsConsta
 import static com.github.lostfly.corgihousetelegrambot.constants.keyboardsConstants.ListMenusConstants.*;
 import static com.github.lostfly.corgihousetelegrambot.constants.regConstants.PetRegConstants.CANCEL_OPERATION;
 import static com.github.lostfly.corgihousetelegrambot.constants.funcsConstants.UserFuncsConstants.EDIT_CHOISE;
+import static com.github.lostfly.corgihousetelegrambot.constants.regConstants.PetRegConstants.REGISTER_PET_PHOTO;
 
 @Slf4j
 @Component
@@ -182,11 +184,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case APPLIED_MEETINGS_FULL_INFO_SELECT:
                     sendEditMessage(chatId, messageId, meetingFuncs.fullInfoMeetingSelection(chatId));
                     break;
-
                 case REGISTRATION:
-                    System.out.println("bef");
                     sendMessage(chatId, userRegistration.initializeRegistration(update));
-                    System.out.println("aft");
                     break;
                 default:
                     sendMessage(chatId, INDEV_TEXT, keyboardMenus.mainKeyboard());
@@ -224,6 +223,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                     break;
                 case SEARCH_MEETINGS:
                     sendMessage(chatId, searchMeetings.searchMeetings(chatId));
+                    try {
+                        sendPhoto(chatId, searchMeetings.showRandomPet());
+                    } catch (TelegramApiException | IOException e) {
+                        throw new RuntimeException(e);
+                    }
                     break;
                 case BACK:
                     sendMessage(chatId, meetingFuncs.changeToMainMenu(chatId));
@@ -237,6 +241,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                     break;
             }
         } else {
+            if (update.hasMessage()) {
+                if (update.getMessage().hasPhoto() && Objects.equals(sessionRepository.findByChatId(chatId).getPetRegisterFunctionContext(), REGISTER_PET_PHOTO)) {
+                    downloadImage(update, petRepository.findTopByOrderByOwnerIdDesc(chatId));
+                }
+            }
             String messageText = update.getMessage().getText();
             switch (sessionRepository.findByChatId(chatId).getGlobalFunctionContext()) {
                 case GLOBAL_CONTEXT_USER_REGISTRATION ->
@@ -245,8 +254,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                         sendMessage(chatId, petRegistration.continueRegistration(update));
                 case GLOBAL_CONTEXT_USER_EDIT -> sendMessage(chatId, userFuncs.editProfileAction(chatId, messageText));
                 case GLOBAL_CONTEXT_PET_DELETE -> sendMessage(chatId, petsFuncs.deleteAnimal(chatId, messageText));
-                case GLOBAL_CONTEXT_FULL_MEETING_INFO -> sendMessage(chatId, meetingFuncs.fullInfoMeetingByNumber(chatId, messageText));
-                case GLOBAL_CONTEXT_MEETING_REGISTRATION -> sendMessage(chatId, meetingRegistration.continueRegistration(update));
+                case GLOBAL_CONTEXT_FULL_MEETING_INFO -> {
+                    sendMessage(chatId, meetingFuncs.fullInfoMeetingByNumber(chatId, messageText));
+                }
+                case GLOBAL_CONTEXT_MEETING_REGISTRATION ->
+                        sendMessage(chatId, meetingRegistration.continueRegistration(update));
                 default -> {
                     sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
                     log.error("No global context found -  " + update.getMessage().getText());
@@ -258,11 +270,11 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
 
-    private void downloadImage(Update update) {
+    public void downloadImage(Update update, Long pet_id) {
 
         long chatId = update.getMessage().getChatId();
 
-        PhotoSize photo = update.getMessage().getPhoto().stream().findFirst().orElse(null);
+        PhotoSize photo = update.getMessage().getPhoto().stream().reduce((first, second) -> second).orElse(null);
 
         if (photo != null) {
             try {
@@ -270,7 +282,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 GetFile getFileRequest = new GetFile();
                 getFileRequest.setFileId(photo.getFileId());
                 org.telegram.telegrambots.meta.api.objects.File file = execute(getFileRequest);
-                java.io.File localFile = fileService.downloadPhotoByFilePath(file.getFilePath(), PHOTO_STORAGE_DIR, chatId, getBotToken());
+                fileService.downloadPhotoByFilePath(file.getFilePath(), PHOTO_STORAGE_DIR, chatId, pet_id, getBotToken());
 
             } catch (TelegramApiException | IOException e) {
                 e.printStackTrace();
@@ -282,6 +294,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         SendPhoto sendPhoto = new SendPhoto();
         sendPhoto.setChatId(chatId.toString());
         sendPhoto.setPhoto(new InputFile(imageFile));
+        sendPhoto.setCaption("КОРЖИКА ВАМ В ЛЕНТУ!");
         execute(sendPhoto);
     }
 
@@ -290,7 +303,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.setChatId(String.valueOf(chatId));
         message.setText(textToSend);
         message.setReplyMarkup(msgKeyboard);
-
         try {
             execute(message);
         } catch (TelegramApiException e) {
@@ -324,7 +336,9 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     void sendMessage(long chatId, SendMessage message) {
-        if (message == null){return;}
+        if (message == null) {
+            return;
+        }
 
         message.setChatId(String.valueOf(chatId));
 

@@ -18,7 +18,9 @@ public class MeetingRegConstants {
     // meeting registration func texts
     public static final String SET_MEETING_TITLE_TEXT = "Введите заголовок события:";
     public static final String SET_MEETING_DESCRIPTION_TEXT = "Введите описание события:";
-    public static final String SET_MEETING_PLACE_TEXT = "Введите место(адрес) проведения события:";
+    public static final String SET_MEETING_PLACE_TEXT = EmojiParser.parseToUnicode("Введите место(адрес) проведения " +
+            "события:" + "\n" + ":exclamation:" + "Вводить в формате: "  + ":exclamation:" + "\n" +
+            "Город, Улица, Номер дома" + "\n" + "ИЛИ" + "\n" +  "Город, *место*, *доп информация по месту проведения*");
     public static final String SET_MEETING_EVENT_DATE_TEXT =
             EmojiParser.parseToUnicode("Введите дату проведения события:" + "\n" + ":exclamation:" +
                     " Вводить в формате: 31.04.2023 10:00 " + ":exclamation:");
@@ -35,5 +37,6 @@ public class MeetingRegConstants {
     public static final String INCORRECT_MEETING_PLACE = "Неверный формат места проведения встречи. Пожалуйста, " +
             "используйте только буквы и смайлики.";
 
+    public static final String FORBIDDEN_WORDS = "реклама|хуй|пиздец";
 
 }

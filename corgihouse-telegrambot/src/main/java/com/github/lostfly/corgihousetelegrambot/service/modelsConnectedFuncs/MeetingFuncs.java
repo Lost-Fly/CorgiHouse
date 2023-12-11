@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import static com.github.lostfly.corgihousetelegrambot.constants.GlobalConstants.*;
@@ -109,7 +110,7 @@ public class MeetingFuncs {
         return message;
     }
 
-    public String showMainMeetingInfo(Meeting meeting){
+    public String showMainMeetingInfo(Meeting meeting) {
         String created_meeting_item = "ID события: " + meeting.getMeetingId() + "\n" +
                 "Название: " + meeting.getTitle() + "\n" +
                 "Дата: " + meeting.getEventDate() + "\n" +
@@ -118,7 +119,7 @@ public class MeetingFuncs {
         return created_meeting_item;
     }
 
-    public String showFullMeetingInfo(Meeting meeting){
+    public String showFullMeetingInfo(Meeting meeting) {
         String created_meeting_item = "ID события: " + meeting.getMeetingId() + "\n" +
                 "Название: " + meeting.getTitle() + "\n" +
                 "Дата: " + meeting.getEventDate() + "\n" +

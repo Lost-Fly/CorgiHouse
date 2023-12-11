@@ -15,6 +15,9 @@ public class BotConfig {
     @Value("${bot.token}")
     String token;
 
+    public BotConfig() {
+    }
+
     public DefaultBotOptions getBotDefaultOptions(){
         DefaultBotOptions options = new DefaultBotOptions();
         options.setMaxThreads(10);

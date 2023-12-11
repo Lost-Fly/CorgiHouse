@@ -107,25 +107,47 @@ public class UserFuncs {
         }
     }
 
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        String phoneRegex = "^(\\+7|7|8)?[\\s\\-]?[0-9]{3}[\\s\\-]?[0-9]{3}[\\s\\-]?[0-9]{2}[\\s\\-]?[0-9]{2}$";
+        return phoneNumber.matches(phoneRegex);
+    }
+
+    private boolean isValidName(String name) {
+        String nameRegex = "^[^0-9~`'\".,<>/\\\\|!@#^&*()+=\\s]{1,40}$";
+        return name.matches(nameRegex);
+    }
+
     public String editProfileAction(long chatId, String messageText) {
         switch(sessionRepository.findByChatId(chatId).getEditFunctionContext()){
             case EDIT_PROFILE_NAME:
-                userRepository.setFirstNameByChatId(messageText, chatId);
-                sessionRepository.setEditUserContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
-                sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
-                return CHANGED_NAME_TEXT;
+                if(isValidName(messageText)) {
+                    userRepository.setFirstNameByChatId(messageText, chatId);
+                    sessionRepository.setEditUserContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+                    sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+                    return CHANGED_NAME_TEXT;
+                }else {
+                    return INCORRECT_FIRST_NAME;
+                }
 
             case EDIT_PROFILE_LASTNAME:
-                userRepository.setLastNameByChatId(messageText, chatId);
-                sessionRepository.setEditUserContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
-                sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
-                return CHANGED_LAST_NAME_TEXT;
+                if (isValidName(messageText)) {
+                    userRepository.setLastNameByChatId(messageText, chatId);
+                    sessionRepository.setEditUserContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+                    sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+                    return CHANGED_LAST_NAME_TEXT;
+                }else {
+                    return INCORRECT_LAST_NAME;
+                }
 
             case EDIT_PROFILE_PHONE_NUMBER:
-                userRepository.setPhoneNumberByChatId(messageText, chatId);
-                sessionRepository.setEditUserContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
-                sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
-                return CHANGED_PHONE_TEXT;
+                if (isValidPhoneNumber(messageText)) {
+                    userRepository.setPhoneNumberByChatId(messageText, chatId);
+                    sessionRepository.setEditUserContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+                    sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+                    return CHANGED_PHONE_TEXT;
+                }else {
+                    return INCORRECT_PHONE_NUMBER;
+                }
             default:
                 return INDEV_TEXT;
 

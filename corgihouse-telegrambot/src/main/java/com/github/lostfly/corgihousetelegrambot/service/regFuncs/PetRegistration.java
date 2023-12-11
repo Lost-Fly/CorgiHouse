@@ -4,6 +4,7 @@ import com.github.lostfly.corgihousetelegrambot.model.Pet;
 import com.github.lostfly.corgihousetelegrambot.repository.PetRepository;
 import com.github.lostfly.corgihousetelegrambot.repository.SessionRepository;
 import com.github.lostfly.corgihousetelegrambot.repository.UserRepository;
+import com.github.lostfly.corgihousetelegrambot.service.TelegramBot;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,11 +27,8 @@ public class PetRegistration {
     @Autowired
     private PetRepository petRepository;
 
-
     @Autowired
     private SessionRepository sessionRepository;
-
-
     public String initializeRegistration(Update update) {
 
         var chatId = update.getCallbackQuery().getMessage().getChatId();
@@ -78,7 +76,7 @@ public class PetRegistration {
 
 
     private boolean isValidName(String name) {
-        String nameRegex = "^[^\\d!@#$%^&*()_+=~`:;\"><,./|\\\\]{1,40}$";
+        String nameRegex = "^[^0-9~`'\".,<>/\\\\|!@#^&*()+=]{1,40}$";
         return name.matches(nameRegex);
     }
 
@@ -92,7 +90,7 @@ public class PetRegistration {
         }
     }
 
-    private String SetPetPhoto(Long chatId, Update update) {
+    private  String SetPetPhoto(Long chatId, Update update) {
         if (update.getMessage().hasPhoto()) {
             sessionRepository.setPetRegisterFunctionContext(REGISTER_CONTEXT_DEFAULT, chatId);
             sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);

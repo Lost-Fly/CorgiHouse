@@ -59,6 +59,14 @@ public class GlobalConstants {
     // logs texts
     public static final String ERROR_OCCURRED = "Error occurred: ";
     public static final String GLOBAL_CONTEXT_FULL_MEETING_INFO = "global_context_full_meeting_info";
+    public static final String GLOBAL_CONTEXT_MEETING_DELETE = "global_context_meeting_delete";
+    public static final String GLOBAL_CONTEXT_MEETING_EDIT = "global_context_meeting_edit";
+
+    public static final String GLOBAL_CONTEXT_SET_NAME_FIELD_MEETING = "global_context_set_name_field_meeting";
+
+    public static final String GLOBAL_CONTEXT_MEETING_SELECT_NUMBER_MEETING = "global_context_meeting_select_number_meeting";
+
+
 
 
 

@@ -10,6 +10,9 @@ public interface SessionRepository extends CrudRepository<UserSession, Long> {
 
     UserSession findByChatId(Long chatId);
 
+
+
+
     @Modifying
     @Transactional
     @Query("update sessionDataTable u set u.globalFunctionContext = ?1 where u.chatId = ?2")
@@ -42,6 +45,18 @@ public interface SessionRepository extends CrudRepository<UserSession, Long> {
     @Transactional
     @Query("update sessionDataTable u set u.meetingRegisterFunctionId = ?1 where u.chatId = ?2")
     void setMeetingRegisterFunctionId(Long MeetingRegisterFunctionId, Long chatId);
+    @Modifying
+    @Transactional
+    @Query("update sessionDataTable u set u.editMeetingFunctionContext = ?1 where u.chatId = ?2")
+    void setEditMeetingFunctionContextByChatId(String EditMeetingContext, Long chatId);
+
+    @Modifying
+    @Transactional
+    @Query("update sessionDataTable u set u.numberEditMeeting = ?1 where u.chatId = ?2")
+    void setNumberEditMeetingByChatId(Long NumberEditMeeting, Long chatId);
+
+
+
 
 
 }

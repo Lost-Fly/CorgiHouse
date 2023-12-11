@@ -1,15 +1,18 @@
 package com.github.lostfly.corgihousetelegrambot.service.regFuncs;
 
+import com.github.lostfly.corgihousetelegrambot.config.BotInitializer;
 import com.github.lostfly.corgihousetelegrambot.model.Meeting;
 import com.github.lostfly.corgihousetelegrambot.model.UserToMeeting;
 import com.github.lostfly.corgihousetelegrambot.repository.*;
 import com.github.lostfly.corgihousetelegrambot.service.TelegramBot;
+import com.github.lostfly.corgihousetelegrambot.service.api.YandexWeather;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -110,7 +113,7 @@ public class MeetingRegistration {
     private boolean isValidPlace(String name) {
         String nameRegex = String.format("^(?:(?!%s).){1,100}$", FORBIDDEN_WORDS);
 
-        String formatRegex = "^[a-zA-Z\\s]+,[a-zA-Z\\s]+,\\d+[a-zA-Z\\s]*$";
+        String formatRegex = "^[a-zA-Zа-яА-Я\\s]+,[a-zA-Zа-яА-Я\\s]+,[\\da-zA-Zа-яА-Я\\s]+$";
 
         return name.toLowerCase().matches(nameRegex) && name.matches(formatRegex);
     }
@@ -130,7 +133,7 @@ public class MeetingRegistration {
         if (isValidTitle(messageText)) {
             meetingRepository.setTitleByOwnerIdAndMeetingId(messageText, chatId, sessionRepository.findByChatId(chatId).getMeetingRegisterFunctionId());
             sessionRepository.setMeetingRegisterFunctionContext(SET_MEETING_DESCRIPTION, chatId);
-            return (SET_MEETING_DESCRIPTION_TEXT);
+            return SET_MEETING_DESCRIPTION_TEXT;
         } else {
             return INCORRECT_MEETING_TITLE;
         }
@@ -222,11 +225,6 @@ public class MeetingRegistration {
             sessionRepository.setMeetingRegisterFunctionContext(GLOBAL_CONTEXT_DEFAULT, chatId);
             sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
             sessionRepository.setMeetingRegisterFunctionId(0L, chatId);
-
-            SendMessage message = new SendMessage();
-            message.setChatId(String.valueOf(chatId));
-            message.setText("XD");
-            execute(message);
 
             return (REGISTER_MEETING_END_TEXT);
         }else {

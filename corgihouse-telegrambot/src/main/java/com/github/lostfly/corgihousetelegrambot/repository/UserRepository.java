@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+
 public interface UserRepository extends CrudRepository<User, Long> {
 
     @Modifying
@@ -30,5 +32,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @Transactional
     void deleteByChatId(Long chatId);
 
+    ArrayList<User> findAll();
 
 }

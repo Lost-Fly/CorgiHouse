@@ -20,10 +20,10 @@ public class MeetingRegConstants {
     public static final String SET_MEETING_DESCRIPTION_TEXT = "Введите описание события:";
     public static final String SET_MEETING_PLACE_TEXT = EmojiParser.parseToUnicode("Введите место(адрес) проведения " +
             "события:" + "\n" + ":exclamation:" + "Вводить в формате: "  + ":exclamation:" + "\n" +
-            "Город, Улица, Номер дома" + "\n" + "ИЛИ" + "\n" +  "Город, *место*, *доп информация по месту проведения*");
+            "*Город*, *Улица*, *Номер дома*" + "\n" + "ИЛИ" + "\n" +  "*Город*, *место*, *доп информация по месту проведения*");
     public static final String SET_MEETING_EVENT_DATE_TEXT =
             EmojiParser.parseToUnicode("Введите дату проведения события:" + "\n" + ":exclamation:" +
-                    " Вводить в формате: 31.04.2023 10:00 " + ":exclamation:");
+                    "Вводить в формате: 31.04.2023 10:00" + ":exclamation:");
     public static final String SET_MEETING_USER_LIMIT_TEXT = "Введите максимальное количество участников события:";
     public static final String INCORRECT_DATE_TEXT = "Дата неверна! Введите ещё раз:";
     public static final String SET_MEETING_ANIMAL_TYPE_TEXT = "Введите тип животных события:";

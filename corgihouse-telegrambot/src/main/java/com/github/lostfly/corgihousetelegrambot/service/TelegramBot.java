@@ -3,6 +3,7 @@ package com.github.lostfly.corgihousetelegrambot.service;
 import com.github.lostfly.corgihousetelegrambot.config.BotConfig;
 import com.github.lostfly.corgihousetelegrambot.keyboardMenus.KeyboardMenus;
 import com.github.lostfly.corgihousetelegrambot.listMenus.ListMenus;
+import com.github.lostfly.corgihousetelegrambot.model.User;
 import com.github.lostfly.corgihousetelegrambot.repository.PetRepository;
 import com.github.lostfly.corgihousetelegrambot.repository.SessionRepository;
 import com.github.lostfly.corgihousetelegrambot.repository.UserRepository;
@@ -13,6 +14,7 @@ import com.github.lostfly.corgihousetelegrambot.service.modelsConnectedFuncs.*;
 import com.github.lostfly.corgihousetelegrambot.service.regFuncs.MeetingRegistration;
 import com.github.lostfly.corgihousetelegrambot.service.regFuncs.PetRegistration;
 import com.github.lostfly.corgihousetelegrambot.service.regFuncs.UserRegistration;
+import com.vdurmont.emoji.EmojiParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -224,6 +226,14 @@ public class TelegramBot extends TelegramLongPollingBot {
             String messageText = update.getMessage().getText();
 
             switch (messageText) {
+                case ADMIN_SEND_BROADCAST:
+                    if( adminsIdList.contains(chatId) ) {
+                        sessionRepository.setGlobalContextByChatId(GLOBAL_ADMIN_BROADCAST, chatId);
+                        sendMessage(chatId, "Введите текст объявления: ");
+                    }else {
+                        sendMessage(chatId, "ВЫ ЛОХ ПОЗОРНЫЙ");
+                    }
+                    break;
                 case START_MENU_COMMAND:
                     sendMessage(chatId, generalFuncs.startCommandReceived(chatId, update.getMessage().getChat().getFirstName()), keyboardMenus.mainKeyboard());
                     break;
@@ -251,7 +261,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     try {
                         sendPhoto(chatId, searchMeetings.showRandomPet());
                     } catch (TelegramApiException | IOException e) {
-                        throw new RuntimeException(e);
+                        log.error(ERROR_OCCURRED + e.getMessage());
                     }
                     break;
                 case BACK:
@@ -271,8 +281,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                     downloadImage(update, petRepository.findTopByOrderByOwnerIdDesc(chatId));
                 }
             }
+
             String messageText = update.getMessage().getText();
             switch (sessionRepository.findByChatId(chatId).getGlobalFunctionContext()) {
+                case GLOBAL_ADMIN_BROADCAST -> adminBroadcastNews(messageText, chatId);
                 case GLOBAL_CONTEXT_USER_REGISTRATION ->
                         sendMessage(chatId, userRegistration.continueRegistration(update));
                 case GLOBAL_CONTEXT_PET_REGISTRATION ->
@@ -294,6 +306,13 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     }
 
+    public void adminBroadcastNews(String msg, Long chatId){
+        ArrayList<User> users = userRepository.findAll();
+        for (User user : users){
+            sendMessage(user.getChatId(), EmojiParser.parseToUnicode(":star:" + "Это сообщение является массовой рассылкой пользователям бота от его администраторов. Если вы получили его, значит произошли важные изменения, которые позволяют нам стать лучше." + ":relaxed:" +"Расскажем подробнее: " + msg + " Если у вас есть пожелания или замечания по работе бота - обращайтесь к администраторам" + ":woman_technologist:" + ":man_technologist:" + ": @eveprova & @lostfly"));
+        }
+        sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
+    }
 
     public void downloadImage(Update update, Long pet_id) {
 

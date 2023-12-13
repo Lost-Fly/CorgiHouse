@@ -36,7 +36,6 @@ public class UserSession {
     private String editMeetingFunctionContext;
 
 
-
     private Long meetingRegisterFunctionId;
 
 

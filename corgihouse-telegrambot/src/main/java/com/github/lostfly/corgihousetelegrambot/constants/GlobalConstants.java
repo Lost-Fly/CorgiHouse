@@ -42,12 +42,27 @@ public class GlobalConstants {
     public static final String NO_PETS_TEXT = "У вас пока что нет питомцев! Хотите зарегистрировать?";
     public static final String DELETE_PROFILE_QUESTION_TEXT = "Вы точно хотите удалить профиль?";
 
-    public static final String BLUSH_EMOJI = ":blush:";
+    public static final String CORGI_PHOTO_TO_YOU = "КОРЖИКА ВАМ В ЛЕНТУ!";
 
+    // Emojis
+    public static final String BLUSH_EMOJI = ":blush:";
+    public static final String STAR_EMOJI = ":star:";
+    public static final String RELAXED_EMOJI = ":relaxed:";
+    public static final String WOMAN_TECHNOLOGIST_EMOJI = ":woman_technologist:";
+    public static final String MAN_TECHNOLOGIST_EMOJI = ":man_technologist:";
+
+    // Static gen string funcs
     public static String generateStartMeetingMessage(String name) {
         return EmojiParser.parseToUnicode("Привет, " + name + ", рад тебя видеть!" + " " + BLUSH_EMOJI);
     }
 
+    public static String generateAdminBroadcastMessage(String msg) {
+        return EmojiParser.parseToUnicode(STAR_EMOJI + "Это сообщение является массовой рассылкой пользователям " +
+                "бота от его администраторов. Если вы получили его, значит произошли важные изменения, " +
+                "которые позволяют нам стать лучше." + RELAXED_EMOJI +"Расскажем подробнее: " + msg +
+                " Если у вас есть пожелания или замечания по работе бота - обращайтесь к администраторам" +
+                WOMAN_TECHNOLOGIST_EMOJI + MAN_TECHNOLOGIST_EMOJI + ": @eveprova & @lostfly");
+    }
 
     // global session context
 
@@ -60,13 +75,6 @@ public class GlobalConstants {
 
     public static final String GLOBAL_ADMIN_BROADCAST = "global_admin_broadcast";
 
-    // global files/dirs names
-    public static final String PHOTO_STORAGE_DIR = "downloaded_photos";
-    public static final String CORGI_STORAGE_DIR = "corgi_photos";
-
-
-    // logs texts
-    public static final String ERROR_OCCURRED = "Error occurred: ";
     public static final String GLOBAL_CONTEXT_FULL_MEETING_INFO = "global_context_full_meeting_info";
     public static final String GLOBAL_CONTEXT_MEETING_DELETE = "global_context_meeting_delete";
     public static final String GLOBAL_CONTEXT_MEETING_EDIT = "global_context_meeting_edit";
@@ -75,13 +83,15 @@ public class GlobalConstants {
 
     public static final String GLOBAL_CONTEXT_MEETING_SELECT_NUMBER_MEETING = "global_context_meeting_select_number_meeting";
 
-    // admins ID list
+    // global files/dirs names
+    public static final String PHOTO_STORAGE_DIR = "downloaded_photos";
+    public static final String CORGI_STORAGE_DIR = "corgi_photos";
 
+    // admins ID list && commands
     public static final ArrayList<Long> adminsIdList = new ArrayList<>(Arrays.asList(919433897L, 881861312L));
-    public static final List<Long> adminsIdList1 = List.of(919433897L, 881861312L);
 
-
-
+    public static final String ADMIN_INPUT_BROADCAST_MESSAGE = "Введите текст объявления: ";
+    public static final String NOT_AN_ADMIN = "У вас недостаточно прав на выполнение комманды!";
 
 
 }

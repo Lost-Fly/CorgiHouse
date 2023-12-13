@@ -75,7 +75,7 @@ public class ListMenusConstants {
     public static final String EDIT_MEETING_BUTTON_TITLE_TEXT = "Название";
     public static final String EDIT_MEETING_BUTTON_TITLE = "edit_meeting_button_title";
     public static final String EDIT_MEETING_BUTTON_DATE_TEXT = "Дата";
-    public static final String EDIT_MEETING_BUTTON_DATE = "edit_meeting_bottom_description";
+    public static final String EDIT_MEETING_BUTTON_DATE = "edit_meeting_button_date";
     public static final String EDIT_MEETING_BUTTON_PLACE_TEXT = "Место проведения";
     public static final String EDIT_MEETING_BUTTON_PLACE = "edit_meeting_button_place";
     public static final String EDIT_MEETING_BUTTON_ANIMALTYPE_TEXT = "Тип животного";

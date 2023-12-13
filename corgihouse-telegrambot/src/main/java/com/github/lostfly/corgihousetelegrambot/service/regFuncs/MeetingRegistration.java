@@ -121,7 +121,7 @@ public class MeetingRegistration {
         return name.toLowerCase().matches(nameRegex);
     }
 
-    private boolean isValidName(String name) {
+    public static boolean isValidName(String name) {
         String nameRegex = String.format("^(?:(?!%s).){1,40}$", FORBIDDEN_WORDS);
         return name.toLowerCase().matches(nameRegex);
     }
@@ -222,11 +222,6 @@ public class MeetingRegistration {
             sessionRepository.setMeetingRegisterFunctionContext(GLOBAL_CONTEXT_DEFAULT, chatId);
             sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
             sessionRepository.setMeetingRegisterFunctionId(0L, chatId);
-
-            SendMessage message = new SendMessage();
-            message.setChatId(String.valueOf(chatId));
-            message.setText("XD");
-            execute(message);
 
             return (REGISTER_MEETING_END_TEXT);
         }else {

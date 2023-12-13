@@ -45,6 +45,11 @@ public class MeetingFuncsConstants {
     public static final String CHANGED_MEETING_DESCRIPTION_TEXT = "Описание изменено";
     public static final String CHANGED_MEETING_ANIMAL_TYPE_TEXT = "Тип животного изменен";
     public static final String CHANGED_MEETING_PLACE_TEXT = "Место проведения изменено";
+    public static final String INCORRECT_MEETING_ANIMAL_TYPE = "Некорректно введен тип животного";
+    public static final String INCORRECT_MEETING_BREED = "Некорректно введена кличка животного";
+    public static final String INCORRECT_MEETING_DATA = "Некорректно введена дата события";
+    public static final String INCORRECT_MEETING_TITTLE = "Некорректно введено название события";
+
 
 
 

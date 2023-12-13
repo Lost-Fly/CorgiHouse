@@ -189,6 +189,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     sendEditMessage(chatId, messageId, meetingFuncs.deleteMeetingSelection(chatId));
                     break;
                 case MEETING_EDIT_BUTTON_SELECT:
+                    System.out.println(MEETING_EDIT_BUTTON_SELECT);
                     sendMessage(chatId, meetingFuncs.editMeetingSelectionNumber(chatId));
                     break;
                 case EDIT_MEETING_BUTTON_TITLE:
@@ -272,6 +273,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 }
             }
             String messageText = update.getMessage().getText();
+            System.out.println(messageText);
             switch (sessionRepository.findByChatId(chatId).getGlobalFunctionContext()) {
                 case GLOBAL_CONTEXT_USER_REGISTRATION ->
                         sendMessage(chatId, userRegistration.continueRegistration(update));
@@ -282,8 +284,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case GLOBAL_CONTEXT_FULL_MEETING_INFO -> sendMessage(chatId, meetingFuncs.fullInfoMeetingByNumber(chatId, messageText));
                 case GLOBAL_CONTEXT_MEETING_DELETE -> sendMessage(chatId,meetingFuncs.deleteMeeting(chatId,messageText));
                 case GLOBAL_CONTEXT_MEETING_REGISTRATION -> sendMessage(chatId, meetingRegistration.continueRegistration(update));
-                case GLOBAL_CONTEXT_MEETING_SELECT_NUMBER_MEETING -> sendMessage(chatId, meetingFuncs.editMeetingNameField(chatId,messageText), listMenus.meetingEditKeyboard());
-                case GLOBAL_CONTEXT_SET_NAME_FIELD_MEETING -> sendMessage(chatId,meetingFuncs.editMeetingAction(chatId,messageText));
+                case GLOBAL_CONTEXT_MEETING_EDIT -> sendMessage(chatId, meetingFuncs.functionEditMeeting(chatId,messageText));
                 default -> {
                     sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
                     log.error("No global context found -  " + update.getMessage().getText());

@@ -14,11 +14,9 @@ import com.github.lostfly.corgihousetelegrambot.service.modelsConnectedFuncs.*;
 import com.github.lostfly.corgihousetelegrambot.service.regFuncs.MeetingRegistration;
 import com.github.lostfly.corgihousetelegrambot.service.regFuncs.PetRegistration;
 import com.github.lostfly.corgihousetelegrambot.service.regFuncs.UserRegistration;
-import com.vdurmont.emoji.EmojiParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
@@ -36,19 +34,15 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
-import static com.github.lostfly.corgihousetelegrambot.constants.funcsConstants.MeetingFuncsConstants.SELECT_NAME_FIELD_MEETING_EDIT_TEXT;
 import static com.github.lostfly.corgihousetelegrambot.constants.keyboardsConstants.CommandListConstants.*;
 import static com.github.lostfly.corgihousetelegrambot.constants.GlobalConstants.*;
 import static com.github.lostfly.corgihousetelegrambot.constants.keyboardsConstants.KeyboardMenusConstants.*;
 import static com.github.lostfly.corgihousetelegrambot.constants.keyboardsConstants.ListMenusConstants.*;
+import static com.github.lostfly.corgihousetelegrambot.constants.logsConstants.LogsConstants.*;
 import static com.github.lostfly.corgihousetelegrambot.constants.regConstants.PetRegConstants.CANCEL_OPERATION;
 import static com.github.lostfly.corgihousetelegrambot.constants.funcsConstants.UserFuncsConstants.EDIT_CHOISE;
 import static com.github.lostfly.corgihousetelegrambot.constants.regConstants.PetRegConstants.REGISTER_PET_PHOTO;
@@ -107,15 +101,15 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         this.config = config;
 
-        List<BotCommand> listofCommands = new ArrayList<>();
-        listofCommands.add(new BotCommand(START_MENU_COMMAND, START_MENU_COMMAND_TEXT));
-        listofCommands.add(new BotCommand(HELP_MENU_COMMAND, HELP_MENU_COMMAND_TEXT));
-        listofCommands.add(new BotCommand(REGISTER_MENU_COMMAND, REGISTER_MENU_COMMAND_TEXT));
+        List<BotCommand> listOfCommands = new ArrayList<>();
+        listOfCommands.add(new BotCommand(START_MENU_COMMAND, START_MENU_COMMAND_TEXT));
+        listOfCommands.add(new BotCommand(HELP_MENU_COMMAND, HELP_MENU_COMMAND_TEXT));
+        listOfCommands.add(new BotCommand(REGISTER_MENU_COMMAND, REGISTER_MENU_COMMAND_TEXT));
 
         try {
-            this.execute(new SetMyCommands(listofCommands, new BotCommandScopeDefault(), null));
+            this.execute(new SetMyCommands(listOfCommands, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException e) {
-            log.error("Error setting bot command list " + e.getMessage());
+            log.error(ERROR_SETTING_BOT_COMMAND + e.getMessage());
         }
 
     }
@@ -182,8 +176,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                     sendEditMessage(chatId, messageId, meetingRegistration.initializeRegistration(update));
                     break;
                 case CREATED_MEETINGS_FULL_INFO_SELECT:
-                    sendEditMessage(chatId, messageId, meetingFuncs.fullInfoMeetingSelection(chatId));
-                    break;
                 case APPLIED_MEETINGS_FULL_INFO_SELECT:
                     sendEditMessage(chatId, messageId, meetingFuncs.fullInfoMeetingSelection(chatId));
                     break;
@@ -228,11 +220,11 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             switch (messageText) {
                 case ADMIN_SEND_BROADCAST:
-                    if( adminsIdList.contains(chatId) ) {
+                    if (adminsIdList.contains(chatId)) {
                         sessionRepository.setGlobalContextByChatId(GLOBAL_ADMIN_BROADCAST, chatId);
-                        sendMessage(chatId, "Введите текст объявления: ");
-                    }else {
-                        sendMessage(chatId, "ВЫ ЛОХ ПОЗОРНЫЙ");
+                        sendMessage(chatId, ADMIN_INPUT_BROADCAST_MESSAGE);
+                    } else {
+                        sendMessage(chatId, NOT_AN_ADMIN);
                     }
                     break;
                 case START_MENU_COMMAND:
@@ -260,7 +252,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case SEARCH_MEETINGS:
                     sendMessage(chatId, searchMeetings.searchMeetings(chatId));
                     try {
-                        sendPhoto(chatId, searchMeetings.showRandomPet());
+                        sendPhoto(chatId, searchMeetings.showRandomPet(), CORGI_PHOTO_TO_YOU);
                     } catch (TelegramApiException | IOException e) {
                         log.error(ERROR_OCCURRED + e.getMessage());
                     }
@@ -299,7 +291,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case GLOBAL_CONTEXT_MEETING_EDIT -> sendMessage(chatId, meetingFuncs.functionEditMeeting(chatId,messageText));
                 default -> {
                     sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
-                    log.error("No global context found -  " + update.getMessage().getText());
+                    log.error(ERROR_GLOBAL_CONTEXT_OCCURRED + update.getMessage().getText());
                     sendMessage(chatId, INDEV_TEXT, keyboardMenus.mainKeyboard());
                 }
             }
@@ -307,10 +299,10 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     }
 
-    public void adminBroadcastNews(String msg, Long chatId){
+    public void adminBroadcastNews(String msg, Long chatId) {
         ArrayList<User> users = userRepository.findAll();
-        for (User user : users){
-            sendMessage(user.getChatId(), EmojiParser.parseToUnicode(":star:" + "Это сообщение является массовой рассылкой пользователям бота от его администраторов. Если вы получили его, значит произошли важные изменения, которые позволяют нам стать лучше." + ":relaxed:" +"Расскажем подробнее: " + msg + " Если у вас есть пожелания или замечания по работе бота - обращайтесь к администраторам" + ":woman_technologist:" + ":man_technologist:" + ": @eveprova & @lostfly"));
+        for (User user : users) {
+            sendMessage(user.getChatId(), generateAdminBroadcastMessage(msg));
         }
         sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
     }
@@ -335,11 +327,11 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private void sendPhoto(Long chatId, File imageFile) throws TelegramApiException {
+    private void sendPhoto(Long chatId, File imageFile, String text_to_send) throws TelegramApiException {
         SendPhoto sendPhoto = new SendPhoto();
         sendPhoto.setChatId(chatId.toString());
         sendPhoto.setPhoto(new InputFile(imageFile));
-        sendPhoto.setCaption("КОРЖИКА ВАМ В ЛЕНТУ!");
+        sendPhoto.setCaption(text_to_send);
         execute(sendPhoto);
     }
 

@@ -7,14 +7,13 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
+import static com.github.lostfly.corgihousetelegrambot.constants.queryConstants.QueryMeeting.ENTITY_NAME_MEETING;
 
 @Getter
 @Setter
 @ToString
-@Entity(name = "meetingDataTable")
+@Entity(name = ENTITY_NAME_MEETING)
 public class Meeting {
 
     @Id

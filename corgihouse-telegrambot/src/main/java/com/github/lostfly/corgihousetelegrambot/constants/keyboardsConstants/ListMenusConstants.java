@@ -84,10 +84,8 @@ public class ListMenusConstants {
     public static final String EDIT_MEETING_BUTTON_BREED = "edit_meeting_button_breed";
     public static final String EDIT_MEETING_BUTTON_DESCRIPTION_TEXT = "Описание";
     public static final String EDIT_MEETING_BUTTON_DESCRIPTION = "edit_meeting_button_description";
-
-
-
-
+    public static final String EDIT_MEETING_BUTTON_LIMIT_TEXT = "Макс. кол-во участников";
+    public static final String EDIT_MEETING_BUTTON_LIMIT = "edit_meeting_button_limit";
 
 
 }

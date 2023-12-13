@@ -14,7 +14,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.sql.Timestamp;
 
 import static com.github.lostfly.corgihousetelegrambot.constants.GlobalConstants.*;
+import static com.github.lostfly.corgihousetelegrambot.constants.logsConstants.LogsConstants.NEW_USER_CREATED_LOG;
+import static com.github.lostfly.corgihousetelegrambot.constants.logsConstants.LogsConstants.NEW_USER_SAVED_LOG;
 import static com.github.lostfly.corgihousetelegrambot.constants.regConstants.UserRegConstants.*;
+import static com.github.lostfly.corgihousetelegrambot.constants.regexConstants.regexConstants.NAME_REGEX;
+import static com.github.lostfly.corgihousetelegrambot.constants.regexConstants.regexConstants.PHONE_REGEX;
 
 
 @Slf4j
@@ -26,7 +30,6 @@ public class UserRegistration {
 
     @Autowired
     private PetRepository petRepository;
-
     @Autowired
     private SessionRepository sessionRepository;
 
@@ -58,7 +61,7 @@ public class UserRegistration {
 
             userRepository.save(user);
 
-            log.info("User saved to DB: " + user);
+            log.info(NEW_USER_SAVED_LOG + user);
             sessionRepository.setRegUserContextByChatId(SET_NAME, chatId);
             return NewUserCommandReceived(chatId);
 
@@ -69,7 +72,7 @@ public class UserRegistration {
     }
 
     private static String NewUserCommandReceived(long chatId) {
-        log.info("Register user " + " " + chatId);
+        log.info(NEW_USER_CREATED_LOG + chatId);
         return NEW_USER_TEXT;
     }
 
@@ -92,8 +95,7 @@ public class UserRegistration {
 
 
     private boolean isValidPhoneNumber(String phoneNumber) {
-        String phoneRegex = "^(\\+7|7|8)?[\\s\\-]?[0-9]{3}[\\s\\-]?[0-9]{3}[\\s\\-]?[0-9]{2}[\\s\\-]?[0-9]{2}$";
-        return phoneNumber.matches(phoneRegex);
+        return phoneNumber.matches(PHONE_REGEX);
     }
 
     private String SetPhoneNumber(long chatId, String messageText) {
@@ -108,8 +110,7 @@ public class UserRegistration {
     }
 
     private boolean isValidName(String name) {
-        String nameRegex = "^[^0-9~`'\".,<>/\\\\|!@#^&*()+=]{1,40}$";
-        return name.matches(nameRegex);
+        return name.matches(NAME_REGEX);
     }
 
     private String SetLastName(long chatId, String messageText) {

@@ -47,11 +47,11 @@ public class PetsFuncs {
             StringBuilder pet_info_message = new StringBuilder();
 
             for (Pet pet : pets) {
-                pet_info_message.append("ID животного: ").append(pet.getPetId()).append("\n")
-                        .append("Имя животного: ").append(pet.getPetName()).append("\n")
-                        .append("Тип животного: ").append(pet.getAnimalType()).append("\n")
-                        .append("Порода животного: ").append(pet.getPetBreed()).append("\n")
-                        .append("ID владельца: ").append(pet.getOwnerId()).append("\n\n");
+                pet_info_message.append(PET_ID_FOR_MSG).append(pet.getPetId()).append("\n")
+                        .append(PET_NAME_FOR_MSG).append(pet.getPetName()).append("\n")
+                        .append(PET_TYPE_FOR_MSG).append(pet.getAnimalType()).append("\n")
+                        .append(PET_BREED_FOR_MSG).append(pet.getPetBreed()).append("\n")
+                        .append(PET_OWNER_ID_FOR_MSG).append(pet.getOwnerId()).append("\n\n");
             }
 
             SendMessage message = new SendMessage();

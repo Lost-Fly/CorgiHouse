@@ -6,7 +6,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -202,6 +201,7 @@ public class ListMenus {
 
         return createdMeetingKeyboard;
     }
+
     public InlineKeyboardMarkup meetingEditKeyboard() {
         InlineKeyboardMarkup meetingEditKeyboard = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> meetingEditRows = new ArrayList<>();
@@ -211,6 +211,7 @@ public class ListMenus {
         List<InlineKeyboardButton> meetingEditAnimalTypeRow = new ArrayList<>();
         List<InlineKeyboardButton> meetingEditBreedRow = new ArrayList<>();
         List<InlineKeyboardButton> meetingEditDescriptionRow = new ArrayList<>();
+        List<InlineKeyboardButton> meetingEditLimitRow = new ArrayList<>();
 
 
         var editMeetingButtonTitle = new InlineKeyboardButton();
@@ -260,30 +261,18 @@ public class ListMenus {
         meetingEditDescriptionRow.add(editMeetingButtonDescription);
         meetingEditRows.add(meetingEditDescriptionRow);
 
+        var editMeetingButtonUserLimit = new InlineKeyboardButton();
+        editMeetingButtonUserLimit.setText(EDIT_MEETING_BUTTON_LIMIT_TEXT);
+        editMeetingButtonUserLimit.setCallbackData(EDIT_MEETING_BUTTON_LIMIT);
+
+        meetingEditLimitRow.add(editMeetingButtonUserLimit);
+        meetingEditRows.add(meetingEditLimitRow);
+
         meetingEditKeyboard.setKeyboard(meetingEditRows);
 
         return meetingEditKeyboard;
     }
 
-    private String animalType;
-
-    private String breed;
-
-    private String title;
-
-    private String description;
-
-    private String place;
-
-    private Boolean completed;
-
-    private Boolean fullFilled;
-
-    private Integer userLimit;
-
-    private Long ownerId;
-
-    private Timestamp eventDate;
     public ReplyKeyboard appliedMeetingKeyboard() {
         InlineKeyboardMarkup appliedMeetingKeyboard = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> appliedMeetingRows = new ArrayList<>();
@@ -294,7 +283,6 @@ public class ListMenus {
 
         showInfoAppliedMeetingButton.setText(APPLIED_MEETINGS_FULL_INFO_TEXT);
         showInfoAppliedMeetingButton.setCallbackData(APPLIED_MEETINGS_FULL_INFO_SELECT);
-
 
 
         appliedMeetingRow.add(showInfoAppliedMeetingButton);
@@ -324,7 +312,7 @@ public class ListMenus {
 
         searchMeetingRow.add(likeMeetingButton);
         searchMeetingRow.add(dislikeMeetingButton);
-//        searchMeetingRow.add(pinnedMeetingButton); #Это для кнопки отложить. Можно включить, она частично работает
+//        searchMeetingRow.add(pinnedMeetingButton); Заготовка кнопки отложить TODO
         searchMeetingRows.add(searchMeetingRow);
         searchMeetingKeyboard.setKeyboard(searchMeetingRows);
 

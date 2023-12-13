@@ -9,21 +9,23 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
+import static com.github.lostfly.corgihousetelegrambot.constants.queryConstants.QueryUser.*;
+
 public interface UserRepository extends CrudRepository<User, Long> {
 
     @Modifying
     @Transactional
-    @Query("update usersDataTable u set u.firstName = ?1 where u.chatId = ?2")
+    @Query(SET_FIRST_NAME_BY_CHAT_ID)
     void setFirstNameByChatId(String firstname, Long chatId);
 
     @Modifying
     @Transactional
-    @Query("update usersDataTable u set u.lastName = ?1 where u.chatId = ?2")
+    @Query(SET_LAST_NAME_BY_CHAT_ID)
     void setLastNameByChatId(String firstname, Long chatId);
 
     @Modifying
     @Transactional
-    @Query("update usersDataTable u set u.phoneNumber = ?1 where u.chatId = ?2")
+    @Query(SET_PHONE_NUMBER_BY_CHAT_ID)
     void setPhoneNumberByChatId(String firstname, Long chatId);
 
 

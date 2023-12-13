@@ -6,10 +6,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import static com.github.lostfly.corgihousetelegrambot.constants.queryConstants.QueryPet.ENTITY_NAME_PET;
+
 @Getter
 @Setter
 @ToString
-@Entity(name = "petDataTable")
+@Entity(name = ENTITY_NAME_PET)
 public class Pet {
 
     @Id

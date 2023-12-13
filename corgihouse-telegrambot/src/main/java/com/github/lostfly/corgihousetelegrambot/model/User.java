@@ -9,10 +9,12 @@ import lombok.ToString;
 
 import java.sql.Timestamp;
 
+import static com.github.lostfly.corgihousetelegrambot.constants.queryConstants.QueryUser.ENTITY_NAME_USER;
+
 @Getter
 @Setter
 @ToString
-@Entity(name = "usersDataTable")
+@Entity(name = ENTITY_NAME_USER)
 public class User {
 
     @Id

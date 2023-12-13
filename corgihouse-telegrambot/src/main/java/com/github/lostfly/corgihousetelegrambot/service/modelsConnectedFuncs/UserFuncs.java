@@ -4,7 +4,6 @@ import com.github.lostfly.corgihousetelegrambot.listMenus.ListMenus;
 import com.github.lostfly.corgihousetelegrambot.repository.*;
 import com.github.lostfly.corgihousetelegrambot.model.User;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -13,6 +12,9 @@ import static com.github.lostfly.corgihousetelegrambot.constants.GlobalConstants
 import static com.github.lostfly.corgihousetelegrambot.constants.keyboardsConstants.ListMenusConstants.*;
 import static com.github.lostfly.corgihousetelegrambot.constants.funcsConstants.UserFuncsConstants.*;
 import static com.github.lostfly.corgihousetelegrambot.constants.regConstants.UserRegConstants.*;
+import static com.github.lostfly.corgihousetelegrambot.constants.regexConstants.regexConstants.NAME_REGEX;
+import static com.github.lostfly.corgihousetelegrambot.constants.regexConstants.regexConstants.PHONE_REGEX;
+
 @Slf4j
 @Component
 public class UserFuncs {
@@ -35,7 +37,7 @@ public class UserFuncs {
     @Autowired
     private UserToMeetingRepository userToMeetingRepository;
 
-    public SendMessage checkExistingProfile(long chatId){
+    public SendMessage checkExistingProfile(long chatId) {
 
         if (userRepository.findById(chatId).isEmpty()) {
             SendMessage message = new SendMessage();
@@ -44,7 +46,7 @@ public class UserFuncs {
             message.setReplyMarkup(listMenus.registrationKeyboard());
 
             return message;
-        }else{
+        } else {
             return null;
         }
 
@@ -52,18 +54,18 @@ public class UserFuncs {
 
     public String showProfile(long chatId) {
 
-        if (userRepository.findById(chatId).isEmpty()){
+        if (userRepository.findById(chatId).isEmpty()) {
             return null;
         }
 
         User user = userRepository.findByChatId(chatId);
 
-        String profileInfo = "ID пользователя: " + user.getChatId() + "\n" +
-                "Логин: " + user.getUserName() + "\n" +
-                "Имя: " + user.getFirstName() + "\n" +
-                "Фамилия: " + user.getLastName() + "\n" +
-                "Телефон: " + user.getPhoneNumber() + "\n" +
-                "Дата Регистрации: " + user.getRegisteredAt() + "\n\n";
+        String profileInfo = USER_ID_FOR_MSG + user.getChatId() + "\n" +
+                USER_LOGIN_FOR_MSG + user.getUserName() + "\n" +
+                USER_NAME_FOR_MSG + user.getFirstName() + "\n" +
+                USER_LAST_NAME_FOR_MSG + user.getLastName() + "\n" +
+                USER_PHONE_NUMBER_FOR_MSG + user.getPhoneNumber() + "\n" +
+                USER_REG_DATE_FOR_MSG + user.getRegisteredAt() + "\n\n";
 
         return profileInfo;
 
@@ -84,11 +86,11 @@ public class UserFuncs {
     }
 
 
-    public String editProfile(long chatId, String editContext ) {
+    public String editProfile(long chatId, String editContext) {
 
         sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_USER_EDIT, chatId);
 
-        switch(editContext){
+        switch (editContext) {
             case EDIT_PROFILE_NAME:
                 sessionRepository.setEditUserContextByChatId(EDIT_PROFILE_NAME, chatId);
 
@@ -108,24 +110,22 @@ public class UserFuncs {
     }
 
     private boolean isValidPhoneNumber(String phoneNumber) {
-        String phoneRegex = "^(\\+7|7|8)?[\\s\\-]?[0-9]{3}[\\s\\-]?[0-9]{3}[\\s\\-]?[0-9]{2}[\\s\\-]?[0-9]{2}$";
-        return phoneNumber.matches(phoneRegex);
+        return phoneNumber.matches(PHONE_REGEX);
     }
 
     private boolean isValidName(String name) {
-        String nameRegex = "^[^0-9~`'\".,<>/\\\\|!@#^&*()+=\\s]{1,40}$";
-        return name.matches(nameRegex);
+        return name.matches(NAME_REGEX);
     }
 
     public String editProfileAction(long chatId, String messageText) {
-        switch(sessionRepository.findByChatId(chatId).getEditFunctionContext()){
+        switch (sessionRepository.findByChatId(chatId).getEditFunctionContext()) {
             case EDIT_PROFILE_NAME:
-                if(isValidName(messageText)) {
+                if (isValidName(messageText)) {
                     userRepository.setFirstNameByChatId(messageText, chatId);
                     sessionRepository.setEditUserContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
                     sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
                     return CHANGED_NAME_TEXT;
-                }else {
+                } else {
                     return INCORRECT_FIRST_NAME;
                 }
 
@@ -135,7 +135,7 @@ public class UserFuncs {
                     sessionRepository.setEditUserContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
                     sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
                     return CHANGED_LAST_NAME_TEXT;
-                }else {
+                } else {
                     return INCORRECT_LAST_NAME;
                 }
 
@@ -145,7 +145,7 @@ public class UserFuncs {
                     sessionRepository.setEditUserContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
                     sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);
                     return CHANGED_PHONE_TEXT;
-                }else {
+                } else {
                     return INCORRECT_PHONE_NUMBER;
                 }
             default:

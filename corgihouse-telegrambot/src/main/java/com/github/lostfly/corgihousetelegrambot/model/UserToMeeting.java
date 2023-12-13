@@ -7,10 +7,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import static com.github.lostfly.corgihousetelegrambot.constants.queryConstants.QueryUserToMeeting.ENTITY_NAME_USER_TO_MEETING;
+
 @Getter
 @Setter
 @ToString
-@Entity(name = "userToMeetingDataTable")
+@Entity(name = ENTITY_NAME_USER_TO_MEETING)
 public class UserToMeeting {
 
     @Id

@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.github.lostfly.corgihousetelegrambot.constants.queryConstants.QueryPet.*;
+
 public interface PetRepository extends CrudRepository<Pet, Long> {
 
     Pet findByPetIdAndOwnerId(Long petId, Long ownerId);
@@ -25,24 +27,25 @@ public interface PetRepository extends CrudRepository<Pet, Long> {
     void deleteByOwnerIdAndPetId(Long ownerId, Long petId);
 
 
-    @Query("select max(pet.petId) from petDataTable pet where pet.ownerId = :ownerId")
-    Long findTopByOrderByOwnerIdDesc(@Param("ownerId") Long ownerId);
+    @Query(FIND_TOP_BY_ORDER_BY_OWNER_ID_DESC)
+    Long findTopByOrderByOwnerIdDesc(@Param(PARAM_OWNER_ID) Long ownerId);
 
-    @Query("select max(pet.petId) from petDataTable pet")
+    @Query(FIND_TOP_BY_ORDER_DESC)
     Long findTopByOrderDesc();
+
     @Modifying
     @Transactional
-    @Query("update petDataTable u set u.petName = ?1 where u.ownerId = ?2 and u.petId = ?3")
+    @Query(SET_PET_NAME_BY_OWNER_ID_AND_PET_ID)
     void setPetNameByOwnerIdAndPetId(String petname, Long ownerId, Long petId);
 
     @Modifying
     @Transactional
-    @Query("update petDataTable u set u.animalType = ?1 where u.ownerId = ?2 and u.petId = ?3")
+    @Query(SET_ANIMAL_TYPE_BY_OWNER_ID_AND_PET_ID)
     void setAnimalTypeByOwnerIdAndPetId(String animaltype, Long ownerId, Long petId);
 
     @Modifying
     @Transactional
-    @Query("update petDataTable u set u.petBreed = ?1 where u.ownerId = ?2 and u.petId = ?3")
+    @Query(SET_PET_BREED_BY_OWNER_ID_AND_PET_ID)
     void setPetBreedByOwnerIdAndPetId(String petbreed, Long ownerId, Long petId);
 
 

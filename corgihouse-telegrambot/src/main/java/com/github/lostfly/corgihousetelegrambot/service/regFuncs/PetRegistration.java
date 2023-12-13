@@ -4,7 +4,6 @@ import com.github.lostfly.corgihousetelegrambot.model.Pet;
 import com.github.lostfly.corgihousetelegrambot.repository.PetRepository;
 import com.github.lostfly.corgihousetelegrambot.repository.SessionRepository;
 import com.github.lostfly.corgihousetelegrambot.repository.UserRepository;
-import com.github.lostfly.corgihousetelegrambot.service.TelegramBot;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,8 +12,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import static com.github.lostfly.corgihousetelegrambot.constants.GlobalConstants.*;
 import static com.github.lostfly.corgihousetelegrambot.constants.GlobalConstants.GLOBAL_CONTEXT_DEFAULT;
+import static com.github.lostfly.corgihousetelegrambot.constants.logsConstants.LogsConstants.NEW_PET_CREATED_LOG;
+import static com.github.lostfly.corgihousetelegrambot.constants.logsConstants.LogsConstants.NEW_PET_SAVED_LOG;
 import static com.github.lostfly.corgihousetelegrambot.constants.regConstants.PetRegConstants.*;
 import static com.github.lostfly.corgihousetelegrambot.constants.regConstants.UserRegConstants.*;
+import static com.github.lostfly.corgihousetelegrambot.constants.regexConstants.regexConstants.NAME_REGEX;
 
 @Slf4j
 @Component
@@ -29,6 +31,7 @@ public class PetRegistration {
 
     @Autowired
     private SessionRepository sessionRepository;
+
     public String initializeRegistration(Update update) {
 
         var chatId = update.getCallbackQuery().getMessage().getChatId();
@@ -48,14 +51,14 @@ public class PetRegistration {
 
         petRepository.save(pet);
 
-        log.info("pet saved: " + pet);
+        log.info(NEW_PET_SAVED_LOG + pet);
         sessionRepository.setPetRegisterFunctionContext(SET_PET_NAME, chatId);
         return NewPetCommandReceived(chatId);
 
     }
 
     private static String NewPetCommandReceived(long chatId) {
-        log.info("Register pet " + " " + chatId);
+        log.info(NEW_PET_CREATED_LOG + chatId);
         return SET_PET_NAME_TEXT;
     }
 
@@ -76,8 +79,7 @@ public class PetRegistration {
 
 
     private boolean isValidName(String name) {
-        String nameRegex = "^[^0-9~`'\".,<>/\\\\|!@#^&*()+=]{1,40}$";
-        return name.matches(nameRegex);
+        return name.matches(NAME_REGEX);
     }
 
     private String SetPetBreed(long chatId, String messageText) {
@@ -90,7 +92,7 @@ public class PetRegistration {
         }
     }
 
-    private  String SetPetPhoto(Long chatId, Update update) {
+    private String SetPetPhoto(Long chatId, Update update) {
         if (update.getMessage().hasPhoto()) {
             sessionRepository.setPetRegisterFunctionContext(REGISTER_CONTEXT_DEFAULT, chatId);
             sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_DEFAULT, chatId);

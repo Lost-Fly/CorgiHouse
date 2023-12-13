@@ -204,6 +204,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case EDIT_MEETING_BUTTON_DESCRIPTION:
                     sendEditMessage(chatId, messageId, meetingFuncs.editMeeting(chatId, EDIT_MEETING_BUTTON_DESCRIPTION));
                     break;
+                case EDIT_MEETING_BUTTON_LIMIT:
+                    sendEditMessage(chatId, messageId, meetingFuncs.editMeeting(chatId, EDIT_MEETING_BUTTON_LIMIT));
+                    break;
                 case REGISTRATION:
                     sendMessage(chatId, userRegistration.initializeRegistration(update));
                     break;

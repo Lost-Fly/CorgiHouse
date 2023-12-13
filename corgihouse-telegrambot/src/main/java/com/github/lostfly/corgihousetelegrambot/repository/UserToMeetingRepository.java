@@ -7,6 +7,8 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.ArrayList;
 
+import static com.github.lostfly.corgihousetelegrambot.constants.queryConstants.QueryUserToMeeting.FIND_TOP_BY_ORDER_BY_ID_DESC;
+
 public interface UserToMeetingRepository extends CrudRepository<UserToMeeting, Long> {
 
     UserToMeeting findByChatIdAndMeetingId(Long chatId, Long meetingId);
@@ -18,7 +20,7 @@ public interface UserToMeetingRepository extends CrudRepository<UserToMeeting, L
     @Transactional
     Long countByMeetingId(Long meetingId);
 
-    @Query("select max(element.id) from userToMeetingDataTable element")
+    @Query(FIND_TOP_BY_ORDER_BY_ID_DESC)
     Long findTopByOrderByIdDesc();
 
     @Transactional

@@ -8,31 +8,34 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.beans.factory.annotation.Value;
 
+import static com.github.lostfly.corgihousetelegrambot.constants.queryConstants.QuerySession.DEFAULT_CONTEXT_STATE_VALUE;
+import static com.github.lostfly.corgihousetelegrambot.constants.queryConstants.QuerySession.ENTITY_NAME_USER_SESSION;
+
 @Getter
 @Setter
 @ToString
-@Entity(name = "sessionDataTable")
+@Entity(name = ENTITY_NAME_USER_SESSION)
 public class UserSession {
 
     @Id
     private Long chatId;
 
-    @Value("default")
+    @Value(DEFAULT_CONTEXT_STATE_VALUE)
     private String globalFunctionContext;
 
-    @Value("default")
+    @Value(DEFAULT_CONTEXT_STATE_VALUE)
     private String registerFunctionContext;
 
-    @Value("default")
+    @Value(DEFAULT_CONTEXT_STATE_VALUE)
     private String editFunctionContext;
 
-    @Value("default")
+    @Value(DEFAULT_CONTEXT_STATE_VALUE)
     private String petRegisterFunctionContext;
 
-    @Value("default")
+    @Value(DEFAULT_CONTEXT_STATE_VALUE)
     private String meetingRegisterFunctionContext;
 
-    @Value("default")
+    @Value(DEFAULT_CONTEXT_STATE_VALUE)
     private String editMeetingFunctionContext;
 
 

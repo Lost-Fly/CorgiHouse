@@ -4,8 +4,6 @@ import com.vdurmont.emoji.EmojiParser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public class GlobalConstants {
 
@@ -59,7 +57,7 @@ public class GlobalConstants {
     public static String generateAdminBroadcastMessage(String msg) {
         return EmojiParser.parseToUnicode(STAR_EMOJI + "Это сообщение является массовой рассылкой пользователям " +
                 "бота от его администраторов. Если вы получили его, значит произошли важные изменения, " +
-                "которые позволяют нам стать лучше." + RELAXED_EMOJI +"Расскажем подробнее: " + msg +
+                "которые позволяют нам стать лучше." + RELAXED_EMOJI + "Расскажем подробнее: " + msg +
                 " Если у вас есть пожелания или замечания по работе бота - обращайтесь к администраторам" +
                 WOMAN_TECHNOLOGIST_EMOJI + MAN_TECHNOLOGIST_EMOJI + ": @eveprova & @lostfly");
     }
@@ -86,11 +84,16 @@ public class GlobalConstants {
     // global files/dirs names
     public static final String PHOTO_STORAGE_DIR = "downloaded_photos";
     public static final String CORGI_STORAGE_DIR = "corgi_photos";
+    public static final String PET_IMG_FILE_NAME = "pet_image_";
+    public static final String PET_IMG_FILE_EXTENSION = ".jpg";
+    public static final String TG_DOWNLOAD_FILE_LINK = "https://api.telegram.org/file/bot";
+
 
     // admins ID list && commands
     public static final ArrayList<Long> adminsIdList = new ArrayList<>(Arrays.asList(919433897L, 881861312L));
 
-    public static final String ADMIN_INPUT_BROADCAST_MESSAGE = "Введите текст объявления: ";
+    public static final String ADMIN_INPUT_BROADCAST_MESSAGE = "Введите текст объявления (Внимание: " +
+            "его увидят все пользователи бота!): ";
     public static final String NOT_AN_ADMIN = "У вас недостаточно прав на выполнение комманды!";
 
 

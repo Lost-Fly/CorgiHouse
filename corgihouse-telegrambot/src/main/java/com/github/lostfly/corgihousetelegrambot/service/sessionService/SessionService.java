@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import static com.github.lostfly.corgihousetelegrambot.constants.GlobalConstants.GLOBAL_CONTEXT_DEFAULT;
+import static com.github.lostfly.corgihousetelegrambot.constants.logsConstants.LogsConstants.NEW_SESSION_CREATED_LOG;
 import static com.github.lostfly.corgihousetelegrambot.constants.regConstants.UserRegConstants.REGISTER_CONTEXT_DEFAULT;
 
 @Slf4j
@@ -16,7 +17,7 @@ public class SessionService {
     @Autowired
     private SessionRepository sessionRepository;
 
-    public void CreateSession(long chatId){
+    public void CreateSession(long chatId) {
         if (sessionRepository.findById(chatId).isEmpty()) {
 
             UserSession userSession = new UserSession();
@@ -28,7 +29,7 @@ public class SessionService {
 
             sessionRepository.save(userSession);
 
-            log.info("New session saved to DB: " + userSession);
+            log.info(NEW_SESSION_CREATED_LOG + userSession);
         }
     }
 

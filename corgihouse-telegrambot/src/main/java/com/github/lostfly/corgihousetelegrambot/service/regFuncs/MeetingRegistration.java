@@ -1,18 +1,13 @@
 package com.github.lostfly.corgihousetelegrambot.service.regFuncs;
 
-import com.github.lostfly.corgihousetelegrambot.config.BotInitializer;
 import com.github.lostfly.corgihousetelegrambot.model.Meeting;
 import com.github.lostfly.corgihousetelegrambot.model.UserToMeeting;
 import com.github.lostfly.corgihousetelegrambot.repository.*;
-import com.github.lostfly.corgihousetelegrambot.service.TelegramBot;
-import com.github.lostfly.corgihousetelegrambot.service.api.YandexWeather;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,9 +16,12 @@ import java.util.Date;
 
 import static com.github.lostfly.corgihousetelegrambot.constants.GlobalConstants.*;
 import static com.github.lostfly.corgihousetelegrambot.constants.funcsConstants.PetFuncsConstants.INCORRECT_NUMBER_ANS;
+import static com.github.lostfly.corgihousetelegrambot.constants.logsConstants.LogsConstants.NEW_MEETING_CREATED_LOG;
+import static com.github.lostfly.corgihousetelegrambot.constants.logsConstants.LogsConstants.NEW_MEETING_SAVED_LOG;
 import static com.github.lostfly.corgihousetelegrambot.constants.regConstants.MeetingRegConstants.*;
 import static com.github.lostfly.corgihousetelegrambot.constants.regConstants.PetRegConstants.INCORRECT_PET_BREED;
 import static com.github.lostfly.corgihousetelegrambot.constants.regConstants.PetRegConstants.INCORRECT_PET_TYPE;
+import static com.github.lostfly.corgihousetelegrambot.constants.regexConstants.regexConstants.*;
 
 @Slf4j
 @Component
@@ -76,14 +74,14 @@ public class MeetingRegistration {
         meetingRepository.save(meeting);
         userToMeetingRepository.save(userToMeeting);
 
-        log.info("Meeting saved: " + meeting);
+        log.info(NEW_MEETING_SAVED_LOG + meeting);
         sessionRepository.setMeetingRegisterFunctionContext(SET_MEETING_TITLE, chatId);
         return NewMeetingCommandReceived(chatId);
 
     }
 
     private static String NewMeetingCommandReceived(long chatId) {
-        log.info("Register meeting " + " " + chatId);
+        log.info(NEW_MEETING_CREATED_LOG + chatId);
         return SET_MEETING_TITLE_TEXT;
     }
 
@@ -106,27 +104,21 @@ public class MeetingRegistration {
     }
 
     private boolean isValidTitle(String name) {
-        String nameRegex = String.format("^(?:(?!%s).){1,100}$", FORBIDDEN_WORDS);
-        return name.toLowerCase().matches(nameRegex);
+        return name.toLowerCase().matches(FORBIDDEN_WORDS_REGEX);
     }
 
     private boolean isValidPlace(String name) {
-        String nameRegex = String.format("^(?:(?!%s).){1,100}$", FORBIDDEN_WORDS);
 
-        String formatRegex = "^[a-zA-Zа-яА-Я\\s]+,[a-zA-Zа-яА-Я\\s]+,[\\da-zA-Zа-яА-Я\\s]+$";
-
-        return name.toLowerCase().matches(nameRegex) && name.matches(formatRegex);
+        return name.toLowerCase().matches(FORBIDDEN_WORDS_REGEX) && name.matches(PLACE_REGEX);
     }
 
 
     private boolean isValidDescription(String name) {
-        String nameRegex = String.format("^(?:(?!%s).){1,1000}$", FORBIDDEN_WORDS);
-        return name.toLowerCase().matches(nameRegex);
+        return name.toLowerCase().matches(FORBIDDEN_WORDS_REGEX);
     }
 
     public static boolean isValidName(String name) {
-        String nameRegex = String.format("^(?:(?!%s).){1,40}$", FORBIDDEN_WORDS);
-        return name.toLowerCase().matches(nameRegex);
+        return name.toLowerCase().matches(FORBIDDEN_WORDS_REGEX);
     }
 
     private String setMeetingTitle(long chatId, String messageText) {
@@ -160,7 +152,7 @@ public class MeetingRegistration {
     }
 
     private String setMeetingEventDate(long chatId, String dateString) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_STYLE);
         Date currentDate = new Date();
         dateFormat.setLenient(false);
 
@@ -178,7 +170,7 @@ public class MeetingRegistration {
             int month = calendar.get(Calendar.MONTH) + 1;
             int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-            if (month < 1 || month > 12 || day < 1 || day > calendar.getActualMaximum(Calendar.DAY_OF_MONTH)) {
+            if (month > 12 || day > calendar.getActualMaximum(Calendar.DAY_OF_MONTH)) {
                 sessionRepository.setGlobalContextByChatId(GLOBAL_CONTEXT_MEETING_REGISTRATION, chatId);
                 sessionRepository.setMeetingRegisterFunctionContext(SET_MEETING_EVENT_DATE, chatId);
                 return INCORRECT_DATE_TEXT;

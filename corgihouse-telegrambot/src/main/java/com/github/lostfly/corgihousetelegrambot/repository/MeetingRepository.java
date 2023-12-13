@@ -10,6 +10,8 @@ import org.springframework.data.repository.CrudRepository;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import static com.github.lostfly.corgihousetelegrambot.constants.queryConstants.QueryMeeting.*;
+
 public interface MeetingRepository extends CrudRepository<Meeting, Long> {
 
     Meeting findByMeetingIdAndOwnerId(Long meetingId, Long ownerId);
@@ -26,10 +28,8 @@ public interface MeetingRepository extends CrudRepository<Meeting, Long> {
 
     @Modifying
     @Transactional
-    @Query("SELECT m FROM meetingDataTable m " +
-            "JOIN userToMeetingDataTable utm ON m.meetingId = utm.meetingId " +
-            "WHERE utm.chatId = :chatId AND utm.chatId != m.ownerId")
-    ArrayList<Meeting> findMyAppliedMeetings(@Param("chatId") Long chatId);
+    @Query(FIND_MY_APPLIED_MEETINGS)
+    ArrayList<Meeting> findMyAppliedMeetings(@Param(PARAM_CHAT_ID) Long chatId);
 
     @Transactional
     void deleteAllByOwnerId(Long ownerId);
@@ -41,53 +41,53 @@ public interface MeetingRepository extends CrudRepository<Meeting, Long> {
     void deleteByOwnerIdAndMeetingId(Long ownerId, Long meetingId);
 
 
-    @Query("select max(meeting.meetingId) from meetingDataTable meeting")
+    @Query(FIND_TOP_BY_ORDER_BY_MEETING_ID_DESC)
     Long findTopByOrderByMeetingIdDesc();
 
 
     @Modifying
     @Transactional
-    @Query("update meetingDataTable u set u.animalType = ?1 where u.ownerId = ?2 and u.meetingId = ?3")
+    @Query(SET_ANIMAL_TYPE_BY_OWNER_ID_AND_MEETING_ID)
     void setAnimalTypeByOwnerIdAndMeetingId(String animalType, Long ownerId, Long meetingId);
 
     @Modifying
     @Transactional
-    @Query("update meetingDataTable u set u.breed = ?1 where u.ownerId = ?2 and u.meetingId = ?3")
+    @Query(SET_BREED_BY_OWNER_ID_AND_MEETING_ID)
     void setBreedByOwnerIdAndMeetingId(String breed, Long ownerId, Long meetingId);
 
     @Modifying
     @Transactional
-    @Query("update meetingDataTable u set u.title = ?1 where u.ownerId = ?2 and u.meetingId = ?3")
+    @Query(SET_TITLE_BY_OWNER_ID_AND_MEETING_ID)
     void setTitleByOwnerIdAndMeetingId(String title, Long ownerId, Long meetingId);
 
     @Modifying
     @Transactional
-    @Query("update meetingDataTable u set u.description = ?1 where u.ownerId = ?2 and u.meetingId = ?3")
+    @Query(SET_DESCRIPTION_BY_OWNER_ID_AND_MEETING_ID)
     void setDescriptionByOwnerIdAndMeetingId(String description, Long ownerId, Long meetingId);
 
     @Modifying
     @Transactional
-    @Query("update meetingDataTable u set u.place = ?1 where u.ownerId = ?2 and u.meetingId = ?3")
+    @Query(SET_PLACE_BY_OWNER_ID_AND_MEETING_ID)
     void setPlaceByOwnerIdAndMeetingId(String place, Long ownerId, Long meetingId);
 
     @Modifying
     @Transactional
-    @Query("update meetingDataTable u set u.completed = ?1 where u.ownerId = ?2 and u.meetingId = ?3")
+    @Query(SET_COMPLETED_BY_OWNER_ID_AND_MEETING_ID)
     void setCompletedByOwnerIdAndMeetingId(Boolean completed, Long ownerId, Long meetingId);
 
     @Modifying
     @Transactional
-    @Query("update meetingDataTable u set u.fullFilled = ?1 where u.ownerId = ?2 and u.meetingId = ?3")
+    @Query(SET_FULFILLED_BY_OWNER_ID_AND_MEETING_ID)
     void setFullFilledByOwnerIdAndMeetingId(Boolean fullFilled, Long ownerId, Long meetingId);
 
     @Modifying
     @Transactional
-    @Query("update meetingDataTable u set u.userLimit = ?1 where u.ownerId = ?2 and u.meetingId = ?3")
+    @Query(SET_USER_LIMIT_BY_OWNER_ID_AND_MEETING_ID)
     void setUserLimitByOwnerIdAndMeetingId(Integer userLimit, Long ownerId, Long meetingId);
 
     @Modifying
     @Transactional
-    @Query("update meetingDataTable u set u.eventDate = ?1 where u.ownerId = ?2 and u.meetingId = ?3")
+    @Query(SET_EVENT_DATE_BY_OWNER_ID_AND_MEETING_ID)
     void setEventDateByOwnerIdAndMeetingId(Timestamp eventDate, Long ownerId, Long meetingId);
 
 

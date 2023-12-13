@@ -10,6 +10,8 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
+import static com.github.lostfly.corgihousetelegrambot.constants.logsConstants.LogsConstants.ERROR_OCCURRED;
+
 
 @Slf4j
 @Component
@@ -22,7 +24,7 @@ public class BotInitializer {
         try {
             telegramBotsApi.registerBot(bot);
         } catch (TelegramApiException e) {
-            log.error("Error occurred" + e.getMessage());
+            log.error(ERROR_OCCURRED + e.getMessage());
         }
     }
 

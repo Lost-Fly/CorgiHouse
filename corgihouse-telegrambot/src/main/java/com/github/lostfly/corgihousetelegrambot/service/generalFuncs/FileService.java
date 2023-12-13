@@ -15,6 +15,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
+import static com.github.lostfly.corgihousetelegrambot.constants.GlobalConstants.CORGI_STORAGE_DIR;
 import static com.github.lostfly.corgihousetelegrambot.constants.GlobalConstants.PHOTO_STORAGE_DIR;
 
 @Slf4j
@@ -45,5 +46,12 @@ public class FileService {
         return localFile;
     }
 
+    public File giveCorgiPhotoByFilePath(Long pet_id) throws IOException {
+        java.io.File downloadedFile = new java.io.File(CORGI_STORAGE_DIR);
+
+        java.io.File localFile = new java.io.File(downloadedFile, pet_id.toString() + ".jpg");
+
+        return localFile;
+    }
 
 }

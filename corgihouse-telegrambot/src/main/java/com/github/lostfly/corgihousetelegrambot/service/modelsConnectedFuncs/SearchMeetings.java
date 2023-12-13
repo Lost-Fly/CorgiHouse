@@ -73,19 +73,17 @@ public class SearchMeetings {
 
     private boolean shouldReturnNull() {
         Random random = new Random();
-        return random.nextInt(3) == 0;
+        return random.nextInt(10) == 0;
     }
 
     public File showRandomPet() throws IOException {
-        if (shouldReturnNull()) {
+        if (!shouldReturnNull()) {
             return null;
         }
 
-        ArrayList<Pet> allPets = petRepository.findAll();
+        Random random = new Random();
 
-        Pet randomPet = getRandomElement(allPets);
-
-        File petPhoto = fileService.givePhotoByFilePath(randomPet.getOwnerId(), randomPet.getPetId());
+        File petPhoto = fileService.giveCorgiPhotoByFilePath((long) random.nextInt(10));
 
         return petPhoto;
     }

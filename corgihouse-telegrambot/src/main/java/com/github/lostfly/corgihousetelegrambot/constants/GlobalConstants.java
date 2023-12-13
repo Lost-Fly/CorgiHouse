@@ -2,6 +2,11 @@ package com.github.lostfly.corgihousetelegrambot.constants;
 
 import com.vdurmont.emoji.EmojiParser;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public class GlobalConstants {
 
     // GLOBAL_CONSTANTS
@@ -53,8 +58,12 @@ public class GlobalConstants {
     public static final String GLOBAL_CONTEXT_USER_EDIT = "user_edit";
     public static final String GLOBAL_CONTEXT_MEETING_REGISTRATION = "meeting_registration";
 
+    public static final String GLOBAL_ADMIN_BROADCAST = "global_admin_broadcast";
+
     // global files/dirs names
     public static final String PHOTO_STORAGE_DIR = "downloaded_photos";
+    public static final String CORGI_STORAGE_DIR = "corgi_photos";
+
 
     // logs texts
     public static final String ERROR_OCCURRED = "Error occurred: ";
@@ -65,6 +74,11 @@ public class GlobalConstants {
     public static final String GLOBAL_CONTEXT_SET_NAME_FIELD_MEETING = "global_context_set_name_field_meeting";
 
     public static final String GLOBAL_CONTEXT_MEETING_SELECT_NUMBER_MEETING = "global_context_meeting_select_number_meeting";
+
+    // admins ID list
+
+    public static final ArrayList<Long> adminsIdList = new ArrayList<>(Arrays.asList(919433897L, 881861312L));
+    public static final List<Long> adminsIdList1 = List.of(919433897L, 881861312L);
 
 
 

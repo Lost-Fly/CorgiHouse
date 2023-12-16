@@ -65,7 +65,7 @@ public class MeetingRegistration {
 
         if (userToMeetingRepository.findTopByOrderByIdDesc() != null) {
             Long Id = userToMeetingRepository.findTopByOrderByIdDesc();
-            userToMeeting.setId(Id);
+            userToMeeting.setId(Id + 1L);
         } else {
             Long Id = 1L;
             userToMeeting.setId(Id);
@@ -103,15 +103,10 @@ public class MeetingRegistration {
         };
     }
 
-    private boolean isValidTitle(String name) {
-        return name.toLowerCase().matches(FORBIDDEN_WORDS_REGEX);
-    }
-
+    private boolean isValidTitle(String name) { return !name.toLowerCase().matches(PLACE_REGEX); }
     private boolean isValidPlace(String name) {
-
-        return name.toLowerCase().matches(FORBIDDEN_WORDS_REGEX) && name.matches(PLACE_REGEX);
+        return  name.toLowerCase().matches(FORBIDDEN_WORDS_REGEX) && name.toLowerCase().matches(PLACE_REGEX);
     }
-
 
     private boolean isValidDescription(String name) {
         return name.toLowerCase().matches(FORBIDDEN_WORDS_REGEX);

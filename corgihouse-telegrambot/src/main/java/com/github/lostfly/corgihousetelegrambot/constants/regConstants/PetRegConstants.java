@@ -13,7 +13,7 @@ public class PetRegConstants {
     public static final String SET_PET_NAME_TEXT = "Введите кличку:";
     public static final String REGISTER_PET_ENDED_TEXT = "Регистрация завершена";
     public static final String REGISTER_PET_TYPE_ANIMAL_TEXT = "Введите тип животного:";
-    public static final String REGISTER_PET_BREED_TEXT = "Введите пароду животного:";
+    public static final String REGISTER_PET_BREED_TEXT = "Введите породу животного:";
     public static final String REGISTER_PET_PHOTO_TEXT = "Отправьте фото животного:";
 
     public static final String INCORRECT_PET_NAME = "Неверный формат имени питомца. Пожалуйста, используйте только " +

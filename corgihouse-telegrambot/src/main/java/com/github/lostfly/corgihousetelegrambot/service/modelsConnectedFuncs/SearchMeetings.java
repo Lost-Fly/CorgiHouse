@@ -82,7 +82,9 @@ public class SearchMeetings {
             return userFuncs.checkExistingProfile(chatId);
         }
 
-        ArrayList<Meeting> all_meetings_created = meetingRepository.findAllByOwnerIdNot(chatId);
+        ArrayList<Meeting> all_meetings_created = meetingRepository.findMyNotAppliedMeetings(chatId);
+        Long numberSearchMeetingId=sessionRepository.findByChatId(chatId).getNumberSearchMeeting();
+
 
 
         SendMessage message = new SendMessage();

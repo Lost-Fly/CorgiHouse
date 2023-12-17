@@ -56,5 +56,11 @@ public interface SessionRepository extends CrudRepository<UserSession, Long> {
     @Query(SET_NUMBER_EDIT_MEETING_BY_CHAT_ID)
     void setNumberEditMeetingByChatId(Long NumberEditMeeting, Long chatId);
 
+    @Modifying
+    @Transactional
+    @Query(SET_NUMBER_SEARCH_MEETING_BY_CHAT_ID)
+    void setNumberSearchMeetingByChatId(Long NumberEditMeeting, Long chatId);
+
+
 
 }

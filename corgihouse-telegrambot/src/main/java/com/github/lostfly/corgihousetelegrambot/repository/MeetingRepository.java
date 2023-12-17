@@ -31,6 +31,12 @@ public interface MeetingRepository extends CrudRepository<Meeting, Long> {
     @Query(FIND_MY_APPLIED_MEETINGS)
     ArrayList<Meeting> findMyAppliedMeetings(@Param(PARAM_CHAT_ID) Long chatId);
 
+
+    @Modifying
+    @Transactional
+    @Query(FIND_MY_NOT_APPLIED_MEETINGS)
+    ArrayList<Meeting> findMyNotAppliedMeetings(@Param(PARAM_CHAT_ID) Long chatId);
+
     @Transactional
     void deleteAllByOwnerId(Long ownerId);
 

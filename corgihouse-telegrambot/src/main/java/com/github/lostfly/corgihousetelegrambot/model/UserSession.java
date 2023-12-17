@@ -44,4 +44,6 @@ public class UserSession {
 
     private Long numberEditMeeting;
 
+    private Long numberSearchMeeting;
+
 }

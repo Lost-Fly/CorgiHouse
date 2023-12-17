@@ -132,8 +132,8 @@ public class CommandProcessor {
         commandMap.put(PETS, () ->
                 bot.sendMessage(chatId, bot.petsFuncs.showPets(chatId)));
         commandMap.put(MY_MEETINGS, () -> {
-            bot.sendMessage(chatId, bot.meetingFuncs.changeToMyMeetings(chatId));
-            bot.sendMessage(chatId, bot.meetingFuncs.showMyMeetings(chatId));
+                bot.sendMessage(chatId, bot.meetingFuncs.changeToMyMeetings(chatId));
+                bot.sendMessage(chatId, bot.meetingFuncs.showMyMeetings(chatId));
         });
         commandMap.put(MY_MEETINGS_CREATED, () ->
                 bot.sendMessage(chatId, bot.meetingFuncs.showCreatedMeetings(chatId)));

@@ -12,5 +12,6 @@ public class QuerySession {
     public static final String SET_MEETING_REGISTER_FUNCTION_ID = "update sessionDataTable u set u.meetingRegisterFunctionId = ?1 where u.chatId = ?2";
     public static final String SET_EDIT_MEETING_FUNCTION_CONTEXT_BY_CHAT_ID = "update sessionDataTable u set u.editMeetingFunctionContext = ?1 where u.chatId = ?2";
     public static final String SET_NUMBER_EDIT_MEETING_BY_CHAT_ID = "update sessionDataTable u set u.numberEditMeeting = ?1 where u.chatId = ?2";
+    public static final String SET_NUMBER_SEARCH_MEETING_BY_CHAT_ID = "update sessionDataTable u set u.numberSearchMeeting = ?1 where u.chatId = ?2";
 
 }

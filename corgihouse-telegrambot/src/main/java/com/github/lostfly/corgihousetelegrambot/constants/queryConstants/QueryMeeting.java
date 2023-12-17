@@ -6,6 +6,10 @@ public class QueryMeeting {
     public static final String FIND_MY_APPLIED_MEETINGS = "SELECT m FROM meetingDataTable m " +
             "JOIN userToMeetingDataTable utm ON m.meetingId = utm.meetingId " +
             "WHERE utm.chatId = :chatId AND utm.chatId != m.ownerId";
+
+    public static final String FIND_MY_NOT_APPLIED_MEETINGS = "SELECT m FROM meetingDataTable m " +
+            "JOIN userToMeetingDataTable utm ON m.meetingId = utm.meetingId " +
+            "WHERE utm.chatId = :chatId AND utm.chatId != m.ownerId";
     public static final String PARAM_CHAT_ID = "chatId";
     public static final String FIND_TOP_BY_ORDER_BY_MEETING_ID_DESC = "select max(meeting.meetingId) from meetingDataTable meeting";
     public static final String SET_ANIMAL_TYPE_BY_OWNER_ID_AND_MEETING_ID = "update meetingDataTable u set u.animalType = ?1 where u.ownerId = ?2 and u.meetingId = ?3";

@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import static com.github.lostfly.corgihousetelegrambot.constants.funcsConstants.MeetingFuncsConstants.*;
 import static com.github.lostfly.corgihousetelegrambot.constants.funcsConstants.ShowMeetingsConstants.NO_AT_ALL_MEETINGS_TEXT;
+import static com.github.lostfly.corgihousetelegrambot.constants.funcsConstants.ShowMeetingsConstants.NO_REMAINING_MEETINGS_TEXT;
 
 @Slf4j
 @Component
@@ -84,20 +85,20 @@ public class SearchMeetings {
         }
 
         ArrayList<Meeting> all_meetings_for_search = meetingRepository.findMyNotAppliedMeetings(chatId);
-        long numberSearchMeetingId=sessionRepository.findByChatId(chatId).getNumberSearchMeeting()+1L;
+        System.out.println(all_meetings_for_search);
+        long numberSearchMeetingId = sessionRepository.findByChatId(chatId).getNumberSearchMeeting() + 1;
         SendMessage message = new SendMessage();
 
         if (all_meetings_for_search.isEmpty()) {
-            message.setText(NO_AT_ALL_MEETINGS_TEXT);
-            message.setReplyMarkup(listMenus.meetingKeyboard());
+            message.setText(NO_REMAINING_MEETINGS_TEXT);
         } else {
-            if (numberSearchMeetingId >= all_meetings_for_search.size()){
-                numberSearchMeetingId=0L;
-                sessionRepository.setNumberSearchMeetingByChatId(chatId,numberSearchMeetingId);
+            if (numberSearchMeetingId >= all_meetings_for_search.size()) {
+                numberSearchMeetingId = 0;
+                sessionRepository.setNumberSearchMeetingByChatId(numberSearchMeetingId, chatId);
             }
 
             Meeting meeting = all_meetings_for_search.get(Math.toIntExact(numberSearchMeetingId));
-            sessionRepository.setNumberSearchMeetingByChatId(chatId,numberSearchMeetingId);
+            sessionRepository.setNumberSearchMeetingByChatId(numberSearchMeetingId, chatId);
             message.setText(showAllMeetingInfo(meeting));
             message.setChatId(chatId);
             message.setReplyMarkup(listMenus.searchMeetingKeyboard());
@@ -105,8 +106,9 @@ public class SearchMeetings {
         return message;
 
     }
-    public SendMessage likeMeeting (long chatId) {
-        UserToMeeting userToMeeting=new UserToMeeting();
+
+    public SendMessage likeMeeting(long chatId) {
+        UserToMeeting userToMeeting = new UserToMeeting();
         if (userToMeetingRepository.findTopByOrderByIdDesc() != null) {
             Long Id = userToMeetingRepository.findTopByOrderByIdDesc();
             userToMeeting.setId(Id + 1L);
@@ -115,10 +117,11 @@ public class SearchMeetings {
             userToMeeting.setId(Id);
         }
 
-        long numberSearchMeetingId=sessionRepository.findByChatId(chatId).getNumberSearchMeeting()+1L;
+        long numberSearchMeetingId = sessionRepository.findByChatId(chatId).getNumberSearchMeeting();
         ArrayList<Meeting> all_meetings_for_search = meetingRepository.findMyNotAppliedMeetings(chatId);
+
         Meeting meeting = all_meetings_for_search.get(Math.toIntExact(numberSearchMeetingId));
-        sessionRepository.setNumberSearchMeetingByChatId(chatId,numberSearchMeetingId);
+
         userToMeeting.setMeetingId(meeting.getMeetingId());
         userToMeeting.setChatId(chatId);
         userToMeetingRepository.save(userToMeeting);

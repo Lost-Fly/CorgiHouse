@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -103,17 +105,22 @@ public class MeetingRegistration {
         };
     }
 
-    private boolean isValidTitle(String name) { return !name.toLowerCase().matches(PLACE_REGEX); }
+    public static boolean containsForbiddenWords(String text) {
+        Pattern pattern = Pattern.compile(FORBIDDEN_WORDS_REGEX);
+        Matcher matcher = pattern.matcher(text);
+        return matcher.find();
+    }
+    private boolean isValidTitle(String name) { return !containsForbiddenWords(name.toLowerCase()); }
     private boolean isValidPlace(String name) {
-        return  name.toLowerCase().matches(FORBIDDEN_WORDS_REGEX) && name.toLowerCase().matches(PLACE_REGEX);
+        return  !name.toLowerCase().matches(FORBIDDEN_WORDS_REGEX) && name.toLowerCase().matches(PLACE_REGEX);
     }
 
     private boolean isValidDescription(String name) {
-        return name.toLowerCase().matches(FORBIDDEN_WORDS_REGEX);
+        return !name.toLowerCase().matches(FORBIDDEN_WORDS_REGEX);
     }
 
     public static boolean isValidName(String name) {
-        return name.toLowerCase().matches(FORBIDDEN_WORDS_REGEX);
+        return !containsForbiddenWords(name.toLowerCase());
     }
 
     private String setMeetingTitle(long chatId, String messageText) {

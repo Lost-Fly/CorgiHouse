@@ -26,6 +26,12 @@ public class SessionService {
             userSession.setRegisterFunctionContext(REGISTER_CONTEXT_DEFAULT);
             userSession.setEditFunctionContext(REGISTER_CONTEXT_DEFAULT);
             userSession.setPetRegisterFunctionContext(REGISTER_CONTEXT_DEFAULT);
+            userSession.setEditMeetingFunctionContext(GLOBAL_CONTEXT_DEFAULT);
+            userSession.setMeetingRegisterFunctionContext(GLOBAL_CONTEXT_DEFAULT);
+            userSession.setNumberSearchMeeting(0L);
+            userSession.setMeetingRegisterFunctionId(0L);
+            userSession.setNumberEditMeeting(0L);
+
 
             sessionRepository.save(userSession);
 

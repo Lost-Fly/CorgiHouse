@@ -96,6 +96,11 @@ public class CommandProcessor {
                 bot.sendEditMessage(chatId, messageId, bot.meetingFuncs.editMeeting(chatId, EDIT_MEETING_BUTTON_LIMIT)));
         commandMap.put(REGISTRATION, () ->
                 bot.sendMessage(chatId, bot.userRegistration.initializeRegistration(update)));
+        commandMap.put(LIKE_MEETING, () ->
+                bot.sendMessage(chatId, bot.searchMeetings.likeMeeting(chatId)));
+        commandMap.put(DISLIKE_MEETING, () ->
+                bot.sendMessage(chatId, bot.searchMeetings.searchMeetings(chatId)));
+
 
         return commandMap;
     }

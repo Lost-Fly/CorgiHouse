@@ -3,6 +3,7 @@ package com.github.lostfly.corgihousetelegrambot.service.modelsConnectedFuncs;
 import com.github.lostfly.corgihousetelegrambot.keyboardMenus.KeyboardMenus;
 import com.github.lostfly.corgihousetelegrambot.listMenus.ListMenus;
 import com.github.lostfly.corgihousetelegrambot.model.Meeting;
+import com.github.lostfly.corgihousetelegrambot.model.UserToMeeting;
 import com.github.lostfly.corgihousetelegrambot.repository.MeetingRepository;
 import com.github.lostfly.corgihousetelegrambot.repository.PetRepository;
 import com.github.lostfly.corgihousetelegrambot.repository.SessionRepository;
@@ -82,30 +83,49 @@ public class SearchMeetings {
             return userFuncs.checkExistingProfile(chatId);
         }
 
-        ArrayList<Meeting> all_meetings_created = meetingRepository.findMyNotAppliedMeetings(chatId);
-        Long numberSearchMeetingId=sessionRepository.findByChatId(chatId).getNumberSearchMeeting();
-
-
-
+        ArrayList<Meeting> all_meetings_for_search = meetingRepository.findMyNotAppliedMeetings(chatId);
+        long numberSearchMeetingId=sessionRepository.findByChatId(chatId).getNumberSearchMeeting()+1L;
         SendMessage message = new SendMessage();
-        if (all_meetings_created.isEmpty()) {
+
+        if (all_meetings_for_search.isEmpty()) {
             message.setText(NO_AT_ALL_MEETINGS_TEXT);
             message.setReplyMarkup(listMenus.meetingKeyboard());
         } else {
-
-            StringBuilder created_meetings_list = new StringBuilder();
-
-            for (Meeting meeting : all_meetings_created) {
-                created_meetings_list.append(showAllMeetingInfo(meeting));
+            if (numberSearchMeetingId >= all_meetings_for_search.size()){
+                numberSearchMeetingId=0L;
+                sessionRepository.setNumberSearchMeetingByChatId(chatId,numberSearchMeetingId);
             }
 
-            message.setText(created_meetings_list.toString());
+            Meeting meeting = all_meetings_for_search.get(Math.toIntExact(numberSearchMeetingId));
+            sessionRepository.setNumberSearchMeetingByChatId(chatId,numberSearchMeetingId);
+            message.setText(showAllMeetingInfo(meeting));
             message.setChatId(chatId);
             message.setReplyMarkup(listMenus.searchMeetingKeyboard());
-
         }
         return message;
 
     }
+    public SendMessage likeMeeting (long chatId) {
+        UserToMeeting userToMeeting=new UserToMeeting();
+        if (userToMeetingRepository.findTopByOrderByIdDesc() != null) {
+            Long Id = userToMeetingRepository.findTopByOrderByIdDesc();
+            userToMeeting.setId(Id + 1L);
+        } else {
+            Long Id = 1L;
+            userToMeeting.setId(Id);
+        }
+
+        long numberSearchMeetingId=sessionRepository.findByChatId(chatId).getNumberSearchMeeting()+1L;
+        ArrayList<Meeting> all_meetings_for_search = meetingRepository.findMyNotAppliedMeetings(chatId);
+        Meeting meeting = all_meetings_for_search.get(Math.toIntExact(numberSearchMeetingId));
+        sessionRepository.setNumberSearchMeetingByChatId(chatId,numberSearchMeetingId);
+        userToMeeting.setMeetingId(meeting.getMeetingId());
+        userToMeeting.setChatId(chatId);
+        userToMeetingRepository.save(userToMeeting);
+
+        return searchMeetings(chatId);
+
+    }
+
 
 }

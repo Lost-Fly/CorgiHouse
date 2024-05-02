@@ -23,6 +23,5 @@ CorgiHouse is a Telegram bot designed for creating and searching meetings of cor
 
 ### Links
 - Telegram Bot Link (https://t.me/CorgiHouseBot)
-- App Scheme on Draw.io Board (https://drive.google.com/file/d/1rWdGmvHeJE0-TMHryNR3o9bVFSEv_mzG/view?usp=sharing)
 
 Feel free to modify and improve this project.
